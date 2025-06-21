@@ -27,56 +27,70 @@ import java.util.Map;
 import static java.util.Map.Entry;
 
 /**
- * MojetLineMapper is an implementation of LineMapper that uses a POJO type to map data that are annotated.
+ * MojetLineMapper is an implementation of LineMapper that uses a POJO type to
+ * map data that are annotated.
+ *
  * @param <T> POJO type
- * 
+ *
  * @author Guillaume CHAUVET
  */
 public class MojetLineMapper<T> extends AbstractMojetLine<T> implements LineMapper<T> {
-  private final DefaultLineMapper<T> delegate = new DefaultLineMapper<>();
 
-  public MojetLineMapper(Class<T> targetType) {
-    super(targetType);
-    final FixedLengthTokenizer tokenizer = new FixedLengthTokenizer();
-    final Map<String, Range> mapping = mapToRanges();
-    final BeanWrapperFieldSetMapper mapper = new BeanWrapperFieldSetMapper<>();
-    mapper.setTargetType(targetType);
-    mapper.setDistanceLimit(0);
-    tokenizer.setNames(mapping.keySet().toArray(new String[0]));
-    tokenizer.setColumns(mapping.values().toArray(new Range[0]));
-    delegate.setLineTokenizer(tokenizer);
-    delegate.setFieldSetMapper(mapper);
-  }
-  
-  private Map<String, Range> mapToRanges() {
-      final Map<String, Range> result = new LinkedHashMap<>();
-      int current = 1;
-      for (Entry<String, Field> field : mappedFields.entrySet()) {
-          final Padding padding = field.getValue().getAnnotation(Padding.class);
-          if (null != padding) {
-              for (Filler filler : padding.value()) {
-                  if (filler.length() <= 1)
-                      throw new MojetRuntimeException("Natural number expected on filler " + field.getKey());
-                  current += filler.length();
-              }
-              --current;
-          }
-          final Fragment fragment = field.getValue().getAnnotation(Fragment.class);
-          if (null != fragment) {
-              final int length = fragment.length();
-              if (length <= 1)
+    private final DefaultLineMapper<T> delegate = new DefaultLineMapper<>();
+
+    public MojetLineMapper(Class<T> targetType) {
+        super(targetType);
+        final FixedLengthTokenizer tokenizer = new FixedLengthTokenizer();
+        final Map<String, Range> mapping = mapToRanges();
+        final BeanWrapperFieldSetMapper<T> mapper = new BeanWrapperFieldSetMapper<>();
+        mapper.setTargetType(targetType);
+        mapper.setDistanceLimit(0);
+        tokenizer.setNames(mapping.keySet().toArray(new String[0]));
+        tokenizer.setColumns(mapping.values().toArray(new Range[0]));
+        delegate.setLineTokenizer(tokenizer);
+        delegate.setFieldSetMapper(mapper);
+    }
+
+    private Map<String, Range> mapToRanges() {
+        final Map<String, Range> result = new LinkedHashMap<>();
+        int current = 1;
+        for (Entry<String, Field> field : mappedFields.entrySet()) {
+            current = processPadding(field, current);
+            current = processFragments(field, result, current) + 1;
+        }
+        return result;
+    }
+
+    private int processPadding(final Entry<String, Field> field, int current) {
+        final Filler[] fillers = field.getValue().getAnnotationsByType(Filler.class);
+        if (null != fillers && fillers.length > 0) {
+            for (Filler filler : fillers) {
+                if (filler.length() <= 1) {
+                    throw new MojetRuntimeException("Natural number expected on filler " + field.getKey());
+                }
+                current += filler.length();
+            }
+            --current;
+        }
+        return current;
+    }
+
+    private int processFragments(final Entry<String, Field> field, final Map<String, Range> result, int current) {
+        final Fragment fragment = field.getValue().getAnnotation(Fragment.class);
+        if (null != fragment) {
+            final int length = fragment.length();
+            if (length <= 1) {
                 throw new MojetRuntimeException("Natural number expected on fragment " + field.getKey());
-              final int end = current + length - 1;
-              result.put(field.getKey(), new Range(current, end));
-              current = end;
-          }
-          ++current;
-      }
-      return result;
-  }
+            }
+            final int end = current + length - 1;
+            result.put(field.getKey(), new Range(current, end));
+            current = end;
+        }
+        return current;
+    }
 
-  @Override
-  public T mapLine(String line, int lineNumber) throws Exception {
-    return delegate.mapLine(line, lineNumber);
-  }
+    @Override
+    public T mapLine(String line, int lineNumber) throws Exception {
+        return delegate.mapLine(line, lineNumber);
+    }
 }
