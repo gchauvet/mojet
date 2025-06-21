@@ -38,19 +38,13 @@ public class MojetLineMapper<T> implements LineMapper<T> {
   public MojetLineMapper(Class<T> targetType) {
     final FixedLengthTokenizer tokenizer = new FixedLengthTokenizer();
     final Map<String, Range> mapping = mapAnnotatedFields(targetType, "", 1);
+    final BeanWrapperFieldSetMapper mapper = new BeanWrapperFieldSetMapper<>();
+    mapper.setTargetType(targetType);
+    mapper.setDistanceLimit(0);
     tokenizer.setNames(mapping.keySet().toArray(new String[0]));
     tokenizer.setColumns(mapping.values().toArray(new Range[0]));
     delegate.setLineTokenizer(tokenizer);
-    delegate.setFieldSetMapper(new BeanWrapperFieldSetMapper<>() {
-      {
-        setTargetType(targetType);
-        setDistanceLimit(0);
-      }
-      @Override
-      protected void initBinder(DataBinder binder) {
-        super.initBinder(binder);
-      }
-    });
+    delegate.setFieldSetMapper(mapper);
   }
 
   /**

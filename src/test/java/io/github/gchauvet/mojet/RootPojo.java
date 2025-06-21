@@ -15,7 +15,6 @@
  */
 package io.github.gchauvet.mojet;
 
-import java.time.LocalDate;
 import lombok.Data;
 
 /**
@@ -28,10 +27,8 @@ public class RootPojo {
     
     @Fragment(length = 5)
     private long id;
-    @Padding({
-        @Filler(length = 3, value = '0'),
-        @Filler(length = 2, value = '#')
-    })
+    @Filler(length = 3, value = '0')
+    @Filler(length = 2, value = '#')
     private ChildPojo child;
     @Fragment(length = 3)
     int counter;

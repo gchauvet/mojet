@@ -1,1 +1,2 @@
-# mojet
+# Mojet: an extended spring-batch bean wrapper
+[![Java CI](https://github.com/gchauvet/mojet/actions/workflows/maven.yml/badge.svg)](https://github.com/gchauvet/mojet/actions/workflows/maven.yml) [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=gchauvet_mojet&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=gchauvet_mojet) [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=gchauvet_mojet&metric=security_rating)](https://sonarcloud.io/dashboard?id=gchauvet_mojet) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=gchauvet_mojet&metric=coverage)](https://sonarcloud.io/dashboard?id=gchauvet_mojet)
