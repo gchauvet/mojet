@@ -15,19 +15,23 @@
  */
 package io.github.gchauvet.mojet;
 
-import lombok.Data;
+import org.springframework.batch.item.file.transform.LineAggregator;
 
 /**
- * Child pojo test class.
- * 
+ * @param <T> POJO type
  * @author Guillaume CHAUVET
  */
-@Data
-@Record
-public class ChildPojo {
+ class MojetLineAggregator<T> implements LineAggregator<T> {
     
-    @Fragment(length = 11)
-    private double total;
-    @Fragment(length = 3)
-    private String label;
+    private final Class<T> type;
+
+    public MojetLineAggregator(Class<T> type) {
+        this.type = type;
+    }
+
+    @Override
+    public String aggregate(T item) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
 }

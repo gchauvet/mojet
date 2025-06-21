@@ -20,11 +20,11 @@ import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.FixedLengthTokenizer;
 import org.springframework.batch.item.file.transform.Range;
-import org.springframework.validation.DataBinder;
 
 import java.lang.reflect.Field;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import static java.util.Map.Entry;
 
 /**
  * MojetLineMapper is an implementation of LineMapper that uses a POJO type to map data that are annotated.
@@ -32,12 +32,13 @@ import java.util.Map;
  * 
  * @author Guillaume CHAUVET
  */
-public class MojetLineMapper<T> implements LineMapper<T> {
+public class MojetLineMapper<T> extends AbstractMojetLine<T> implements LineMapper<T> {
   private final DefaultLineMapper<T> delegate = new DefaultLineMapper<>();
 
   public MojetLineMapper(Class<T> targetType) {
+    super(targetType);
     final FixedLengthTokenizer tokenizer = new FixedLengthTokenizer();
-    final Map<String, Range> mapping = mapAnnotatedFields(targetType, "", 1);
+    final Map<String, Range> mapping = mapToRanges();
     final BeanWrapperFieldSetMapper mapper = new BeanWrapperFieldSetMapper<>();
     mapper.setTargetType(targetType);
     mapper.setDistanceLimit(0);
@@ -46,42 +47,32 @@ public class MojetLineMapper<T> implements LineMapper<T> {
     delegate.setLineTokenizer(tokenizer);
     delegate.setFieldSetMapper(mapper);
   }
-
-  /**
-   * Browse the class fields and create a map of fields annotated with @Fragment.
-   * If a field is a custom class annotated with @Registration, it is explored recursively.
-   *
-   * @param clazz la classe to wrap
-   * @param prefix prefix for field names
-   * @param index starting index for field mapping
-   * @return a map of field names and their corresponding ranges
-   */
-  private Map<String, Range> mapAnnotatedFields(Class<?> clazz, String prefix, int index) {
-    final Map<String, Range> fieldMap = new LinkedHashMap<>();
-
-    for (Field field : clazz.getDeclaredFields()) {
-      final Padding padding = field.getAnnotation(Padding.class);
-      if (padding != null) {
-          for (Filler filler : padding.value()) {
-              index += filler.length();
+  
+  private Map<String, Range> mapToRanges() {
+      final Map<String, Range> result = new LinkedHashMap<>();
+      int current = 1;
+      for (Entry<String, Field> field : mappedFields.entrySet()) {
+          final Padding padding = field.getValue().getAnnotation(Padding.class);
+          if (null != padding) {
+              for (Filler filler : padding.value()) {
+                  if (filler.length() <= 1)
+                      throw new MojetRuntimeException("Natural number expected on filler " + field.getKey());
+                  current += filler.length();
+              }
+              --current;
           }
+          final Fragment fragment = field.getValue().getAnnotation(Fragment.class);
+          if (null != fragment) {
+              final int length = fragment.length();
+              if (length <= 1)
+                throw new MojetRuntimeException("Natural number expected on fragment " + field.getKey());
+              final int end = current + length - 1;
+              result.put(field.getKey(), new Range(current, end));
+              current = end;
+          }
+          ++current;
       }
-      final Fragment champ = field.getAnnotation(Fragment.class);
-      if (champ != null) {
-        int end = index + champ.length() - 1;
-        fieldMap.put(prefix + field.getName(), new Range(index, end));
-        index = end;
-      } else if (field.getType().isAnnotationPresent(Record.class)) {
-        // If the field is a custom class, we recursively explore
-        for (Map.Entry<String, Range> entry : mapAnnotatedFields(field.getType(), prefix + field.getName() + ".", index).entrySet()) {
-          Range range = entry.getValue();
-          fieldMap.put(entry.getKey(), range);
-          index = range.getMax();
-        }
-      }
-      index++;
-    }
-    return fieldMap;
+      return result;
   }
 
   @Override
