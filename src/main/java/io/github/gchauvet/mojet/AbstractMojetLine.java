@@ -45,7 +45,7 @@ abstract class AbstractMojetLine<T> {
     final Map<String, Field> fieldMap = new LinkedHashMap<>();
 
     for (Field field : clazz.getDeclaredFields()) {
-      if (field.isAnnotationPresent(Fragment.class) || field.isAnnotationPresent(Filler.class) || field.isAnnotationPresent(Padding.class)) {
+      if (field.isAnnotationPresent(Fragment.class) || field.isAnnotationPresent(Filler.class) || field.isAnnotationPresent(Fillers.class)) {
         fieldMap.put(prefix + field.getName(), field);
       }
       if (field.getType().isAnnotationPresent(Record.class)) {

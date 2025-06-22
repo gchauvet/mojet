@@ -15,22 +15,15 @@
  */
 package io.github.gchauvet.mojet;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Repeatable;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
- * Defines a fill area with a specific charact.
+ * Defines multiple padding zones.
  * 
  * @author Guillaume CHAUVET
  */
-@Repeatable(Fillers.class)
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface Filler {
-    int length();
-    
-    char value() default ' ';
+public @interface Fillers {
+    Filler[] value();
 }
