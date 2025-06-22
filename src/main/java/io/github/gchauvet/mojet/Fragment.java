@@ -29,4 +29,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface Fragment {
     int length();
+    
+    char padder() default ' ';
 }

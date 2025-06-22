@@ -15,25 +15,21 @@
  */
 package io.github.gchauvet.mojet;
 
+import io.github.gchauvet.mojet.types.TypeHandler;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Define the padding of a field annoted by {@link Fragment}
+ * Define a custom converter to manage a field annoted with {@link Fragment}
  * 
  * @author Guillaume CHAUVET
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface Padding {
+public @interface Converter {
     
-    /**
-     * Define ways for padding
-     */
-    public enum PadWay { LEFT, RIGHT }
-    
-    PadWay value() default PadWay.RIGHT;
-    
+    Class<? extends TypeHandler> value();
+
 }

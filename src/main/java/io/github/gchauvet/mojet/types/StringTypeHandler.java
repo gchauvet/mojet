@@ -13,27 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.gchauvet.mojet;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+package io.github.gchauvet.mojet.types;
 
 /**
- * Define the padding of a field annoted by {@link Fragment}
+ * String data type handler
  * 
  * @author Guillaume CHAUVET
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-public @interface Padding {
-    
-    /**
-     * Define ways for padding
-     */
-    public enum PadWay { LEFT, RIGHT }
-    
-    PadWay value() default PadWay.RIGHT;
+final class StringTypeHandler extends AbstractTypeHandler<String>{
+
+    @Override
+    protected boolean isAccept(Class<?> type) {
+        return String.class == type;
+    }
+
+    @Override
+    public String read(String data) {
+        return data;
+    }
+
+    @Override
+    public String write(String data) {
+        return data;
+    }
     
 }

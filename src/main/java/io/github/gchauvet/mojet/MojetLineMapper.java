@@ -38,7 +38,7 @@ public class MojetLineMapper<T> extends AbstractMojetLine<T> implements LineMapp
 
     private final DefaultLineMapper<T> delegate = new DefaultLineMapper<>();
 
-    public MojetLineMapper(Class<T> targetType) {
+    public MojetLineMapper(final Class<T> targetType) {
         super(targetType);
         final FixedLengthTokenizer tokenizer = new FixedLengthTokenizer();
         final Map<String, Range> mapping = mapToRanges();
@@ -55,13 +55,13 @@ public class MojetLineMapper<T> extends AbstractMojetLine<T> implements LineMapp
         final Map<String, Range> result = new LinkedHashMap<>();
         int current = 1;
         for (Entry<String, Field> field : mappedFields.entrySet()) {
-            current = processPadding(field, current);
+            current = processFillers(field, current);
             current = processFragments(field, result, current) + 1;
         }
         return result;
     }
 
-    private int processPadding(final Entry<String, Field> field, int current) {
+    private int processFillers(final Entry<String, Field> field, int current) {
         final Filler[] fillers = field.getValue().getAnnotationsByType(Filler.class);
         if (null != fillers && fillers.length > 0) {
             for (Filler filler : fillers) {
