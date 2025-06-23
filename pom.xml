@@ -5,6 +5,12 @@
     <artifactId>mojet</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
+    <scm>
+        <connection>scm:git:git://github.com/gchauvet/mojet.git</connection>
+        <developerConnection>scm:git:ssh://github.com/gchauvet/mojet.git</developerConnection>
+        <url>https://github.com/gchauvet/mojet</url>
+        <tag>HEAD</tag>
+    </scm>
     <developers>
         <developer>
             <id>gchauvet</id>
@@ -85,8 +91,25 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>3.1.1</version>
+                <configuration>
+                    <tagNameFormat>@{project.version}</tagNameFormat>
+                    <pushChanges>true</pushChanges>
+                    <scmCommentPrefix>[BOT](release): </scmCommentPrefix>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/gchauvet/mojet</url>
+        </repository>
+    </distributionManagement>
     <properties>
         <lombok.version>1.18.38</lombok.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

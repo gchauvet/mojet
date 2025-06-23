@@ -1,0 +1,22 @@
+name: Publish package to GitHub Packages
+on:
+  release:
+    types: [created]
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Configure Git to use PAT
+        run: |
+          git config --global user.name "GitHub Bot"
+          git config --global user.email "bot.github@users.noreply.github.com"
+          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }}
+      - name: Run Maven Release
+        run: ./mvnw -B release:prepare release:perform
