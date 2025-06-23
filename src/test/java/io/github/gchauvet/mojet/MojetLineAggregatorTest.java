@@ -192,19 +192,26 @@ class MojetLineAggregatorTest {
     @Test
     void testErrorAggregation() {
         var undefined = new MojetLineAggregator<>(UndefinedPojo.class);
-        assertThrows(MojetRuntimeException.class, () -> assertNull(undefined.aggregate(new UndefinedPojo())));
+        var pojo1 = new UndefinedPojo();
+        assertThrows(MojetRuntimeException.class, () -> undefined.aggregate(pojo1));
         var bugged = new MojetLineAggregator<>(BuggedConverterPojo.class);
-        assertThrows(MojetRuntimeException.class, () -> assertNull(bugged.aggregate(new BuggedConverterPojo())));
+        var pojo2 = new BuggedConverterPojo();
+        assertThrows(MojetRuntimeException.class, () -> bugged.aggregate(pojo2));
         var uncoverted = new MojetLineAggregator<>(NoConverterPojo.class);
-        assertThrows(MojetRuntimeException.class, () -> assertNull(uncoverted.aggregate(new NoConverterPojo())));
+        var pojo3 = new NoConverterPojo();
+        assertThrows(MojetRuntimeException.class, () -> uncoverted.aggregate(pojo3));
         var inacceptable = new MojetLineAggregator<>(InacceptablePojo.class);
-        assertThrows(MojetRuntimeException.class, () -> assertNull(inacceptable.aggregate(new InacceptablePojo())));
+        var pojo4 = new InacceptablePojo();
+        assertThrows(MojetRuntimeException.class, () -> inacceptable.aggregate(pojo4));
         var overflow = new MojetLineAggregator<>(OverflowPojo.class);
-        assertEquals("private java.lang.String io.github.gchauvet.mojet.MojetLineAggregatorTest$OverflowPojo.overflow length (4) greater than fragment length definition (3)", assertThrows(MojetRuntimeException.class, () -> assertNull(overflow.aggregate(new OverflowPojo()))).getMessage());
+        var pojo5 = new OverflowPojo();
+        assertEquals("private java.lang.String io.github.gchauvet.mojet.MojetLineAggregatorTest$OverflowPojo.overflow length (4) greater than fragment length definition (3)", assertThrows(MojetRuntimeException.class, () -> overflow.aggregate(pojo5)).getMessage());
         var noIterable = new MojetLineAggregator<>(NoIterableAllowedPojo.class);
-        assertThrows(MojetRuntimeException.class, () -> assertNull(noIterable.aggregate(new NoIterableAllowedPojo())));
+        var pojo6 = new NoIterableAllowedPojo();
+        assertThrows(MojetRuntimeException.class, () -> noIterable.aggregate(pojo6));
         var noArray = new MojetLineAggregator<>(NoArrayAllowedPojo.class);
-        assertThrows(MojetRuntimeException.class, () -> assertNull(noArray.aggregate(new NoArrayAllowedPojo())));
+        var pojo7 = new NoArrayAllowedPojo();
+        assertThrows(MojetRuntimeException.class, () -> noArray.aggregate(pojo7));
     }
 
 }
