@@ -19,6 +19,7 @@ import io.github.gchauvet.mojet.types.TypeHandlerFactory;
 import io.github.gchauvet.mojet.types.TypeHandler;
 import java.lang.reflect.Field;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.TextStringBuilder;
 import org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor;
 import org.springframework.batch.item.file.transform.LineAggregator;
@@ -46,10 +47,8 @@ public class MojetLineAggregator<T> extends AbstractMojetLine<T> implements Line
 
         int i = 0;
         for (Map.Entry<String, Field> entry : mappedFields.entrySet()) {
-            Field field = entry.getValue();
-            for (Filler filler : field.getAnnotationsByType(Filler.class)) {
-                output.appendPadding(filler.length(), filler.value());
-            }
+            final Field field = entry.getValue();
+            generateFillers(output, field.getAnnotationsByType(Filler.class));
 
             if (field.isAnnotationPresent(Fragment.class)) {
                 final TypeHandler<Object> handler = getHandler(field);
@@ -63,7 +62,17 @@ public class MojetLineAggregator<T> extends AbstractMojetLine<T> implements Line
             i++;
         }
 
+        if (type.isAnnotationPresent(Filler.class)) {
+            generateFillers(output, type.getAnnotationsByType(Filler.class));
+        }
+
         return output.toString();
+    }
+
+    private static void generateFillers(TextStringBuilder output, Filler[] fillers) {
+        for (Filler filler : fillers) {
+            output.appendPadding(filler.length(), filler.value());
+        }
     }
 
     private static TypeHandler<Object> getHandler(Field field) {

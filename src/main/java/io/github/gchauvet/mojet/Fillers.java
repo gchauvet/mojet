@@ -23,7 +23,7 @@ import java.lang.annotation.*;
  * @author Guillaume CHAUVET
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
+@Target({ElementType.FIELD, ElementType.TYPE})
 public @interface Fillers {
 
     Filler[] value();

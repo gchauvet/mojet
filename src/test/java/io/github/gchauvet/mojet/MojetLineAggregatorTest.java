@@ -54,6 +54,7 @@ class MojetLineAggregatorTest {
 
     @Data
     @Record
+    @Filler(length = 3, value = '€')
     public static final class SimplePojo {
 
         @Fragment(length = 7, padder = '0')
@@ -83,7 +84,7 @@ class MojetLineAggregatorTest {
         item.setName("CHAUVET");
         item.setSurname("Guillaume");
         item.setDate(LocalDate.of(1999, Month.JULY, 18));
-        assertEquals("0000777###||   CHAUVETGuillaume_9907$5€C", instance.aggregate(item));
+        assertEquals("0000777###||   CHAUVETGuillaume_9907$5€C€€€", instance.aggregate(item));
     }
 
     @Data

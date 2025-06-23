@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import lombok.NonNull;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Skeleton class providing fields extraction.
@@ -29,8 +30,10 @@ import lombok.NonNull;
 abstract class AbstractMojetLine<T> {
 
     protected final Map<String, Field> mappedFields;
+    protected final Class<T> type;
 
-    protected AbstractMojetLine(@NonNull Class<T> type) {
+    protected AbstractMojetLine(@NonNull Class<T> targetType) {
+        this.type = targetType;
         mappedFields = Collections.unmodifiableMap(mapAnnotatedFields(type, ""));
     }
 

@@ -47,6 +47,7 @@ public class MojetLineMapper<T> extends AbstractMojetLine<T> implements LineMapp
         mapper.setDistanceLimit(0);
         tokenizer.setNames(mapping.keySet().toArray(new String[0]));
         tokenizer.setColumns(mapping.values().toArray(new Range[0]));
+        tokenizer.setStrict(false);
         delegate.setLineTokenizer(tokenizer);
         delegate.setFieldSetMapper(mapper);
     }

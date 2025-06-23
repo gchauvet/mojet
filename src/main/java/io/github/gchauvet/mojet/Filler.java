@@ -28,7 +28,7 @@ import java.lang.annotation.Target;
  */
 @Repeatable(Fillers.class)
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
+@Target({ElementType.FIELD, ElementType.TYPE})
 public @interface Filler {
 
     int length();
