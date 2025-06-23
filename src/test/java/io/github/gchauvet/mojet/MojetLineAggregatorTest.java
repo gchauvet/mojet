@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Unit test
  * @author Guillaume CHAUVET
  */
-public class MojetLineAggregatorTest {
+class MojetLineAggregatorTest {
     
     public static final class MyLocalDateTypeHandler extends AbstractTypeHandler<LocalDate> {
         
@@ -70,7 +70,7 @@ public class MojetLineAggregatorTest {
     }
     
     @Test
-    public void testSimpleAggregation() {
+    void testSimpleAggregation() {
         var instance = new MojetLineAggregator<>(SimplePojo.class);
         SimplePojo item = new SimplePojo();
         item.setId(777);
@@ -154,7 +154,7 @@ public class MojetLineAggregatorTest {
     }
     
     @Test
-    public void testErrorAggregation() {
+    void testErrorAggregation() {
         assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(UndefinedPojo.class).aggregate(new UndefinedPojo()));
         assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(BuggedConverterPojo.class).aggregate(new BuggedConverterPojo()));
         assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(NoConverterPojo.class).aggregate(new NoConverterPojo()));

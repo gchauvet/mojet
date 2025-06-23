@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Unit test
  * @author Guillaume CHAUVET
  */
-public class MojetLineMapperTest {
+class MojetLineMapperTest {
     
     /**
     * Main test pojo class
@@ -53,7 +53,7 @@ public class MojetLineMapperTest {
    }
 
     @Test
-    public void testSimpleReadLineToRootPojo() throws Exception {
+    void testSimpleReadLineToRootPojo() throws Exception {
         final MojetLineMapper<RootPojo> mapper = new MojetLineMapper(RootPojo.class);
         final RootPojo result = mapper.mapLine("01985000##114273EUR567", 1);
         assertEquals(1985, result.getId());
@@ -81,7 +81,7 @@ public class MojetLineMapperTest {
     }
     
     @Test
-    public void testBadPojoSetting() {
+    void testBadPojoSetting() {
         assertThrows(MojetRuntimeException.class, () -> new MojetLineMapper(BadFragmentPojo.class));
         assertThrows(MojetRuntimeException.class, () -> new MojetLineMapper(BadPaddingPojo.class));
     }

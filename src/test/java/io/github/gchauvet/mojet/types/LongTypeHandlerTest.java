@@ -22,12 +22,12 @@ import static org.junit.jupiter.api.Assertions.*;
  * Unit test of long type handler
  * @author Guillaume CHAUVET
  */
-public class LongTypeHandlerTest {
+class LongTypeHandlerTest {
     
     private LongTypeHandler instance = new LongTypeHandler();
     
     @Test
-    public void testAccept() {
+    void testAccept() {
         assertFalse(instance.accept(null));
         assertFalse(instance.accept(Double.class));
         assertTrue(instance.accept(Long.class));
@@ -35,13 +35,13 @@ public class LongTypeHandlerTest {
     }
     
     @Test
-    public void testRead() {
+    void testRead() {
         assertEquals(1, instance.read("1"));
         assertEquals(1985, instance.read("1985"));
     }
     
     @Test
-    public void testWrite() {
+    void testWrite() {
         assertEquals("0", instance.write(0L));
         assertEquals("1985", instance.write(1985L));
     }

@@ -23,16 +23,16 @@ import static org.junit.jupiter.api.Assertions.*;
  * Unit test of {@link TypeHandlerFactory}
  * @author Guillaume CHAUVET
  */
-public class TypeHandlerFactoryTest {
+class TypeHandlerFactoryTest {
 
     @Test
-    public void testFactory() {
+    void testFactory() {
         final TypeHandlerFactory instance = TypeHandlerFactory.getInstance();
         assertSame(instance, TypeHandlerFactory.getInstance());
     }
     
     @Test
-    public void testGetter() {
+    void testGetter() {
         assertNotNull(TypeHandlerFactory.getInstance().get(long.class));
         assertThrows(MojetRuntimeException.class, () -> TypeHandlerFactory.getInstance().get(getClass()));
     }
