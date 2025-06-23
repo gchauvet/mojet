@@ -17,10 +17,10 @@ package io.github.gchauvet.mojet.types;
 
 /**
  * String data type handler
- * 
+ *
  * @author Guillaume CHAUVET
  */
-final class StringTypeHandler extends AbstractTypeHandler<String>{
+final class StringTypeHandler extends AbstractTypeHandler<String> {
 
     @Override
     protected boolean isAccept(Class<?> type) {
@@ -36,5 +36,5 @@ final class StringTypeHandler extends AbstractTypeHandler<String>{
     public String write(String data, String format) {
         return data;
     }
-    
+
 }

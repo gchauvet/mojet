@@ -40,7 +40,7 @@ final class LocalDateTypeHandler extends AbstractTypeHandler<LocalDate> {
     public String write(LocalDate data, String format) {
         return getFormatter(format).format(data);
     }
-    
+
     private static DateTimeFormatter getFormatter(String format) {
         return StringUtils.isEmpty(format) ? DateTimeFormatter.ISO_DATE : DateTimeFormatter.ofPattern(format);
     }

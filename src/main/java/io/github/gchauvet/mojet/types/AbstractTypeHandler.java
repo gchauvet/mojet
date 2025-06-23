@@ -19,6 +19,7 @@ import org.apache.commons.lang3.ClassUtils;
 
 /**
  * partial implementation to every concret TypeHandler.
+ *
  * @author Guillaume CHAUVET
  */
 public abstract class AbstractTypeHandler<T> implements TypeHandler<T> {
@@ -36,7 +37,7 @@ public abstract class AbstractTypeHandler<T> implements TypeHandler<T> {
     }
 
     /**
-     * 
+     *
      * @param type class type to check
      * @return positive if accepted
      */

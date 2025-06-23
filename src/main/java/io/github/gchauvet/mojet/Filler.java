@@ -23,14 +23,15 @@ import java.lang.annotation.Target;
 
 /**
  * Defines a fill area with a specific charact.
- * 
+ *
  * @author Guillaume CHAUVET
  */
 @Repeatable(Fillers.class)
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface Filler {
+
     int length();
-    
+
     char value() default ' ';
 }

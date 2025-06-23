@@ -19,11 +19,12 @@ import java.lang.annotation.*;
 
 /**
  * Defines multiple padding zones.
- * 
+ *
  * @author Guillaume CHAUVET
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface Fillers {
+
     Filler[] value();
 }

@@ -17,10 +17,10 @@ package io.github.gchauvet.mojet.types;
 
 /**
  * Long data type handler
- * 
+ *
  * @author Guillaume CHAUVET
  */
-final class LongTypeHandler extends AbstractTypeHandler<Long>{
+final class LongTypeHandler extends AbstractTypeHandler<Long> {
 
     @Override
     protected boolean isAccept(Class<?> type) {
@@ -36,5 +36,5 @@ final class LongTypeHandler extends AbstractTypeHandler<Long>{
     public String write(Long data, String format) {
         return Long.toString(data);
     }
-    
+
 }

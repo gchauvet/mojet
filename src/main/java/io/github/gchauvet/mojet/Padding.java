@@ -22,18 +22,20 @@ import java.lang.annotation.Target;
 
 /**
  * Define the padding of a field annoted by {@link Fragment}
- * 
+ *
  * @author Guillaume CHAUVET
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface Padding {
-    
+
     /**
      * Define ways for padding
      */
-    public enum PadWay { LEFT, RIGHT }
-    
+    public enum PadWay {
+        LEFT, RIGHT
+    }
+
     PadWay value() default PadWay.RIGHT;
-    
+
 }

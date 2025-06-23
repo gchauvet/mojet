@@ -19,6 +19,7 @@ import lombok.experimental.StandardException;
 
 /**
  * Specialized Mojet runtime exception
+ *
  * @author Guillaume CHAUVET
  */
 @StandardException

@@ -20,31 +20,32 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit test of string type handler
+ *
  * @author Guillaume CHAUVET
  */
 class StringTypeHandlerTest {
-    
+
     private StringTypeHandler instance = new StringTypeHandler();
-    
+
     @Test
     void testAccept() {
         assertFalse(instance.accept(null));
         assertFalse(instance.accept(Double.class));
         assertTrue(instance.accept(String.class));
     }
-    
+
     @Test
     void testRead() {
         assertEquals("", instance.read("", null));
         assertEquals("test", instance.read("test", null));
         assertEquals("€éàÉ", instance.read("€éàÉ", null));
     }
-    
+
     @Test
     void testWrite() {
         assertEquals("", instance.write("", null));
         assertEquals("test", instance.write("test", null));
         assertEquals("€éàÉ", instance.write("€éàÉ", null));
     }
-    
+
 }

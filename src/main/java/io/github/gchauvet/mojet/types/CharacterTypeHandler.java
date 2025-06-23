@@ -17,10 +17,10 @@ package io.github.gchauvet.mojet.types;
 
 /**
  * Charactere data type handler
- * 
+ *
  * @author Guillaume CHAUVET
  */
-final class CharacterTypeHandler extends AbstractTypeHandler<Character>{
+final class CharacterTypeHandler extends AbstractTypeHandler<Character> {
 
     @Override
     protected boolean isAccept(Class<?> type) {
@@ -36,5 +36,5 @@ final class CharacterTypeHandler extends AbstractTypeHandler<Character>{
     public String write(Character data, String format) {
         return Character.toString(data);
     }
-    
+
 }

@@ -17,10 +17,10 @@ package io.github.gchauvet.mojet.types;
 
 /**
  * Byte data type handler
- * 
+ *
  * @author Guillaume CHAUVET
  */
-final class ByteTypeHandler extends AbstractTypeHandler<Byte>{
+final class ByteTypeHandler extends AbstractTypeHandler<Byte> {
 
     @Override
     protected boolean isAccept(Class<?> type) {
@@ -36,5 +36,5 @@ final class ByteTypeHandler extends AbstractTypeHandler<Byte>{
     public String write(Byte data, String format) {
         return Byte.toString(data);
     }
-    
+
 }
