@@ -13,7 +13,6 @@ This library is built to simplify reading and writing structured flat files in S
 - Padding and filler support (left/right, custom characters)
 - Custom field formatting (e.g. `LocalDate`)
 - Works with Spring Batch’s `FlatFileItemReader` and `FlatFileItemWriter`
-- Built on top of ASM for high performance
 - Plug-and-play integration with Spring Batch
 
 ---
@@ -122,7 +121,6 @@ public class ExampleBatchConfig {
 * ✅ Custom formatting support (e.g. LocalDate)
 * 🧪 Multi-record type support (in progress)
 * ❌ Collections and arrays not yet supported
-* ❌ Release pipeline to Maven Central is under construction.
 
 ## 🚀 Contributing
 Contributions are welcome!
