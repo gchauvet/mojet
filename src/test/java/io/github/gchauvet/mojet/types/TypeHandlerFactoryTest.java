@@ -35,12 +35,14 @@ class TypeHandlerFactoryTest {
 
     @Test
     void testGetter() {
-        assertNotNull(TypeHandlerFactory.getInstance().get(long.class));
-        assertNotNull(TypeHandlerFactory.getInstance().get(char.class));
-        assertNotNull(TypeHandlerFactory.getInstance().get(String.class));
-        assertNotNull(TypeHandlerFactory.getInstance().get(byte.class));
-        assertNotNull(TypeHandlerFactory.getInstance().get(LocalDate.class));
-        assertThrows(MojetRuntimeException.class, () -> TypeHandlerFactory.getInstance().get(getClass()));
+        final TypeHandlerFactory instance = TypeHandlerFactory.getInstance();
+        assertNotNull(instance.get(long.class));
+        assertNotNull(instance.get(char.class));
+        assertNotNull(instance.get(String.class));
+        assertNotNull(instance.get(byte.class));
+        assertNotNull(instance.get(LocalDate.class));
+        
+        assertThrows(MojetRuntimeException.class, () -> instance.get(getClass()));
     }
 
 }

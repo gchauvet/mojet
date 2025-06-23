@@ -19,7 +19,7 @@ This library is built to simplify reading and writing structured flat files in S
 ---
 
 ## 📦 Maven Dependency
-
+(Not published yet: need build locally)
 ```xml
 <dependency>
   <groupId>io.github.gchauvet</groupId>
@@ -29,6 +29,17 @@ This library is built to simplify reading and writing structured flat files in S
 ```
 ## 🧪 Example POJO Usage
 ```java
+@Record
+public class ChildPojo {
+
+    @Fragment(length = 6)
+    private double total;
+    @Fragment(length = 3)
+    private String label;
+
+    // Getters / Setters...
+}
+
 @Record
 @Filler(length = 5, value = '_') // Adds 5 underscores at the end of each record (optional)
 public class SimplePojo {
@@ -55,6 +66,8 @@ public class SimplePojo {
 
     @Fragment(length = 2, padder = '€')
     private char car = 'C';
+
+    private ChildPojo child; // append fragments/fillers description to main mapper description
 
     // Getters / Setters...
 }

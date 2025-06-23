@@ -19,7 +19,6 @@ import io.github.gchauvet.mojet.types.TypeHandlerFactory;
 import io.github.gchauvet.mojet.types.TypeHandler;
 import java.lang.reflect.Field;
 import java.util.Map;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.TextStringBuilder;
 import org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor;
 import org.springframework.batch.item.file.transform.LineAggregator;
