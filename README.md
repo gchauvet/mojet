@@ -22,7 +22,7 @@ This library is built to simplify reading and writing structured flat files in S
 (Not published yet: need build locally)
 ```xml
 <dependency>
-  <groupId>io.github.gchauvet</groupId>
+  <groupId>pro.cyberyon</groupId>
   <artifactId>mojet</artifactId>
   <version>1.0.0</version>
 </dependency>
