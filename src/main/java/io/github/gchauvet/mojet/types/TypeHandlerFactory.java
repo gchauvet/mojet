@@ -38,6 +38,7 @@ public final class TypeHandlerFactory {
         types.add(new LongTypeHandler());
         types.add(new ByteTypeHandler());
         types.add(new CharacterTypeHandler());
+        types.add(new LocalDateTypeHandler());
         handlers = Collections.unmodifiableSet(types);
     }
 

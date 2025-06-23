@@ -15,26 +15,34 @@
  */
 package io.github.gchauvet.mojet.types;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import org.apache.commons.lang3.StringUtils;
+
 /**
- * Long data type handler
- * 
+ * local date data type handler
+ *
  * @author Guillaume CHAUVET
  */
-final class LongTypeHandler extends AbstractTypeHandler<Long>{
+final class LocalDateTypeHandler extends AbstractTypeHandler<LocalDate> {
 
     @Override
     protected boolean isAccept(Class<?> type) {
-        return Long.class == type;
+        return LocalDate.class == type;
     }
 
     @Override
-    public Long read(String data, String format) {
-        return Long.valueOf(data);
+    public LocalDate read(String data, String format) {
+        return LocalDate.parse(data, getFormatter(format));
     }
 
     @Override
-    public String write(Long data, String format) {
-        return Long.toString(data);
+    public String write(LocalDate data, String format) {
+        return getFormatter(format).format(data);
     }
     
+    private static DateTimeFormatter getFormatter(String format) {
+        return StringUtils.isEmpty(format) ? DateTimeFormatter.ISO_DATE : DateTimeFormatter.ofPattern(format);
+    }
+
 }

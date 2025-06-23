@@ -15,6 +15,9 @@
  */
 package io.github.gchauvet.mojet.types;
 
+import java.time.LocalDate;
+import java.time.Month;
+import java.util.Date;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,28 +26,28 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author Guillaume CHAUVET
  */
-class LongTypeHandlerTest {
+class LocalDateTypeHandlerTest {
 
-    private LongTypeHandler instance = new LongTypeHandler();
+    private LocalDateTypeHandler instance = new LocalDateTypeHandler();
 
     @Test
     void testAccept() {
         assertFalse(instance.accept(null));
         assertFalse(instance.accept(Double.class));
-        assertTrue(instance.accept(Long.class));
-        assertTrue(instance.accept(long.class));
+        assertFalse(instance.accept(Date.class));
+        assertTrue(instance.accept(LocalDate.class));
     }
 
     @Test
     void testRead() {
-        assertEquals(1, instance.read("1", null));
-        assertEquals(1985, instance.read("1985", null));
+        assertEquals(LocalDate.of(2002, Month.OCTOBER, 5), instance.read("2002-10-05", null));
+        assertEquals(LocalDate.of(2003, Month.FEBRUARY, 1), instance.read("01-02-03", "dd-MM-uu"));
     }
 
     @Test
     void testWrite() {
-        assertEquals("0", instance.write(0L, null));
-        assertEquals("1985", instance.write(1985L, null));
+        assertEquals("2001-03-17", instance.write(LocalDate.of(2001, Month.MARCH, 17), null));
+        assertEquals("20010317", instance.write(LocalDate.of(2001, Month.MARCH, 17), "yyyyMMdd"));
     }
 
 }

@@ -71,7 +71,7 @@ public class MojetLineAggregator<T> extends AbstractMojetLine<T> implements Line
         final Converter converter = field.getAnnotation(Converter.class);
         if (converter != null) {
             try {
-                result = (TypeHandler<Object>) converter.value().getConstructor().newInstance();
+                result = converter.value().getConstructor().newInstance();
             } catch (ReflectiveOperationException ex) {
                 throw new MojetRuntimeException(ex);
             }
@@ -83,7 +83,7 @@ public class MojetLineAggregator<T> extends AbstractMojetLine<T> implements Line
 
     private static void generateFragment(final TextStringBuilder output, TypeHandler<Object> handler, Object item, Field field) {
         final Fragment fragment = field.getAnnotation(Fragment.class);
-        final String data = handler.write(item);
+        final String data = handler.write(item, fragment.format());
         if (data.length() > fragment.length())
             throw new MojetRuntimeException(field.toString() + " length (" + data.length() + ") greater than fragment length definition (" + fragment.length() + ")" );
         final Padding padding = field.getAnnotation(Padding.class);

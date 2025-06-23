@@ -16,11 +16,13 @@
 package io.github.gchauvet.mojet.types;
 
 import io.github.gchauvet.mojet.MojetRuntimeException;
+import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit test of {@link TypeHandlerFactory}
+ *
  * @author Guillaume CHAUVET
  */
 class TypeHandlerFactoryTest {
@@ -30,14 +32,15 @@ class TypeHandlerFactoryTest {
         final TypeHandlerFactory instance = TypeHandlerFactory.getInstance();
         assertSame(instance, TypeHandlerFactory.getInstance());
     }
-    
+
     @Test
     void testGetter() {
         assertNotNull(TypeHandlerFactory.getInstance().get(long.class));
         assertNotNull(TypeHandlerFactory.getInstance().get(char.class));
         assertNotNull(TypeHandlerFactory.getInstance().get(String.class));
         assertNotNull(TypeHandlerFactory.getInstance().get(byte.class));
+        assertNotNull(TypeHandlerFactory.getInstance().get(LocalDate.class));
         assertThrows(MojetRuntimeException.class, () -> TypeHandlerFactory.getInstance().get(getClass()));
     }
-    
+
 }

@@ -17,27 +17,31 @@ package io.github.gchauvet.mojet.types;
 
 /**
  * Type handler contract to manage java types.
+ *
  * @author Guillaume CHAUVET
  */
 public interface TypeHandler<T> {
 
     /**
      * Check if we can handle the data type
+     *
      * @param type to check
      * @return <code>true</code> if handlable
      */
     boolean accept(Class<?> type);
-    
+
     /**
      * @param data string of data
+     * @param format of data, null otherwise
      * @return instance of the type
      */
-    T read(String data);
-    
+    T read(String data, String format);
+
     /**
      * @param data the type with data
+     * @param format of data, null otherwise
      * @return string content of type
      */
-    String write(T data);
-    
+    String write(T data, String format);
+
 }

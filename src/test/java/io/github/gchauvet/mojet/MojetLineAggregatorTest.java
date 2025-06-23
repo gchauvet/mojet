@@ -33,20 +33,20 @@ class MojetLineAggregatorTest {
 
     public static final class MyLocalDateTypeHandler extends AbstractTypeHandler<LocalDate> {
 
-        private final DateTimeFormatter sfd = DateTimeFormatter.ofPattern("ddyyMM", Locale.FRENCH);
-
         @Override
         protected boolean isAccept(Class<?> type) {
             return LocalDate.class == type;
         }
 
         @Override
-        public LocalDate read(String data) {
+        public LocalDate read(String data, String format) {
+            final DateTimeFormatter sfd = DateTimeFormatter.ofPattern("dd" + format, Locale.FRENCH);
             return LocalDate.parse("01" + data, sfd);
         }
 
         @Override
-        public String write(LocalDate data) {
+        public String write(LocalDate data, String format) {
+            final DateTimeFormatter sfd = DateTimeFormatter.ofPattern("dd" + format, Locale.FRENCH);
             return data.format(sfd).substring(2);
         }
 
@@ -67,7 +67,7 @@ class MojetLineAggregatorTest {
         @Fragment(length = 10, padder = '_')
         private String surname;
         @Converter(MyLocalDateTypeHandler.class)
-        @Fragment(length = 4)
+        @Fragment(length = 4, format = "yyMM")
         private LocalDate date;
         @Fragment(length = 2, padder = '$')
         private byte octet = 5;
@@ -106,12 +106,12 @@ class MojetLineAggregatorTest {
         }
 
         @Override
-        public Object read(String data) {
+        public Object read(String data, String format) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public String write(Object data) {
+        public String write(Object data, String format) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
@@ -142,12 +142,12 @@ class MojetLineAggregatorTest {
         }
 
         @Override
-        public Object read(String data) {
+        public Object read(String data, String format) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public String write(Object data) {
+        public String write(Object data, String format) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 

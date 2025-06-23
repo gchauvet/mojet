@@ -23,13 +23,13 @@ import java.lang.annotation.Target;
 
 /**
  * Define a custom converter to manage a field annoted with {@link Fragment}
- * 
+ *
  * @author Guillaume CHAUVET
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface Converter {
-    
+
     Class<? extends TypeHandler> value();
 
 }

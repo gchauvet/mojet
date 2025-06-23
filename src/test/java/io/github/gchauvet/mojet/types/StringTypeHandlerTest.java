@@ -35,16 +35,16 @@ class StringTypeHandlerTest {
     
     @Test
     void testRead() {
-        assertEquals("", instance.read(""));
-        assertEquals("test", instance.read("test"));
-        assertEquals("€éàÉ", instance.read("€éàÉ"));
+        assertEquals("", instance.read("", null));
+        assertEquals("test", instance.read("test", null));
+        assertEquals("€éàÉ", instance.read("€éàÉ", null));
     }
     
     @Test
     void testWrite() {
-        assertEquals("", instance.write(""));
-        assertEquals("test", instance.write("test"));
-        assertEquals("€éàÉ", instance.write("€éàÉ"));
+        assertEquals("", instance.write("", null));
+        assertEquals("test", instance.write("test", null));
+        assertEquals("€éàÉ", instance.write("€éàÉ", null));
     }
     
 }

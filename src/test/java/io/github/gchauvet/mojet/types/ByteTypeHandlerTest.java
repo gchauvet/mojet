@@ -38,14 +38,14 @@ class ByteTypeHandlerTest {
 
     @Test
     void testRead() {
-        assertEquals((byte) 77, instance.read("77"));
-        assertEquals((byte) 0, instance.read("0"));
+        assertEquals((byte) 77, instance.read("77", null));
+        assertEquals((byte) 0, instance.read("0", null));
     }
 
     @Test
     void testWrite() {
-        assertEquals("55", instance.write(Byte.valueOf("55")));
-        assertEquals("-10", instance.write(Byte.parseByte("-10")));
+        assertEquals("55", instance.write(Byte.valueOf("55"), null));
+        assertEquals("-10", instance.write(Byte.parseByte("-10"), null));
     }
 
 }

@@ -37,14 +37,14 @@ class CharactereTypeHandlerTest {
 
     @Test
     void testRead() {
-        assertEquals('0', instance.read("0"));
-        assertEquals('t', instance.read("t"));
+        assertEquals('0', instance.read("0", null));
+        assertEquals('t', instance.read("t", null));
     }
 
     @Test
     void testWrite() {
-        assertEquals("t", instance.write('t'));
-        assertEquals("€", instance.write('€'));
+        assertEquals("t", instance.write('t', null));
+        assertEquals("€", instance.write('€', null));
     }
 
 }

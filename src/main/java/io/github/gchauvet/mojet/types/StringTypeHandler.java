@@ -28,12 +28,12 @@ final class StringTypeHandler extends AbstractTypeHandler<String>{
     }
 
     @Override
-    public String read(String data) {
+    public String read(String data, String format) {
         return data;
     }
 
     @Override
-    public String write(String data) {
+    public String write(String data, String format) {
         return data;
     }
     

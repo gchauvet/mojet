@@ -28,12 +28,12 @@ final class CharacterTypeHandler extends AbstractTypeHandler<Character>{
     }
 
     @Override
-    public Character read(String data) {
+    public Character read(String data, String format) {
         return data.toCharArray()[0];
     }
 
     @Override
-    public String write(Character data) {
+    public String write(Character data, String format) {
         return Character.toString(data);
     }
     
