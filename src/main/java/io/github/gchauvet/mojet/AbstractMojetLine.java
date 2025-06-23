@@ -23,38 +23,40 @@ import lombok.NonNull;
 
 /**
  * Skeleton class providing fields extraction.
- * 
+ *
  * @author Guillaume CHAUVET
  */
 abstract class AbstractMojetLine<T> {
-    
-    protected final Map<String, Field> mappedFields;
-    
-    protected AbstractMojetLine(@NonNull Class<T> type) {
-         mappedFields = Collections.unmodifiableMap(mapAnnotatedFields(type, ""));
-    }
-    
-    /**
-   * Browse the class fields and create a map of fields annotated with @Fragment.
-   * If a field is a custom class annotated with @Registration, it is explored recursively.
-   *
-   * @param clazz la classe to wrap
-   * @param prefix prefix for field names
-   * @return a map of field names and their corresponding ranges
-   */
-  private Map<String, Field> mapAnnotatedFields(Class<?> clazz, String prefix) {
-    final Map<String, Field> fieldMap = new LinkedHashMap<>();
 
-    for (Field field : clazz.getDeclaredFields()) {
-      if (field.isAnnotationPresent(Fragment.class) || field.isAnnotationPresent(Filler.class) || field.isAnnotationPresent(Fillers.class)) {
-        fieldMap.put(prefix + field.getName(), field);
-      }
-      if (field.getType().isAnnotationPresent(Record.class)) {
-        // If the field is a custom class, we recursively explore
-        fieldMap.putAll(mapAnnotatedFields(field.getType(), prefix + field.getName() + "."));
-      }
+    protected final Map<String, Field> mappedFields;
+
+    protected AbstractMojetLine(@NonNull Class<T> type) {
+        mappedFields = Collections.unmodifiableMap(mapAnnotatedFields(type, ""));
     }
-    return fieldMap;
-  }
-    
+
+    /**
+     * Browse the class fields and create a map of fields annotated with
+     *
+     * @Fragment. If a field is a custom class annotated with @Registration, it
+     * is explored recursively.
+     *
+     * @param clazz la classe to wrap
+     * @param prefix prefix for field names
+     * @return a map of field names and their corresponding ranges
+     */
+    private Map<String, Field> mapAnnotatedFields(Class<?> clazz, String prefix) {
+        final Map<String, Field> fieldMap = new LinkedHashMap<>();
+
+        for (Field field : clazz.getDeclaredFields()) {
+            if (field.isAnnotationPresent(Fragment.class) || field.isAnnotationPresent(Filler.class) || field.isAnnotationPresent(Fillers.class)) {
+                fieldMap.put(prefix + field.getName(), field);
+            }
+            if (field.getType().isAnnotationPresent(Record.class)) {
+                // If the field is a custom class, we recursively explore
+                fieldMap.putAll(mapAnnotatedFields(field.getType(), prefix + field.getName() + "."));
+            }
+        }
+        return fieldMap;
+    }
+
 }

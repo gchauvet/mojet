@@ -26,12 +26,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit test
+ *
  * @author Guillaume CHAUVET
  */
 class MojetLineAggregatorTest {
-    
+
     public static final class MyLocalDateTypeHandler extends AbstractTypeHandler<LocalDate> {
-        
+
         private final DateTimeFormatter sfd = DateTimeFormatter.ofPattern("ddyyMM", Locale.FRENCH);
 
         @Override
@@ -50,10 +51,11 @@ class MojetLineAggregatorTest {
         }
 
     }
-    
+
     @Data
     @Record
     public static final class SimplePojo {
+
         @Fragment(length = 7, padder = '0')
         private long id;
         @Filler(length = 3, value = '#')
@@ -62,13 +64,13 @@ class MojetLineAggregatorTest {
         @Fragment(length = 10)
         private String name;
         @Padding(Padding.PadWay.RIGHT)
-        @Fragment(length = 10)
+        @Fragment(length = 10, padder = '_')
         private String surname;
         @Converter(MyLocalDateTypeHandler.class)
         @Fragment(length = 4)
         private LocalDate date;
     }
-    
+
     @Test
     void testSimpleAggregation() {
         var instance = new MojetLineAggregator<>(SimplePojo.class);
@@ -77,16 +79,17 @@ class MojetLineAggregatorTest {
         item.setName("CHAUVET");
         item.setSurname("Guillaume");
         item.setDate(LocalDate.of(1999, Month.JULY, 18));
-        assertEquals("0000777###||   CHAUVETGuillaume 9907", instance.aggregate(item));
+        assertEquals("0000777###||   CHAUVETGuillaume_9907", instance.aggregate(item));
     }
-    
+
     @Data
     @Record
     public static final class UndefinedPojo {
+
         @Fragment(length = 10)
         private Object undefined = "";
     }
-    
+
     public static class BuggerConverterType extends AbstractTypeHandler<Object> {
 
         public BuggerConverterType() {
@@ -109,23 +112,24 @@ class MojetLineAggregatorTest {
         }
 
     }
-    
+
     @Data
     @Record
     public static final class BuggedConverterPojo {
+
         @Fragment(length = 10)
         @Converter(BuggerConverterType.class)
         private Object undefined = "";
     }
-    
+
     @Data
     @Record
     public static final class NoConverterPojo {
+
         @Fragment(length = 10)
         private Object undefined = "";
     }
-    
-    
+
     public static class InacceptableConverterType extends AbstractTypeHandler<Object> {
 
         @Override
@@ -144,20 +148,58 @@ class MojetLineAggregatorTest {
         }
 
     }
-    
+
     @Data
     @Record
     public static final class InacceptablePojo {
+
         @Fragment(length = 10)
         @Converter(InacceptableConverterType.class)
         private Object undefined = "";
     }
-    
+
+    @Data
+    @Record
+    public static final class OverflowPojo {
+
+        @Fragment(length = 2)
+        private String good = "OK";
+        @Fragment(length = 3)
+        private String overflow = "TEST";
+    }
+
+    @Data
+    @Record
+    public static final class NoIterableAllowedPojo {
+
+        @Fragment(length = 5)
+        private Iterable<Long> undefined;
+    }
+
+    @Data
+    @Record
+    public static final class NoArrayAllowedPojo {
+
+        @Fragment(length = 5)
+        private long[] values = new long[3];
+    }
+
     @Test
     void testErrorAggregation() {
-        assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(UndefinedPojo.class).aggregate(new UndefinedPojo()));
-        assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(BuggedConverterPojo.class).aggregate(new BuggedConverterPojo()));
-        assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(NoConverterPojo.class).aggregate(new NoConverterPojo()));
-        assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(InacceptablePojo.class).aggregate(new InacceptablePojo()));
+        var undefined = new MojetLineAggregator<>(UndefinedPojo.class);
+        assertThrows(MojetRuntimeException.class, () -> assertNull(undefined.aggregate(new UndefinedPojo())));
+        var bugged = new MojetLineAggregator<>(BuggedConverterPojo.class);
+        assertThrows(MojetRuntimeException.class, () -> assertNull(bugged.aggregate(new BuggedConverterPojo())));
+        var uncoverted = new MojetLineAggregator<>(NoConverterPojo.class);
+        assertThrows(MojetRuntimeException.class, () -> assertNull(uncoverted.aggregate(new NoConverterPojo())));
+        var inacceptable = new MojetLineAggregator<>(InacceptablePojo.class);
+        assertThrows(MojetRuntimeException.class, () -> assertNull(inacceptable.aggregate(new InacceptablePojo())));
+        var overflow = new MojetLineAggregator<>(OverflowPojo.class);
+        assertEquals("private java.lang.String io.github.gchauvet.mojet.MojetLineAggregatorTest$OverflowPojo.overflow length (4) greater than fragment length definition (3)", assertThrows(MojetRuntimeException.class, () -> assertNull(overflow.aggregate(new OverflowPojo()))).getMessage());
+        var noIterable = new MojetLineAggregator<>(NoIterableAllowedPojo.class);
+        assertThrows(MojetRuntimeException.class, () -> assertNull(noIterable.aggregate(new NoIterableAllowedPojo())));
+        var noArray = new MojetLineAggregator<>(NoArrayAllowedPojo.class);
+        assertThrows(MojetRuntimeException.class, () -> assertNull(noArray.aggregate(new NoArrayAllowedPojo())));
     }
+
 }
