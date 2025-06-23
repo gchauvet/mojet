@@ -29,35 +29,37 @@ import java.util.Set;
 public final class TypeHandlerFactory {
 
     private final Set<TypeHandler<?>> handlers;
-    
+
     private static TypeHandlerFactory instance = null;
 
     private TypeHandlerFactory() {
         final var types = new HashSet<TypeHandler<?>>();
         types.add(new StringTypeHandler());
         types.add(new LongTypeHandler());
-        this.handlers = Collections.unmodifiableSet(types);
+        types.add(new ByteTypeHandler());
+        types.add(new CharacterTypeHandler());
+        handlers = Collections.unmodifiableSet(types);
     }
-    
+
     /**
      * Retrive the first type handler for a give type.
-     * 
+     *
      * @param <T> type to handle
      * @param type the class type to handle
      * @return the type handler for the type
      * @throws MojetRuntimeException
      */
-    public<T> TypeHandler<T> get(final Class<T> type) {
+    public <T> TypeHandler<T> get(final Class<T> type) {
         try {
             return (TypeHandler<T>) handlers.stream().filter(t -> t.accept(type)).findFirst().get();
-        } catch(NoSuchElementException ex) {
+        } catch (NoSuchElementException ex) {
             throw new MojetRuntimeException(ex);
         }
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public static TypeHandlerFactory getInstance() {
         if (instance == null) {
@@ -65,7 +67,5 @@ public final class TypeHandlerFactory {
         }
         return instance;
     }
-
-    
 
 }

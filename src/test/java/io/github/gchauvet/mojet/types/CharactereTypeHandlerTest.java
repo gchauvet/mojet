@@ -15,29 +15,36 @@
  */
 package io.github.gchauvet.mojet.types;
 
-import io.github.gchauvet.mojet.MojetRuntimeException;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Unit test of {@link TypeHandlerFactory}
+ * Unit test of byte type handler
+ *
  * @author Guillaume CHAUVET
  */
-class TypeHandlerFactoryTest {
+class CharactereTypeHandlerTest {
+
+    private CharacterTypeHandler instance = new CharacterTypeHandler();
 
     @Test
-    void testFactory() {
-        final TypeHandlerFactory instance = TypeHandlerFactory.getInstance();
-        assertSame(instance, TypeHandlerFactory.getInstance());
+    void testAccept() {
+        assertFalse(instance.accept(null));
+        assertFalse(instance.accept(Double.class));
+        assertTrue(instance.accept(char.class));
+        assertTrue(instance.accept(Character.class));
     }
-    
+
     @Test
-    void testGetter() {
-        assertNotNull(TypeHandlerFactory.getInstance().get(long.class));
-        assertNotNull(TypeHandlerFactory.getInstance().get(char.class));
-        assertNotNull(TypeHandlerFactory.getInstance().get(String.class));
-        assertNotNull(TypeHandlerFactory.getInstance().get(byte.class));
-        assertThrows(MojetRuntimeException.class, () -> TypeHandlerFactory.getInstance().get(getClass()));
+    void testRead() {
+        assertEquals('0', instance.read("0"));
+        assertEquals('t', instance.read("t"));
     }
-    
+
+    @Test
+    void testWrite() {
+        assertEquals("t", instance.write('t'));
+        assertEquals("€", instance.write('€'));
+    }
+
 }

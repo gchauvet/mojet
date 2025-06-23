@@ -69,6 +69,10 @@ class MojetLineAggregatorTest {
         @Converter(MyLocalDateTypeHandler.class)
         @Fragment(length = 4)
         private LocalDate date;
+        @Fragment(length = 2, padder = '$')
+        private byte octet = 5;
+        @Fragment(length = 2, padder = '€')
+        private char car = 'C';
     }
 
     @Test
@@ -79,7 +83,7 @@ class MojetLineAggregatorTest {
         item.setName("CHAUVET");
         item.setSurname("Guillaume");
         item.setDate(LocalDate.of(1999, Month.JULY, 18));
-        assertEquals("0000777###||   CHAUVETGuillaume_9907", instance.aggregate(item));
+        assertEquals("0000777###||   CHAUVETGuillaume_9907$5€C", instance.aggregate(item));
     }
 
     @Data
