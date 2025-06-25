@@ -38,6 +38,9 @@ public class MojetLineMapper<T> extends AbstractMojetLine<T> implements LineMapp
 
     private final DefaultLineMapper<T> delegate = new DefaultLineMapper<>();
 
+    /**
+     * @param targetType the bean type to manage
+     */
     public MojetLineMapper(final Class<T> targetType) {
         super(targetType);
         final FixedLengthTokenizer tokenizer = new FixedLengthTokenizer();

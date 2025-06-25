@@ -33,6 +33,9 @@ public class MojetLineAggregator<T> extends AbstractMojetLine<T> implements Line
 
     private final BeanWrapperFieldExtractor<T> extractor;
 
+    /**
+     * @param type the bean type to manage
+     */
     public MojetLineAggregator(final Class<T> type) {
         super(type);
         extractor = new BeanWrapperFieldExtractor<>();

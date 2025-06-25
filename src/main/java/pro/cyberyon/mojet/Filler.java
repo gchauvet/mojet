@@ -31,7 +31,13 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD, ElementType.TYPE})
 public @interface Filler {
 
+    /**
+     * @return size of the filling area (natural number)
+     */
     int length();
 
+    /**
+     * @return the filling character of the area
+     */
     char value() default ' ';
 }

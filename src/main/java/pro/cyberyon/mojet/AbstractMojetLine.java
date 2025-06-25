@@ -28,7 +28,13 @@ import lombok.NonNull;
  */
 abstract class AbstractMojetLine<T> {
 
+    /**
+     * a map of key(field path)/value(field declaration) pair whose insertion order is retained
+     */
     protected final Map<String, Field> mappedFields;
+    /**
+     * The bean class type
+     */
     protected final Class<T> type;
 
     protected AbstractMojetLine(@NonNull Class<T> targetType) {

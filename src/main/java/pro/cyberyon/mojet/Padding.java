@@ -33,9 +33,19 @@ public @interface Padding {
      * Define ways for padding
      */
     public enum PadWay {
-        LEFT, RIGHT
+        /**
+         * align at left
+         */
+        LEFT,
+        /**
+         * align at right
+         */
+        RIGHT
     }
 
+    /**
+     * @return the padding way
+     */
     PadWay value() default PadWay.RIGHT;
 
 }

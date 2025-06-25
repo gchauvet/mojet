@@ -29,5 +29,8 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface Occurences {
 
+    /**
+     * @return number of occurence on array field type
+     */
     int value() default 1;
 }

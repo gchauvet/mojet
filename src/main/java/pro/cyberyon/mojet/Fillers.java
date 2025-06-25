@@ -26,5 +26,8 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD, ElementType.TYPE})
 public @interface Fillers {
 
+    /**
+     * @return optional list of filler annotations used to populate the end of the record
+     */
     Filler[] value();
 }

@@ -48,7 +48,7 @@ public final class TypeHandlerFactory {
      * @param <T> type to handle
      * @param type the class type to handle
      * @return the type handler for the type
-     * @throws MojetRuntimeException
+     * @throws MojetRuntimeException a mojet runtime exception if an error occurs
      */
     public <T> TypeHandler<T> get(final Class<T> type) {
         try {
@@ -59,8 +59,7 @@ public final class TypeHandlerFactory {
     }
 
     /**
-     *
-     * @return
+     * @return the singleton instance of this factory
      */
     public static TypeHandlerFactory getInstance() {
         if (instance == null) {

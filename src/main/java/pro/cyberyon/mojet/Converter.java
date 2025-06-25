@@ -30,6 +30,9 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface Converter {
 
+    /**
+     * @return the custom type handler
+     */
     Class<? extends TypeHandler> value();
 
 }
