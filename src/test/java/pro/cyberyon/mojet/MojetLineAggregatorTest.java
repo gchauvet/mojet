@@ -74,6 +74,9 @@ class MojetLineAggregatorTest {
         private byte octet = 5;
         @Fragment(length = 2, padder = '€')
         private char car = 'C';
+        @Fragment(length = 5)
+        @Occurences(3)
+        private long[] values = new long[]{2, 4, 6};
     }
 
     @Test
@@ -84,7 +87,7 @@ class MojetLineAggregatorTest {
         item.setName("CHAUVET");
         item.setSurname("Guillaume");
         item.setDate(LocalDate.of(1999, Month.JULY, 18));
-        assertEquals("0000777###||   CHAUVETGuillaume_9907$5€C€€€", instance.aggregate(item));
+        assertEquals("0000777###||   CHAUVETGuillaume_9907$5€C    2    4    6€€€", instance.aggregate(item));
     }
 
     @Data
@@ -93,6 +96,14 @@ class MojetLineAggregatorTest {
 
         @Fragment(length = 10)
         private Object undefined = "";
+    }
+
+    @Data
+    @Record
+    public static final class BadFragmentPojo {
+
+        @Fragment(length = 0)
+        private long undefined;
     }
 
     public static class BuggerConverterType extends AbstractTypeHandler<Object> {
@@ -178,15 +189,33 @@ class MojetLineAggregatorTest {
     public static final class NoIterableAllowedPojo {
 
         @Fragment(length = 5)
+        @Occurences(3)
         private Iterable<Long> undefined;
     }
 
     @Data
     @Record
-    public static final class NoArrayAllowedPojo {
+    public static final class InvalidFragmentPojo {
+
+        @Fragment(length = -1)
+        private String value;
+    }
+
+    @Data
+    @Record
+    public static final class NoOccurencesDefinedPojo {
 
         @Fragment(length = 5)
-        private long[] values = new long[3];
+        private long[] values;
+    }
+
+    @Data
+    @Record
+    public static final class BadOccurencesDefinedPojo {
+
+        @Fragment(length = 5)
+        @Occurences(0)
+        private long[] values;
     }
 
     @Test
@@ -209,9 +238,10 @@ class MojetLineAggregatorTest {
         var noIterable = new MojetLineAggregator<>(NoIterableAllowedPojo.class);
         var pojo6 = new NoIterableAllowedPojo();
         assertThrows(MojetRuntimeException.class, () -> noIterable.aggregate(pojo6));
-        var noArray = new MojetLineAggregator<>(NoArrayAllowedPojo.class);
-        var pojo7 = new NoArrayAllowedPojo();
-        assertThrows(MojetRuntimeException.class, () -> noArray.aggregate(pojo7));
+        assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(NoOccurencesDefinedPojo.class));
+        assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(BadOccurencesDefinedPojo.class));
+        assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(BadFragmentPojo.class));
+        assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(InvalidFragmentPojo.class));
     }
 
 }

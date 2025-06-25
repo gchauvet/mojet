@@ -35,6 +35,9 @@ public class ChildPojo {
     private double total;
     @Fragment(length = 3)
     private String label;
+    @Fragment(length = 5)
+    @Occurences(3)
+    private long[] values;
 
     // Getters / Setters...
 }
@@ -116,11 +119,11 @@ public class ExampleBatchConfig {
 ```
 
 ## 🛠 Roadmap
-* ✅ Annotation-based POJO-to-fixed-length mapping
+* ✅ Annotation-based POJO-to-fixed-length mapping (including arrays)
 * ✅ Multi-filler and padding support
 * ✅ Custom formatting support (e.g. LocalDate)
 * 🧪 Multi-record type support (in progress)
-* ❌ Collections and arrays not yet supported
+* ❌ Collections not yet supported
 
 ## 🚀 Contributing
 Contributions are welcome!

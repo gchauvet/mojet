@@ -39,6 +39,7 @@ public class MojetLineAggregator<T> extends AbstractMojetLine<T> implements Line
         extractor.setNames(mappedFields.keySet().toArray(new String[0]));
     }
 
+    @SuppressWarnings("java:S3011")
     @Override
     public String aggregate(T item) {
         final TextStringBuilder output = new TextStringBuilder();
@@ -89,29 +90,33 @@ public class MojetLineAggregator<T> extends AbstractMojetLine<T> implements Line
         return result;
     }
 
+
     private static void generateFragment(final TextStringBuilder output, TypeHandler<Object> handler, Object item, Field field) {
         final Fragment fragment = field.getAnnotation(Fragment.class);
         final String data = handler.write(item, fragment.format());
-        if (data.length() > fragment.length()) {
+        if (data.isEmpty()) {
+            throw new MojetRuntimeException(field.toString() + " length is not a natural number");
+        } else if (data.length() > fragment.length()) {
             throw new MojetRuntimeException(field.toString() + " length (" + data.length() + ") greater than fragment length definition (" + fragment.length() + ")");
-        }
-        final Padding padding = field.getAnnotation(Padding.class);
-        final Padding.PadWay way;
-
-        if (padding != null) {
-            way = padding.value();
         } else {
-            way = Padding.PadWay.LEFT;
-        }
-        switch (way) {
-            case LEFT:
-                output.appendFixedWidthPadLeft(data, fragment.length(), fragment.padder());
-                break;
-            case RIGHT:
-                output.appendFixedWidthPadRight(data, fragment.length(), fragment.padder());
-                break;
-            default:
-                throw new MojetRuntimeException("Undefined case");
+            final Padding padding = field.getAnnotation(Padding.class);
+            final Padding.PadWay way;
+
+            if (padding != null) {
+                way = padding.value();
+            } else {
+                way = Padding.PadWay.LEFT;
+            }
+            switch (way) {
+                case LEFT:
+                    output.appendFixedWidthPadLeft(data, fragment.length(), fragment.padder());
+                    break;
+                case RIGHT:
+                    output.appendFixedWidthPadRight(data, fragment.length(), fragment.padder());
+                    break;
+                default:
+                    throw new MojetRuntimeException("Undefined case");
+            }
         }
     }
 
