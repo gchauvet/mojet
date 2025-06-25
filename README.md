@@ -69,6 +69,7 @@ public class SimplePojo {
     @Fragment(length = 2, padder = '€')
     private char car = 'C';
 
+    @Record
     private ChildPojo child; // append fragments/fillers description to main mapper description
 
     // Getters / Setters...

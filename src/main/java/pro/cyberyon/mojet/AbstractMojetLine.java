@@ -56,30 +56,42 @@ abstract class AbstractMojetLine<T> {
      * @param prefix prefix for field names
      * @return a map of field names and their corresponding ranges
      */
-    private Map<String, Field> mapAnnotatedFields(Class<?> clazz, String prefix) {
+    private static Map<String, Field> mapAnnotatedFields(final Class<?> clazz, final String prefix) {
         final Map<String, Field> fieldMap = new LinkedHashMap<>();
 
         for (Field field : clazz.getDeclaredFields()) {
-            if (field.isAnnotationPresent(Fragment.class) || field.isAnnotationPresent(Filler.class) || field.isAnnotationPresent(Fillers.class)) {
-                final String key = prefix + field.getName();
-                if (field.getType().isArray()) {
-                    processOccuences(fieldMap, key, field);
-                } else {
-                    if (field.isAnnotationPresent(Fragment.class) && field.getAnnotation(Fragment.class).length() < 1) {
-                        throw new MojetRuntimeException("Natual number of occurences expected on field " + field);
-                    }
-                    fieldMap.put(key, field);
-                }
-            }
-            if (field.getType().isAnnotationPresent(Record.class)) {
-                // If the field is a custom class, we recursively explore
-                fieldMap.putAll(mapAnnotatedFields(field.getType(), prefix + field.getName() + "."));
-            }
+            processField(fieldMap, prefix, field);
+            processRecord(fieldMap, prefix, field);
         }
         return fieldMap;
     }
 
-    private void processOccuences(final Map<String, Field> fieldMap, String key, Field field) {
+    private static void processField(final Map<String, Field> fieldMap, final String prefix, final Field field) {
+        if (field.isAnnotationPresent(Fragment.class) || field.isAnnotationPresent(Filler.class) || field.isAnnotationPresent(Fillers.class)) {
+            final String key = prefix + field.getName();
+            if (field.getType().isArray()) {
+                processOccuences(fieldMap, key, field);
+            } else {
+                if (field.isAnnotationPresent(Fragment.class) && field.getAnnotation(Fragment.class).length() < 1) {
+                    throw new MojetRuntimeException("Natual number of occurences expected on field " + field);
+                }
+                fieldMap.put(key, field);
+            }
+        }
+    }
+
+    private static void processRecord(final Map<String, Field> fieldMap, final String prefix, final Field field) {
+        if (field.getType().isAnnotationPresent(Record.class)) {
+            if (field.isAnnotationPresent(Record.class)) {
+                // If the field is a custom class, we recursively explore
+                fieldMap.putAll(mapAnnotatedFields(field.getType(), prefix + field.getName() + "."));
+            } else {
+                throw new MojetRuntimeException("Nested type should be annoted as Record");
+            }
+        }
+    }
+
+    private static void processOccuences(final Map<String, Field> fieldMap, final String key, final Field field) {
         if (!field.isAnnotationPresent(Occurences.class)) {
             throw new MojetRuntimeException("Array required a number of occurences. See corresponding annotation");
         }

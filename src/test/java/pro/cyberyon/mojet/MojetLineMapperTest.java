@@ -38,6 +38,7 @@ class MojetLineMapperTest {
         private long id;
         @Filler(length = 3, value = '0')
         @Filler(length = 2, value = '#')
+        @Record
         private ChildPojo child;
         @Fragment(length = 3)
         int counter;
@@ -89,11 +90,19 @@ class MojetLineMapperTest {
         @Filler(length = 0)
         private int value2;
     }
+    
+    @Data
+    @Record
+    public static class BadRecordPojo {
+
+        private ChildPojo value2;
+    }
 
     @Test
     void testBadPojoSetting() {
         assertThrows(MojetRuntimeException.class, () -> new MojetLineMapper(BadFragmentPojo.class));
         assertThrows(MojetRuntimeException.class, () -> new MojetLineMapper(BadPaddingPojo.class));
+        assertThrows(MojetRuntimeException.class, () -> new MojetLineMapper(BadRecordPojo.class));
     }
 
 }
