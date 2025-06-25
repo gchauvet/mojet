@@ -94,7 +94,7 @@ public class MojetLineAggregator<T> extends AbstractMojetLine<T> implements Line
     private static void generateFragment(final TextStringBuilder output, TypeHandler<Object> handler, Object item, Field field) {
         final Fragment fragment = field.getAnnotation(Fragment.class);
         final String data = handler.write(item, fragment.format());
-        if (data.length() < 1) {
+        if (data.isEmpty()) {
             throw new MojetRuntimeException(field.toString() + " length is not a natural number");
         } else if (data.length() > fragment.length()) {
             throw new MojetRuntimeException(field.toString() + " length (" + data.length() + ") greater than fragment length definition (" + fragment.length() + ")");
