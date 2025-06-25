@@ -62,8 +62,12 @@ abstract class AbstractMojetLine<T> {
                 }
             }
             if (field.getType().isAnnotationPresent(Record.class)) {
-                // If the field is a custom class, we recursively explore
-                fieldMap.putAll(mapAnnotatedFields(field.getType(), prefix + field.getName() + "."));
+                if (field.isAnnotationPresent(Record.class)) {
+                    // If the field is a custom class, we recursively explore
+                    fieldMap.putAll(mapAnnotatedFields(field.getType(), prefix + field.getName() + "."));
+                } else {
+                    throw new MojetRuntimeException("Nested type should be annoted as Record");
+                }
             }
         }
         return fieldMap;
