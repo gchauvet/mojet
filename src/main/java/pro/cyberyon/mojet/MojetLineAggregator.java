@@ -15,7 +15,6 @@
  */
 package pro.cyberyon.mojet;
 
-import java.lang.reflect.Array;
 import pro.cyberyon.mojet.types.TypeHandlerFactory;
 import pro.cyberyon.mojet.types.TypeHandler;
 import java.lang.reflect.Field;
@@ -55,7 +54,7 @@ public class MojetLineAggregator<T> extends AbstractMojetLine<T> implements Line
                 final TypeHandler<Object> handler = getHandler(field);
 
                 if (handler.accept(items[i].getClass())) {
-                    generateFragments(output, handler, items[i], field);
+                    generateFragment(output, handler, items[i], field);
                 } else {
                     throw new MojetRuntimeException("Bad converter on field " + field);
                 }
@@ -90,16 +89,7 @@ public class MojetLineAggregator<T> extends AbstractMojetLine<T> implements Line
         }
         return result;
     }
-    
-    private static void generateFragments(final TextStringBuilder output, TypeHandler<Object> handler, Object item, Field field) {
-        if (item.getClass().isArray()) {
-            for (int i = 0; i < Array.getLength(item); i++) {
-                generateFragment(output, handler, Array.get(item, i), field);
-            }
-        } else {
-            generateFragment(output, handler, item, field);
-        }
-    }
+
 
     private static void generateFragment(final TextStringBuilder output, TypeHandler<Object> handler, Object item, Field field) {
         final Fragment fragment = field.getAnnotation(Fragment.class);

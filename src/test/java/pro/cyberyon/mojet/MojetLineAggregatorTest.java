@@ -19,7 +19,6 @@ import pro.cyberyon.mojet.types.AbstractTypeHandler;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Locale;
 import lombok.Data;
 import org.junit.jupiter.api.Test;
@@ -97,6 +96,14 @@ class MojetLineAggregatorTest {
 
         @Fragment(length = 10)
         private Object undefined = "";
+    }
+    
+    @Data
+    @Record
+    public static final class BadFragmentPojo {
+
+        @Fragment(length = 0)
+        private long undefined;
     }
 
     public static class BuggerConverterType extends AbstractTypeHandler<Object> {
@@ -182,15 +189,25 @@ class MojetLineAggregatorTest {
     public static final class NoIterableAllowedPojo {
 
         @Fragment(length = 5)
+        @Occurences(3)
         private Iterable<Long> undefined;
     }
 
     @Data
     @Record
-    public static final class NoCollectionAllowedPojo {
+    public static final class NoOccurencesDefinedPojo {
 
         @Fragment(length = 5)
-        private List<Object> iterable;
+        private long[] values;
+    }
+    
+    @Data
+    @Record
+    public static final class BadOccurencesDefinedPojo {
+
+        @Fragment(length = 5)
+        @Occurences(0)
+        private long[] values;
     }
 
     @Test
@@ -213,9 +230,9 @@ class MojetLineAggregatorTest {
         var noIterable = new MojetLineAggregator<>(NoIterableAllowedPojo.class);
         var pojo6 = new NoIterableAllowedPojo();
         assertThrows(MojetRuntimeException.class, () -> noIterable.aggregate(pojo6));
-        var noCollection = new MojetLineAggregator<>(NoCollectionAllowedPojo.class);
-        var pojo7 = new NoCollectionAllowedPojo();
-        assertThrows(MojetRuntimeException.class, () -> noCollection.aggregate(pojo7));
+        assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(NoOccurencesDefinedPojo.class));
+        assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(BadOccurencesDefinedPojo.class));
+        assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(BadFragmentPojo.class));
     }
 
 }

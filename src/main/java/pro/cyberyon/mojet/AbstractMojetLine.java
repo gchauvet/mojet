@@ -57,12 +57,16 @@ abstract class AbstractMojetLine<T> {
                         throw new MojetRuntimeException("Array required a number of occurences. See corresponding annotation");
                     }
                     final int max = field.getAnnotation(Occurences.class).value();
-                    if (max < 1)
+                    if (max < 1) {
                         throw new MojetRuntimeException("Natual number of occurences expected on field " + field);
+                    }
                     for (int i = 0; i < max; i++) {
                         fieldMap.put(key + "[" + i + "]", field);
                     }
                 } else {
+                    if (field.isAnnotationPresent(Fragment.class) && field.getAnnotation(Fragment.class).length() < 1) {
+                        throw new MojetRuntimeException("Natual number of occurences expected on field " + field);
+                    }
                     fieldMap.put(key, field);
                 }
             }
