@@ -28,6 +28,9 @@ public abstract class AbstractTypeHandler<T> implements TypeHandler<T> {
     public final boolean accept(Class<?> type) {
         boolean result = false;
         if (type != null) {
+            if (type.isArray()) {
+                type = type.getComponentType();
+            }
             if (type.isPrimitive()) {
                 type = ClassUtils.primitivesToWrappers(type)[0];
             }

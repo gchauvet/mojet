@@ -19,6 +19,7 @@ import pro.cyberyon.mojet.types.AbstractTypeHandler;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Locale;
 import lombok.Data;
 import org.junit.jupiter.api.Test;
@@ -74,6 +75,9 @@ class MojetLineAggregatorTest {
         private byte octet = 5;
         @Fragment(length = 2, padder = '€')
         private char car = 'C';
+        @Fragment(length = 5)
+        @Occurences(3)
+        private long[] values = new long[] {2, 4, 6};
     }
 
     @Test
@@ -84,7 +88,7 @@ class MojetLineAggregatorTest {
         item.setName("CHAUVET");
         item.setSurname("Guillaume");
         item.setDate(LocalDate.of(1999, Month.JULY, 18));
-        assertEquals("0000777###||   CHAUVETGuillaume_9907$5€C€€€", instance.aggregate(item));
+        assertEquals("0000777###||   CHAUVETGuillaume_9907$5€C    2    4    6€€€", instance.aggregate(item));
     }
 
     @Data
@@ -183,10 +187,10 @@ class MojetLineAggregatorTest {
 
     @Data
     @Record
-    public static final class NoArrayAllowedPojo {
+    public static final class NoCollectionAllowedPojo {
 
         @Fragment(length = 5)
-        private long[] values = new long[3];
+        private List<Object> iterable;
     }
 
     @Test
@@ -209,9 +213,9 @@ class MojetLineAggregatorTest {
         var noIterable = new MojetLineAggregator<>(NoIterableAllowedPojo.class);
         var pojo6 = new NoIterableAllowedPojo();
         assertThrows(MojetRuntimeException.class, () -> noIterable.aggregate(pojo6));
-        var noArray = new MojetLineAggregator<>(NoArrayAllowedPojo.class);
-        var pojo7 = new NoArrayAllowedPojo();
-        assertThrows(MojetRuntimeException.class, () -> noArray.aggregate(pojo7));
+        var noCollection = new MojetLineAggregator<>(NoCollectionAllowedPojo.class);
+        var pojo7 = new NoCollectionAllowedPojo();
+        assertThrows(MojetRuntimeException.class, () -> noCollection.aggregate(pojo7));
     }
 
 }

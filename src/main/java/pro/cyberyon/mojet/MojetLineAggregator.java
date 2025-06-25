@@ -15,6 +15,7 @@
  */
 package pro.cyberyon.mojet;
 
+import java.lang.reflect.Array;
 import pro.cyberyon.mojet.types.TypeHandlerFactory;
 import pro.cyberyon.mojet.types.TypeHandler;
 import java.lang.reflect.Field;
@@ -39,6 +40,7 @@ public class MojetLineAggregator<T> extends AbstractMojetLine<T> implements Line
         extractor.setNames(mappedFields.keySet().toArray(new String[0]));
     }
 
+    @SuppressWarnings("java:S3011")
     @Override
     public String aggregate(T item) {
         final TextStringBuilder output = new TextStringBuilder();
@@ -53,7 +55,7 @@ public class MojetLineAggregator<T> extends AbstractMojetLine<T> implements Line
                 final TypeHandler<Object> handler = getHandler(field);
 
                 if (handler.accept(items[i].getClass())) {
-                    generateFragment(output, handler, items[i], field);
+                    generateFragments(output, handler, items[i], field);
                 } else {
                     throw new MojetRuntimeException("Bad converter on field " + field);
                 }
@@ -88,30 +90,43 @@ public class MojetLineAggregator<T> extends AbstractMojetLine<T> implements Line
         }
         return result;
     }
+    
+    private static void generateFragments(final TextStringBuilder output, TypeHandler<Object> handler, Object item, Field field) {
+        if (item.getClass().isArray()) {
+            for (int i = 0; i < Array.getLength(item); i++) {
+                generateFragment(output, handler, Array.get(item, i), field);
+            }
+        } else {
+            generateFragment(output, handler, item, field);
+        }
+    }
 
     private static void generateFragment(final TextStringBuilder output, TypeHandler<Object> handler, Object item, Field field) {
         final Fragment fragment = field.getAnnotation(Fragment.class);
         final String data = handler.write(item, fragment.format());
-        if (data.length() > fragment.length()) {
+        if (data.length() < 1) {
+            throw new MojetRuntimeException(field.toString() + " length is not a natural number");
+        } else if (data.length() > fragment.length()) {
             throw new MojetRuntimeException(field.toString() + " length (" + data.length() + ") greater than fragment length definition (" + fragment.length() + ")");
-        }
-        final Padding padding = field.getAnnotation(Padding.class);
-        final Padding.PadWay way;
-
-        if (padding != null) {
-            way = padding.value();
         } else {
-            way = Padding.PadWay.LEFT;
-        }
-        switch (way) {
-            case LEFT:
-                output.appendFixedWidthPadLeft(data, fragment.length(), fragment.padder());
-                break;
-            case RIGHT:
-                output.appendFixedWidthPadRight(data, fragment.length(), fragment.padder());
-                break;
-            default:
-                throw new MojetRuntimeException("Undefined case");
+            final Padding padding = field.getAnnotation(Padding.class);
+            final Padding.PadWay way;
+
+            if (padding != null) {
+                way = padding.value();
+            } else {
+                way = Padding.PadWay.LEFT;
+            }
+            switch (way) {
+                case LEFT:
+                    output.appendFixedWidthPadLeft(data, fragment.length(), fragment.padder());
+                    break;
+                case RIGHT:
+                    output.appendFixedWidthPadRight(data, fragment.length(), fragment.padder());
+                    break;
+                default:
+                    throw new MojetRuntimeException("Undefined case");
+            }
         }
     }
 

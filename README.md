@@ -35,6 +35,9 @@ public class ChildPojo {
     private double total;
     @Fragment(length = 3)
     private String label;
+    @Fragment(length = 5)
+    @Occurences(3)
+    private long[] values;
 
     // Getters / Setters...
 }
@@ -120,7 +123,6 @@ public class ExampleBatchConfig {
 * ✅ Multi-filler and padding support
 * ✅ Custom formatting support (e.g. LocalDate)
 * 🧪 Multi-record type support (in progress)
-* ❌ Collections and arrays not yet supported
 
 ## 🚀 Contributing
 Contributions are welcome!

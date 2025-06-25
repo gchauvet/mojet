@@ -21,18 +21,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Define a fragment of a record. Used to indicate the length of the field in a
- * line of data.
+ * Define the number of occurences for arrays.
  *
  * @author Guillaume CHAUVET
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface Fragment {
+public @interface Occurences {
 
-    int length();
-    
-    char padder() default ' ';
-
-    String format() default "";
+    int value() default 1;
 }
