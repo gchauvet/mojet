@@ -53,16 +53,7 @@ abstract class AbstractMojetLine<T> {
             if (field.isAnnotationPresent(Fragment.class) || field.isAnnotationPresent(Filler.class) || field.isAnnotationPresent(Fillers.class)) {
                 final String key = prefix + field.getName();
                 if (field.getType().isArray()) {
-                    if (!field.isAnnotationPresent(Occurences.class)) {
-                        throw new MojetRuntimeException("Array required a number of occurences. See corresponding annotation");
-                    }
-                    final int max = field.getAnnotation(Occurences.class).value();
-                    if (max < 1) {
-                        throw new MojetRuntimeException("Natual number of occurences expected on field " + field);
-                    }
-                    for (int i = 0; i < max; i++) {
-                        fieldMap.put(key + "[" + i + "]", field);
-                    }
+                    processOccuences(fieldMap, key, field);
                 } else {
                     if (field.isAnnotationPresent(Fragment.class) && field.getAnnotation(Fragment.class).length() < 1) {
                         throw new MojetRuntimeException("Natual number of occurences expected on field " + field);
@@ -76,6 +67,19 @@ abstract class AbstractMojetLine<T> {
             }
         }
         return fieldMap;
+    }
+
+    private void processOccuences(final Map<String, Field> fieldMap, String key, Field field) {
+        if (!field.isAnnotationPresent(Occurences.class)) {
+            throw new MojetRuntimeException("Array required a number of occurences. See corresponding annotation");
+        }
+        final int max = field.getAnnotation(Occurences.class).value();
+        if (max < 1) {
+            throw new MojetRuntimeException("Natual number of occurences expected on field " + field);
+        }
+        for (int i = 0; i < max; i++) {
+            fieldMap.put(key + "[" + i + "]", field);
+        }
     }
 
 }
