@@ -19,6 +19,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import pro.cyberyon.mojet.types.TypeHandler;
 
 /**
  * Define a fragment of a record. Used to indicate the length of the field in a
@@ -30,9 +31,21 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface Fragment {
 
+    /**
+     * The field length
+     * @return a positive number corresponding to field length
+     */
     int length();
     
+    /**
+     * The default padding character
+     * @return the padding character, with space as default
+     */
     char padder() default ' ';
 
+    /**
+     * An optional argument
+     * @return optional format argument passed to the {@link TypeHandler}
+     */
     String format() default "";
 }

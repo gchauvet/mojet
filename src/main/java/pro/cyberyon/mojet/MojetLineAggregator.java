@@ -33,6 +33,11 @@ public class MojetLineAggregator<T> extends AbstractMojetLine<T> implements Line
 
     private final BeanWrapperFieldExtractor<T> extractor;
 
+    /**
+     * Construct a new pojo {@link LineAggregator} instance
+     * 
+     * @param type the bean type to manage
+     */
     public MojetLineAggregator(final Class<T> type) {
         super(type);
         extractor = new BeanWrapperFieldExtractor<>();
