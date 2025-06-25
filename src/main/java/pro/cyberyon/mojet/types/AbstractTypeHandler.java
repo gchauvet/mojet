@@ -19,6 +19,7 @@ import org.apache.commons.lang3.ClassUtils;
 
 /**
  * partial implementation to every concret TypeHandler.
+ * @param <T> type of pojo record
  *
  * @author Guillaume CHAUVET
  */
@@ -40,8 +41,8 @@ public abstract class AbstractTypeHandler<T> implements TypeHandler<T> {
     }
 
     /**
-     *
-     * @param type class type to check
+     * Check type of field (or nested type array)
+     * @param type non primitive class type to check
      * @return positive if accepted
      */
     protected abstract boolean isAccept(Class<?> type);

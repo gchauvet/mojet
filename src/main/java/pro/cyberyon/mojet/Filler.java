@@ -32,12 +32,14 @@ import java.lang.annotation.Target;
 public @interface Filler {
 
     /**
-     * @return size of the filling area (natural number)
+     * The size of the filling area
+     * @return size of this filling area (positive number)
      */
     int length();
 
     /**
-     * @return the filling character of the area
+     * The default filling character
+     * @return the filling character of this area
      */
     char value() default ' ';
 }

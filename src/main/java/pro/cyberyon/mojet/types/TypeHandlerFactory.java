@@ -52,13 +52,15 @@ public final class TypeHandlerFactory {
      */
     public <T> TypeHandler<T> get(final Class<T> type) {
         try {
-            return (TypeHandler<T>) handlers.stream().filter(t -> t.accept(type)).findFirst().get();
+            return (TypeHandler<T>) handlers.stream().filter(t -> t.accept(type)).findFirst().orElseThrow();
         } catch (NoSuchElementException ex) {
             throw new MojetRuntimeException(ex);
         }
     }
 
     /**
+     * Get the singleton instance
+     * 
      * @return the singleton instance of this factory
      */
     public static TypeHandlerFactory getInstance() {

@@ -33,10 +33,14 @@ abstract class AbstractMojetLine<T> {
      */
     protected final Map<String, Field> mappedFields;
     /**
-     * The bean class type
+     * The pojo class type
      */
     protected final Class<T> type;
 
+    /**
+     * default constructor to build the list of field in a annoted pojo class
+     * @param targetType the pojo class type
+     */
     protected AbstractMojetLine(@NonNull Class<T> targetType) {
         this.type = targetType;
         mappedFields = Collections.unmodifiableMap(mapAnnotatedFields(type, ""));

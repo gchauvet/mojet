@@ -31,7 +31,8 @@ import java.lang.annotation.Target;
 public @interface Converter {
 
     /**
-     * @return the custom type handler
+     * Define a custom type handler on a field
+     * @return the custom type handler class
      */
     Class<? extends TypeHandler> value();
 

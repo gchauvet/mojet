@@ -27,7 +27,8 @@ import java.lang.annotation.*;
 public @interface Fillers {
 
     /**
-     * @return optional list of filler annotations used to populate the end of the record
+     * The filer lists to apply
+     * @return a list of filler annotations used to populate the end of the record
      */
     Filler[] value();
 }

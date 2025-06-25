@@ -17,6 +17,7 @@ package pro.cyberyon.mojet.types;
 
 /**
  * Type handler contract to manage java types.
+ * @param <T> type of field to handle
  *
  * @author Guillaume CHAUVET
  */
@@ -31,6 +32,8 @@ public interface TypeHandler<T> {
     boolean accept(Class<?> type);
 
     /**
+     * process an input string to a concrete field value
+     * 
      * @param data string of data
      * @param format of data, null otherwise
      * @return instance of the type
@@ -38,6 +41,8 @@ public interface TypeHandler<T> {
     T read(String data, String format);
 
     /**
+     * transform a field value to an output string
+     * 
      * @param data the type with data
      * @param format of data, null otherwise
      * @return string content of type

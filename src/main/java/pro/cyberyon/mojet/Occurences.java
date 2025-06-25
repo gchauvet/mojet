@@ -30,7 +30,8 @@ import java.lang.annotation.Target;
 public @interface Occurences {
 
     /**
-     * @return number of occurence on array field type
+     * Number of occurence on array field type
+     * @return a natural number
      */
     int value() default 1;
 }
