@@ -76,7 +76,7 @@ class MojetLineAggregatorTest {
         private char car = 'C';
         @Fragment(length = 5)
         @Occurences(3)
-        private long[] values = new long[] {2, 4, 6};
+        private long[] values = new long[]{2, 4, 6};
     }
 
     @Test
@@ -97,7 +97,7 @@ class MojetLineAggregatorTest {
         @Fragment(length = 10)
         private Object undefined = "";
     }
-    
+
     @Data
     @Record
     public static final class BadFragmentPojo {
@@ -195,12 +195,20 @@ class MojetLineAggregatorTest {
 
     @Data
     @Record
+    public static final class InvalidFragmentPojo {
+
+        @Fragment(length = -1)
+        private String value;
+    }
+
+    @Data
+    @Record
     public static final class NoOccurencesDefinedPojo {
 
         @Fragment(length = 5)
         private long[] values;
     }
-    
+
     @Data
     @Record
     public static final class BadOccurencesDefinedPojo {
@@ -233,6 +241,7 @@ class MojetLineAggregatorTest {
         assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(NoOccurencesDefinedPojo.class));
         assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(BadOccurencesDefinedPojo.class));
         assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(BadFragmentPojo.class));
+        assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(InvalidFragmentPojo.class));
     }
 
 }

@@ -119,10 +119,11 @@ public class ExampleBatchConfig {
 ```
 
 ## 🛠 Roadmap
-* ✅ Annotation-based POJO-to-fixed-length mapping
+* ✅ Annotation-based POJO-to-fixed-length mapping (including arrays)
 * ✅ Multi-filler and padding support
 * ✅ Custom formatting support (e.g. LocalDate)
 * 🧪 Multi-record type support (in progress)
+* ❌ Collections not yet supported
 
 ## 🚀 Contributing
 Contributions are welcome!
