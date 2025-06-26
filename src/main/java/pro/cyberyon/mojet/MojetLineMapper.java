@@ -40,7 +40,7 @@ public class MojetLineMapper<T> extends AbstractMojetLine<T> implements LineMapp
 
     /**
      * Construct a new pojo {@link LineMapper} instance
-     * 
+     *
      * @param targetType the bean type to manage
      */
     public MojetLineMapper(final Class<T> targetType) {
@@ -60,20 +60,24 @@ public class MojetLineMapper<T> extends AbstractMojetLine<T> implements LineMapp
     private Map<String, Range> mapToRanges() {
         final Map<String, Range> result = new LinkedHashMap<>();
         int current = 1;
+        Field previous = null;
         for (Entry<String, Field> field : mappedFields.entrySet()) {
-            current = processFillers(field, current);
+            current = processFillers(field, previous, current);
             current = processFragments(field, result, current);
+            previous = field.getValue();
         }
         return result;
     }
 
-    private int processFillers(final Entry<String, Field> field, int current) {
+    private int processFillers(final Entry<String, Field> field, final Field previous, int current) {
+        if (previous != field.getValue()) {
             for (Filler filler : field.getValue().getAnnotationsByType(Filler.class)) {
                 if (filler.length() <= 1) {
                     throw new MojetRuntimeException("Natural number expected on filler " + field.getKey());
                 }
                 current += filler.length();
             }
+        }
         return current;
     }
 
