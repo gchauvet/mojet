@@ -42,6 +42,7 @@ class MojetLineMapperTest {
         private ChildPojo child;
         @Fragment(length = 3)
         int counter;
+        @Filler(length = 3)
         @Fragment(length = 5, padder = '0')
         @Occurences(3)
         long[] values;
@@ -55,7 +56,7 @@ class MojetLineMapperTest {
     public static class ChildPojo {
 
         @Fragment(length = 6)
-        private double total;
+        private long total;
         @Fragment(length = 3)
         private String label;
     }
@@ -63,12 +64,12 @@ class MojetLineMapperTest {
     @Test
     void testSimpleReadLineToRootPojo() throws Exception {
         final MojetLineMapper<RootPojo> mapper = new MojetLineMapper(RootPojo.class);
-        final RootPojo result = mapper.mapLine("01985000##114273EUR567000010000200003_____", 1);
+        final RootPojo result = mapper.mapLine("01985000##114273EUR567   100011000210003_____", 1);
         assertEquals(1985, result.getId());
         assertEquals(114273, result.getChild().getTotal());
         assertEquals("EUR", result.getChild().getLabel());
         assertEquals(567, result.getCounter());
-        assertArrayEquals(new long[] {1, 2, 3}, result.getValues());
+        assertArrayEquals(new long[]{10001, 10002, 10003}, result.getValues());
     }
 
     @Data
@@ -90,7 +91,7 @@ class MojetLineMapperTest {
         @Filler(length = 0)
         private int value2;
     }
-    
+
     @Data
     @Record
     public static class BadRecordPojo {

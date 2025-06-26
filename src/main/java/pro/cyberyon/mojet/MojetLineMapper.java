@@ -40,7 +40,7 @@ public class MojetLineMapper<T> extends AbstractMojetLine<T> implements LineMapp
 
     /**
      * Construct a new pojo {@link LineMapper} instance
-     * 
+     *
      * @param targetType the bean type to manage
      */
     public MojetLineMapper(final Class<T> targetType) {
@@ -60,23 +60,23 @@ public class MojetLineMapper<T> extends AbstractMojetLine<T> implements LineMapp
     private Map<String, Range> mapToRanges() {
         final Map<String, Range> result = new LinkedHashMap<>();
         int current = 1;
+        Field previous = null;
         for (Entry<String, Field> field : mappedFields.entrySet()) {
-            current = processFillers(field, current);
-            current = processFragments(field, result, current) + 1;
+            current = processFillers(field, previous, current);
+            current = processFragments(field, result, current);
+            previous = field.getValue();
         }
         return result;
     }
 
-    private int processFillers(final Entry<String, Field> field, int current) {
-        final Filler[] fillers = field.getValue().getAnnotationsByType(Filler.class);
-        if (null != fillers && fillers.length > 0) {
-            for (Filler filler : fillers) {
+    private int processFillers(final Entry<String, Field> field, final Field previous, int current) {
+        if (previous != field.getValue()) {
+            for (Filler filler : field.getValue().getAnnotationsByType(Filler.class)) {
                 if (filler.length() <= 1) {
                     throw new MojetRuntimeException("Natural number expected on filler " + field.getKey());
                 }
                 current += filler.length();
             }
-            --current;
         }
         return current;
     }
@@ -88,8 +88,8 @@ public class MojetLineMapper<T> extends AbstractMojetLine<T> implements LineMapp
             if (length <= 1) {
                 throw new MojetRuntimeException("Natural number expected on fragment " + field.getKey());
             }
-            final int end = current + length - 1;
-            result.put(field.getKey(), new Range(current, end));
+            final int end = current + length;
+            result.put(field.getKey(), new Range(current, end - 1));
             current = end;
         }
         return current;
