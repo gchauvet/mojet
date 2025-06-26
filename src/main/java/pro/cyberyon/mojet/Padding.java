@@ -45,7 +45,7 @@ public @interface Padding {
 
     /**
      * The padding way to apply
-     * 
+     *
      * @return padding way constant enum
      */
     PadWay value() default PadWay.RIGHT;

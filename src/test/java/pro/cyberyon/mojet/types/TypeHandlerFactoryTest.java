@@ -41,7 +41,7 @@ class TypeHandlerFactoryTest {
         assertNotNull(instance.get(String.class));
         assertNotNull(instance.get(byte.class));
         assertNotNull(instance.get(LocalDate.class));
-        
+
         assertThrows(MojetRuntimeException.class, () -> instance.get(Void.class));
     }
 

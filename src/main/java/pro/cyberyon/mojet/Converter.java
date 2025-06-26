@@ -32,6 +32,7 @@ public @interface Converter {
 
     /**
      * Define a custom type handler on a field
+     *
      * @return the custom type handler class
      */
     Class<? extends TypeHandler> value();

@@ -35,7 +35,7 @@ public class MojetLineAggregator<T> extends AbstractMojetLine<T> implements Line
 
     /**
      * Construct a new pojo {@link LineAggregator} instance
-     * 
+     *
      * @param type the bean type to manage
      */
     public MojetLineAggregator(final Class<T> type) {
@@ -94,7 +94,6 @@ public class MojetLineAggregator<T> extends AbstractMojetLine<T> implements Line
         }
         return result;
     }
-
 
     private static void generateFragment(final TextStringBuilder output, TypeHandler<Object> handler, Object item, Field field) {
         final Fragment fragment = field.getAnnotation(Fragment.class);

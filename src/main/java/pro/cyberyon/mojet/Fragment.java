@@ -33,18 +33,21 @@ public @interface Fragment {
 
     /**
      * The field length
+     *
      * @return a positive number corresponding to field length
      */
     int length();
-    
+
     /**
      * The default padding character
+     *
      * @return the padding character, with space as default
      */
     char padder() default ' ';
 
     /**
      * An optional argument
+     *
      * @return optional format argument passed to the {@link TypeHandler}
      */
     String format() default "";

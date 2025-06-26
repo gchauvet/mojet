@@ -28,7 +28,9 @@ public @interface Fillers {
 
     /**
      * The filer lists to apply
-     * @return a list of filler annotations used to populate the end of the record
+     *
+     * @return a list of filler annotations used to populate the end of the
+     * record
      */
     Filler[] value();
 }

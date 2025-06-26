@@ -33,12 +33,14 @@ public @interface Filler {
 
     /**
      * The size of the filling area
+     *
      * @return size of this filling area (positive number)
      */
     int length();
 
     /**
      * The default filling character
+     *
      * @return the filling character of this area
      */
     char value() default ' ';
