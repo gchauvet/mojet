@@ -31,16 +31,14 @@ class BigIntegerTypeHandlerTest {
     @Test
     void testAccept() {
         assertFalse(instance.accept(null));
-        assertFalse(instance.accept(Double.class));
-        assertFalse(instance.accept(long.class));
-        assertTrue(instance.accept(Integer.class));
-        assertTrue(instance.accept(int.class));
+        assertFalse(instance.accept(Integer.class));
+        assertTrue(instance.accept(BigInteger.class));
     }
 
     @Test
     void testRead() {
-        assertEquals(1, instance.read("1", null));
-        assertEquals(1985, instance.read("1985", null));
+        assertEquals(BigInteger.ONE, instance.read("1", null));
+        assertEquals(BigInteger.valueOf(1985), instance.read("1985", null));
     }
 
     @Test

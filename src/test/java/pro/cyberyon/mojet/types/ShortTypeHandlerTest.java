@@ -32,8 +32,8 @@ class ShortTypeHandlerTest {
         assertFalse(instance.accept(null));
         assertFalse(instance.accept(Double.class));
         assertFalse(instance.accept(long.class));
-        assertTrue(instance.accept(Integer.class));
-        assertTrue(instance.accept(int.class));
+        assertTrue(instance.accept(Short.class));
+        assertTrue(instance.accept(short.class));
     }
 
     @Test
