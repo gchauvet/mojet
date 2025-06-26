@@ -16,7 +16,7 @@
 package pro.cyberyon.mojet.types;
 
 /**
- * Integer data type handler
+ * Short data type handler
  *
  * @author Guillaume CHAUVET
  */

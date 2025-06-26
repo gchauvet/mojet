@@ -18,7 +18,7 @@ package pro.cyberyon.mojet.types;
 import java.math.BigInteger;
 
 /**
- * Integer data type handler
+ * Big integer data type handler
  *
  * @author Guillaume CHAUVET
  */
