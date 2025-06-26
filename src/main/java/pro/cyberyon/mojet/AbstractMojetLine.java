@@ -67,21 +67,21 @@ abstract class AbstractMojetLine<T> {
     }
 
     private static void processField(final Map<String, Field> fieldMap, final String prefix, final Field field) {
-        if (field.isAnnotationPresent(Fragment.class) || field.isAnnotationPresent(Filler.class) || field.isAnnotationPresent(Fillers.class)) {
-            final String key = prefix + field.getName();
-            if (field.getType().isArray()) {
-                processOccuences(fieldMap, key, field);
-            } else {
-                if (field.isAnnotationPresent(Fragment.class) && field.getAnnotation(Fragment.class).length() < 1) {
-                    throw new MojetRuntimeException("Natual number of occurences expected on field " + field);
+            if (field.isAnnotationPresent(Fragment.class) || field.isAnnotationPresent(Filler.class) || field.isAnnotationPresent(Fillers.class)) {
+                final String key = prefix + field.getName();
+                if (field.getType().isArray()) {
+                    processOccuences(fieldMap, key, field);
+                } else {
+                    if (field.isAnnotationPresent(Fragment.class) && field.getAnnotation(Fragment.class).length() < 1) {
+                        throw new MojetRuntimeException("Natual number of occurences expected on field " + field);
+                    }
+                    fieldMap.put(key, field);
                 }
-                fieldMap.put(key, field);
             }
-        }
     }
 
     private static void processRecord(final Map<String, Field> fieldMap, final String prefix, final Field field) {
-        if (field.getType().isAnnotationPresent(Record.class)) {
+            if (field.getType().isAnnotationPresent(Record.class)) {
             if (field.isAnnotationPresent(Record.class)) {
                 // If the field is a custom class, we recursively explore
                 fieldMap.putAll(mapAnnotatedFields(field.getType(), prefix + field.getName() + "."));
