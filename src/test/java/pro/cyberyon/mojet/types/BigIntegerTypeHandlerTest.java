@@ -15,36 +15,38 @@
  */
 package pro.cyberyon.mojet.types;
 
+import java.math.BigInteger;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Unit test of charactere type handler
+ * Unit test of big integer type handler
  *
  * @author Guillaume CHAUVET
  */
-class CharactereTypeHandlerTest {
+class BigIntegerTypeHandlerTest {
 
-    private final CharacterTypeHandler instance = new CharacterTypeHandler();
+    private final BigIntegerTypeHandler instance = new BigIntegerTypeHandler();
 
     @Test
     void testAccept() {
         assertFalse(instance.accept(null));
         assertFalse(instance.accept(Double.class));
-        assertTrue(instance.accept(char.class));
-        assertTrue(instance.accept(Character.class));
+        assertFalse(instance.accept(long.class));
+        assertTrue(instance.accept(Integer.class));
+        assertTrue(instance.accept(int.class));
     }
 
     @Test
     void testRead() {
-        assertEquals('0', instance.read("0", null));
-        assertEquals('t', instance.read("t", null));
+        assertEquals(1, instance.read("1", null));
+        assertEquals(1985, instance.read("1985", null));
     }
 
     @Test
     void testWrite() {
-        assertEquals("t", instance.write('t', null));
-        assertEquals("€", instance.write('€', null));
+        assertEquals("0", instance.write(BigInteger.ZERO, null));
+        assertEquals("1985", instance.write(BigInteger.valueOf(1985), null));
     }
 
 }

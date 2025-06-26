@@ -36,6 +36,9 @@ public final class TypeHandlerFactory {
         final var types = new HashSet<TypeHandler<?>>();
         types.add(new StringTypeHandler());
         types.add(new LongTypeHandler());
+        types.add(new IntegerTypeHandler());
+        types.add(new ShortTypeHandler());
+        types.add(new BigIntegerTypeHandler());
         types.add(new ByteTypeHandler());
         types.add(new CharacterTypeHandler());
         types.add(new LocalDateTypeHandler());
