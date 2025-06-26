@@ -69,7 +69,7 @@ class MojetLineMapperTest {
         assertEquals(114273, result.getChild().getTotal());
         assertEquals("EUR", result.getChild().getLabel());
         assertEquals(567, result.getCounter());
-        assertArrayEquals(new long[] {10001, 10002, 10003}, result.getValues());
+        assertArrayEquals(new long[]{10001, 10002, 10003}, result.getValues());
     }
 
     @Data
