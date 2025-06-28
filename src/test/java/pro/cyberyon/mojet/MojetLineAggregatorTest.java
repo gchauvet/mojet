@@ -18,8 +18,6 @@ package pro.cyberyon.mojet;
 import pro.cyberyon.mojet.types.AbstractTypeHandler;
 import java.time.LocalDate;
 import java.time.Month;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 import lombok.Data;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,27 +29,6 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class MojetLineAggregatorTest {
 
-    public static final class MyLocalDateTypeHandler extends AbstractTypeHandler<LocalDate> {
-
-        @Override
-        protected boolean isAccept(Class<?> type) {
-            return LocalDate.class == type;
-        }
-
-        @Override
-        public LocalDate read(String data, String format) {
-            final DateTimeFormatter sfd = DateTimeFormatter.ofPattern("dd" + format, Locale.FRENCH);
-            return LocalDate.parse("01" + data, sfd);
-        }
-
-        @Override
-        public String write(LocalDate data, String format) {
-            final DateTimeFormatter sfd = DateTimeFormatter.ofPattern("dd" + format, Locale.FRENCH);
-            return data.format(sfd).substring(2);
-        }
-
-    }
-
     @Data
     @Record
     @Filler(length = 3, value = '€')
@@ -61,11 +38,9 @@ class MojetLineAggregatorTest {
         private long id;
         @Filler(length = 3, value = '#')
         @Filler(length = 2, value = '|')
-        @Padding(Padding.PadWay.LEFT)
         @Fragment(length = 10)
         private String name;
-        @Padding(Padding.PadWay.RIGHT)
-        @Fragment(length = 10, padder = '_')
+        @Fragment(length = 10, padder = '_', alignement = Fragment.PadWay.RIGHT)
         private String surname;
         @Converter(MyLocalDateTypeHandler.class)
         @Fragment(length = 4, format = "yyMM")

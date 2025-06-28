@@ -15,6 +15,8 @@
  */
 package pro.cyberyon.mojet;
 
+import java.time.LocalDate;
+import java.time.Month;
 import lombok.Data;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -46,6 +48,9 @@ class MojetLineMapperTest {
         @Fragment(length = 5, padder = '0')
         @Occurences(3)
         long[] values;
+        @Converter(MyLocalDateTypeHandler.class)
+        @Fragment(length = 8)
+        private LocalDate date;
     }
 
     /**
@@ -64,12 +69,13 @@ class MojetLineMapperTest {
     @Test
     void testSimpleReadLineToRootPojo() throws Exception {
         final MojetLineMapper<RootPojo> mapper = new MojetLineMapper(RootPojo.class);
-        final RootPojo result = mapper.mapLine("01985000##114273EUR567   100011000210003_____", 1);
+        final RootPojo result = mapper.mapLine("01985000##114273EUR567   10001100021000320030118_____", 1);
         assertEquals(1985, result.getId());
         assertEquals(114273, result.getChild().getTotal());
         assertEquals("EUR", result.getChild().getLabel());
         assertEquals(567, result.getCounter());
         assertArrayEquals(new long[]{10001, 10002, 10003}, result.getValues());
+        assertEquals(LocalDate.of(2003, Month.JANUARY, 18), result.getDate());
     }
 
     @Data

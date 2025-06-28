@@ -13,31 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pro.cyberyon.mojet;
+package pro.cyberyon.mojet.nodes;
 
-import lombok.NonNull;
-import pro.cyberyon.mojet.nodes.RecordNode;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 /**
- * Skeleton class providing fields extraction.
  *
  * @author Guillaume CHAUVET
  */
-abstract class AbstractMojetLine<T> {
-
-    /**
-     * The pojo class type
-     */
-    protected final RecordNode root;
-
-    /**
-     * default constructor to build the list of field in a annoted pojo class
-     *
-     * @param targetType the pojo class type
-     */
-    protected AbstractMojetLine(@NonNull Class<T> targetType) {
-        final NodesBuilder builder = new NodesBuilder();
-        root = builder.build(targetType);
-    }
-
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
+abstract class AbstractNode<A> implements NodeVisitable {
+    
+    protected final A annotation;
+    
+    @Getter
+    protected final String accessor;
+    
 }

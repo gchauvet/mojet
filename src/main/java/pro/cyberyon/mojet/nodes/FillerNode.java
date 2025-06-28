@@ -13,31 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pro.cyberyon.mojet;
+package pro.cyberyon.mojet.nodes;
 
-import lombok.NonNull;
-import pro.cyberyon.mojet.nodes.RecordNode;
+import pro.cyberyon.mojet.Filler;
 
 /**
- * Skeleton class providing fields extraction.
  *
  * @author Guillaume CHAUVET
  */
-abstract class AbstractMojetLine<T> {
+public class FillerNode extends AbstractNode<Filler> {
 
-    /**
-     * The pojo class type
-     */
-    protected final RecordNode root;
-
-    /**
-     * default constructor to build the list of field in a annoted pojo class
-     *
-     * @param targetType the pojo class type
-     */
-    protected AbstractMojetLine(@NonNull Class<T> targetType) {
-        final NodesBuilder builder = new NodesBuilder();
-        root = builder.build(targetType);
+    public FillerNode(Filler annotation) {
+        super(annotation, null);
     }
-
+    
+    public int getLength() {
+        return annotation.length();
+    }
+    
+    public char getPadding() {
+        return annotation.value();
+    }
+    
+    @Override
+    public void accept(NodeVisitor visitor) {
+        visitor.visit(this);
+    }
 }

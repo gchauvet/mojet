@@ -13,31 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pro.cyberyon.mojet;
+package pro.cyberyon.mojet.nodes;
 
-import lombok.NonNull;
-import pro.cyberyon.mojet.nodes.RecordNode;
+import lombok.Getter;
+import pro.cyberyon.mojet.Occurences;
 
 /**
- * Skeleton class providing fields extraction.
  *
  * @author Guillaume CHAUVET
  */
-abstract class AbstractMojetLine<T> {
+public class OccurenceNode extends AbstractNode<Occurences> {
 
-    /**
-     * The pojo class type
-     */
-    protected final RecordNode root;
+    @Getter
+    private final NodeVisitable item;
 
-    /**
-     * default constructor to build the list of field in a annoted pojo class
-     *
-     * @param targetType the pojo class type
-     */
-    protected AbstractMojetLine(@NonNull Class<T> targetType) {
-        final NodesBuilder builder = new NodesBuilder();
-        root = builder.build(targetType);
+    public OccurenceNode(String accessor, Occurences annotation, NodeVisitable item) {
+        super(annotation, accessor);
+        this.item = item;
+    }
+    
+    public int getCount() {
+        return annotation.value();
     }
 
+    @Override
+    public void accept(NodeVisitor visitor) {
+        visitor.visit(this);
+    }
 }
