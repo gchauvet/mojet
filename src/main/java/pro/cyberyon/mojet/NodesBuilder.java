@@ -61,7 +61,7 @@ public class NodesBuilder {
 		handler = TypeHandlerFactory.getInstance().get(field.getType());
 	    }
 	    if (handler.accept(field.getType())) {
-		NodeVisitable node = new FragmentNode(accessor, field.getAnnotation(Fragment.class), handler);
+		AbstractNode node = new FragmentNode(accessor, field.getAnnotation(Fragment.class), handler);
 
 		if (field.getType().isArray()) {
 		    if (field.isAnnotationPresent(Occurences.class)) {

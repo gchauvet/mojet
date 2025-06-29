@@ -15,10 +15,13 @@
  */
 package pro.cyberyon.mojet;
 
+import java.util.Stack;
+import java.util.stream.Collectors;
 import org.springframework.batch.item.file.LineMapper;
 
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
+import pro.cyberyon.mojet.nodes.AbstractNode;
 import pro.cyberyon.mojet.nodes.FillerNode;
 import pro.cyberyon.mojet.nodes.FragmentNode;
 import pro.cyberyon.mojet.nodes.NodeVisitor;
@@ -41,34 +44,56 @@ public class MojetLineMapper<T> extends AbstractMojetLine<T> implements LineMapp
      * @param targetType the bean type to manage
      */
     public MojetLineMapper(final Class<T> targetType) {
-        super(targetType);
+	super(targetType);
     }
 
     @Override
-    public T mapLine(String line, int lineNumber) throws Exception {
-        final BeanWrapper wrapper = new BeanWrapperImpl(root.getType());
-        root.accept(new NodeVisitor() {
-            @Override
-            public void visit(RecordNode node) {
-                throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-            }
+    public T mapLine(final String line, int lineNumber) throws Exception {
+	final BeanWrapper wrapper = new BeanWrapperImpl(root.getType());
+	wrapper.setAutoGrowNestedPaths(true);
+	root.accept(new NodeVisitor() {
 
-            @Override
-            public void visit(FillerNode node) {
-                throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-            }
+	    private final Stack<String> path = new Stack<>();
+	    private int index = 0;
 
-            @Override
-            public void visit(OccurencesNode node) {
-                throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-            }
+	    @Override
+	    public void visit(final RecordNode node) {
+		for (AbstractNode visitable : node.getNodes()) {
+		    path.push(visitable.getAccessor());
+		    visitable.accept(this);
+		    path.pop();
+		}
+	    }
 
-            @Override
-            public void visit(FragmentNode node) {
-                throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-            }
-        });
-        return (T) wrapper.getWrappedInstance();
+	    @Override
+	    public void visit(final FillerNode node) {
+		index += node.getLength();
+	    }
+
+	    @Override
+	    public void visit(final OccurencesNode node) {
+		final String old = path.pop();
+		for (int i = 0; i < node.getCount(); i++) {
+		    path.push(node.getAccessor() + "[" + i + "]");
+		    node.getItem().accept(this);
+		    path.pop();
+		}
+		path.push(old);
+	    }
+
+	    @Override
+	    public void visit(final FragmentNode node) {
+		final String data = line.substring(index, index + node.getLenght());
+		final Object value = node.getHandler().read(data, node.getFormat());
+		wrapper.setPropertyValue(getPath(), value);
+		index += node.getLenght();
+	    }
+
+	    private String getPath() {
+		return path.stream().filter(t -> !t.isEmpty()).collect(Collectors.joining("."));
+	    }
+	});
+	return (T) wrapper.getWrappedInstance();
     }
 
 }

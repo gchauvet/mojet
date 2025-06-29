@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
  * @author Guillaume CHAUVET
  */
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-abstract class AbstractNode<A> implements NodeVisitable {
+abstract public class AbstractNode<A> implements NodeVisitable {
     
     protected final A annotation;
     

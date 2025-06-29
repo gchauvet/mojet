@@ -51,12 +51,10 @@ public class SimplePojo {
 
     @Filler(length = 3, value = '#')
     @Filler(length = 2, value = '|')
-    @Padding(Padding.PadWay.LEFT)
     @Fragment(length = 10)
     private String name; // Left-padded to 10 characters with spaces
 
-    @Padding(Padding.PadWay.RIGHT)
-    @Fragment(length = 10, padder = '_')
+    @Fragment(length = 10, padder = '_', alignement = PadWay.RIGHT)
     private String surname; // Right-padded to 10 characters with underscores
 
     @Converter(MyLocalDateTypeHandler.class)

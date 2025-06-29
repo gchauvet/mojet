@@ -27,7 +27,7 @@ import lombok.Getter;
  */
 public class RecordNode extends AbstractNode<Record> {
     
-    private final Set<NodeVisitable> nodes = new LinkedHashSet<>();
+    private final Set<AbstractNode> nodes = new LinkedHashSet<>();
     @Getter
     private final Class<?> type;
 
@@ -36,11 +36,11 @@ public class RecordNode extends AbstractNode<Record> {
         this.type = type;
     }
     
-    public boolean add(NodeVisitable node) {
+    public boolean add(AbstractNode node) {
         return nodes.add(node);
     }
     
-    public Set<NodeVisitable> getNodes() {
+    public Set<AbstractNode> getNodes() {
         return Collections.unmodifiableSet(nodes);
     }
 
