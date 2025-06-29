@@ -48,6 +48,16 @@ public class MojetLineMapper<T> extends AbstractMojetLine<T> implements LineMapp
     public MojetLineMapper(final Class<T> targetType) {
 	super(targetType);
     }
+    
+    /**
+     * Construct a new pojo {@link LineMapper} instance
+     *
+     * @param builder the node builder instance to use
+     * @param targetType the bean type to manage
+     */
+    public MojetLineMapper(final NodesBuilder builder, final Class<T> targetType) {
+	super(targetType, builder);
+    }
 
     /**
      * {@inheritDoc}

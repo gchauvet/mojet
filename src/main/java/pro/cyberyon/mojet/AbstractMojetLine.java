@@ -31,12 +31,22 @@ abstract class AbstractMojetLine<T> {
     protected final RecordNode root;
 
     /**
-     * default constructor to build the list of field in a annoted pojo class
+     * Constructor to build the list of field in a annoted pojo class
      *
      * @param targetType the pojo class type
      */
     protected AbstractMojetLine(@NonNull Class<T> targetType) {
-	final NodesBuilder builder = new NodesBuilder();
+	this(targetType, new NodesBuilder());
+
+    }
+
+    /**
+     * Constructor to build the list of field in a annoted pojo class
+     *
+     * @param targetType the pojo class type
+     * @param builder the builder to use
+     */
+    protected AbstractMojetLine(@NonNull Class<T> targetType, @NonNull NodesBuilder builder) {
 	root = builder.build(targetType);
     }
 

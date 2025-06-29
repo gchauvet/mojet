@@ -16,6 +16,8 @@
 package pro.cyberyon.mojet;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 import pro.cyberyon.mojet.nodes.*;
 import pro.cyberyon.mojet.types.TypeHandler;
 import pro.cyberyon.mojet.types.TypeHandlerFactory;
@@ -25,7 +27,12 @@ import pro.cyberyon.mojet.types.TypeHandlerFactory;
  *
  * @author Guillaume CHAUVET
  */
-class NodesBuilder {
+public class NodesBuilder {
+
+    /**
+     * Cache to avoid multiple resolution time type.
+     */
+    private final Map<Class, RecordNode> cache = new HashMap<>();
 
     /**
      * Construct an AST from a class definition
@@ -33,21 +40,24 @@ class NodesBuilder {
      * @param type the class definition
      * @return a Recod not as root element
      */
-    RecordNode build(Class<?> type) {
+    public RecordNode build(Class<?> type) {
 	return build("", type);
     }
 
     private RecordNode build(String accessor, Class<?> type) {
-	if (!type.isAnnotationPresent(Record.class)) {
-	    throw new MojetRuntimeException("Record not annoted");
-	} else {
-	    final RecordNode result = new RecordNode(accessor, type);
-	    for (Field field : type.getDeclaredFields()) {
-		build(field, result);
+	if (!cache.containsKey(type)) {
+	    if (!type.isAnnotationPresent(Record.class)) {
+		throw new MojetRuntimeException("Record not annoted");
+	    } else {
+		final RecordNode result = new RecordNode(accessor, type);
+		for (Field field : type.getDeclaredFields()) {
+		    build(field, result);
+		}
+		addFillers(type.getDeclaredAnnotationsByType(Filler.class), result);
+		cache.put(type, result);
 	    }
-	    addFillers(type.getDeclaredAnnotationsByType(Filler.class), result);
-	    return result;
 	}
+	return cache.get(type);
     }
 
     private void build(final Field field, final RecordNode node) {

@@ -48,6 +48,16 @@ public class MojetLineAggregator<T> extends AbstractMojetLine<T> implements Line
     }
 
     /**
+     * Construct a new pojo {@link LineAggregator} instance
+     *
+     * @param builder the node builder instance to use
+     * @param type the bean type to manage
+     */
+    public MojetLineAggregator(final NodesBuilder builder, final Class<T> type) {
+	super(type, builder);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
