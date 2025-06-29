@@ -32,7 +32,7 @@ public class NodesBuilder {
     /**
      * Cache to avoid multiple resolution time type.
      */
-    private final Map<Class, RecordNode> cache = new HashMap<>();
+    private final Map<Class<?>, RecordNode> cache = new HashMap<>();
 
     /**
      * Construct an AST from a class definition

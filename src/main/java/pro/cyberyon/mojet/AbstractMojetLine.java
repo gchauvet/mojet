@@ -15,7 +15,14 @@
  */
 package pro.cyberyon.mojet;
 
+import java.util.ArrayDeque;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.stream.Collectors;
 import lombok.NonNull;
+import pro.cyberyon.mojet.nodes.AbstractNode;
+import pro.cyberyon.mojet.nodes.NodeVisitor;
+import pro.cyberyon.mojet.nodes.OccurencesNode;
 import pro.cyberyon.mojet.nodes.RecordNode;
 
 /**
@@ -48,6 +55,55 @@ abstract class AbstractMojetLine<T> {
      */
     protected AbstractMojetLine(@NonNull Class<T> targetType, @NonNull NodesBuilder builder) {
 	root = builder.build(targetType);
+    }
+
+    /**
+     * Abstract node visitor implemention, providing common behaviors
+     */
+    protected static abstract class AbstractNodeVisitor implements NodeVisitor {
+
+	private final Deque<String> path = new ArrayDeque<>();
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final void visit(final RecordNode node) {
+	    for (AbstractNode<?> visitable : node.getNodes()) {
+		path.push(visitable.getAccessor());
+		visitable.accept(this);
+		path.pop();
+	    }
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final void visit(final OccurencesNode node) {
+	    final String old = path.pop();
+	    for (int i = 0; i < node.getCount(); i++) {
+		path.push(node.getAccessor() + "[" + i + "]");
+		node.getItem().accept(this);
+		path.pop();
+	    }
+	    path.push(old);
+	}
+
+	/**
+	 * Get the path from root record
+	 *
+	 * @return the absolute path from root record
+	 */
+	protected final String getPath() {
+	    return path.stream().filter(t -> !t.isEmpty()).collect(Collectors.collectingAndThen(
+		    Collectors.toList(),
+		    lst -> {
+			Collections.reverse(lst);
+			return lst.stream().filter(t -> !t.isEmpty()).collect(Collectors.joining("."));
+		    }
+	    ));
+	}
     }
 
 }

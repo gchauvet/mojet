@@ -15,19 +15,11 @@
  */
 package pro.cyberyon.mojet;
 
-import java.util.ArrayDeque;
-import java.util.Collections;
-import java.util.Deque;
-import java.util.stream.Collectors;
 import org.apache.commons.text.TextStringBuilder;
 import org.springframework.batch.item.file.transform.LineAggregator;
 import org.springframework.beans.BeanWrapperImpl;
-import pro.cyberyon.mojet.nodes.AbstractNode;
 import pro.cyberyon.mojet.nodes.FillerNode;
 import pro.cyberyon.mojet.nodes.FragmentNode;
-import pro.cyberyon.mojet.nodes.NodeVisitor;
-import pro.cyberyon.mojet.nodes.OccurencesNode;
-import pro.cyberyon.mojet.nodes.RecordNode;
 import pro.cyberyon.mojet.types.TypeHandler;
 
 /**
@@ -63,44 +55,13 @@ public class MojetLineAggregator<T> extends AbstractMojetLine<T> implements Line
     @Override
     public String aggregate(final T item) {
 	final TextStringBuilder output = new TextStringBuilder();
-	root.accept(new NodeVisitor() {
+	root.accept(new AbstractNodeVisitor() {
 
 	    private final BeanWrapperImpl bean = new BeanWrapperImpl(item);
-	    private final Deque<String> path = new ArrayDeque<>();
-
-	    private String getPath() {
-		return path.stream().filter(t -> !t.isEmpty()).collect(Collectors.collectingAndThen(
-			Collectors.toList(),
-			lst -> {
-			    Collections.reverse(lst);
-			    return lst.stream().filter(t -> !t.isEmpty()).collect(Collectors.joining("."));
-			}
-		));
-	    }
-
-	    @Override
-	    public void visit(final RecordNode node) {
-		for (AbstractNode<?> visitable : node.getNodes()) {
-		    path.push(visitable.getAccessor());
-		    visitable.accept(this);
-		    path.pop();
-		}
-	    }
 
 	    @Override
 	    public void visit(final FillerNode node) {
 		output.appendPadding(node.getLength(), node.getPadding());
-	    }
-
-	    @Override
-	    public void visit(final OccurencesNode node) {
-		final String old = path.pop();
-		for (int i = 0; i < node.getCount(); i++) {
-		    path.push(node.getAccessor() + "[" + i + "]");
-		    node.getItem().accept(this);
-		    path.pop();
-		}
-		path.push(old);
 	    }
 
 	    @Override
