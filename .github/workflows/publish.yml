@@ -23,7 +23,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Deploy to Maven Central
-        uses: actions/setup-java@v4
         with:
           gpg-key-name: ${{ secrets.GPG_KEY_NAME }}
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
