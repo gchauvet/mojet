@@ -15,11 +15,15 @@
  */
 package pro.cyberyon.mojet;
 
-import java.lang.reflect.Field;
+import java.util.ArrayDeque;
 import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.Deque;
+import java.util.stream.Collectors;
 import lombok.NonNull;
+import pro.cyberyon.mojet.nodes.AbstractNode;
+import pro.cyberyon.mojet.nodes.NodeVisitor;
+import pro.cyberyon.mojet.nodes.OccurencesNode;
+import pro.cyberyon.mojet.nodes.RecordNode;
 
 /**
  * Skeleton class providing fields extraction.
@@ -29,81 +33,77 @@ import lombok.NonNull;
 abstract class AbstractMojetLine<T> {
 
     /**
-     * a map of key(field path)/value(field declaration) pair whose insertion
-     * order is retained
-     */
-    protected final Map<String, Field> mappedFields;
-    /**
      * The pojo class type
      */
-    protected final Class<T> type;
+    protected final RecordNode root;
 
     /**
-     * default constructor to build the list of field in a annoted pojo class
+     * Constructor to build the list of field in a annoted pojo class
      *
      * @param targetType the pojo class type
      */
     protected AbstractMojetLine(@NonNull Class<T> targetType) {
-        this.type = targetType;
-        mappedFields = Collections.unmodifiableMap(mapAnnotatedFields(type, ""));
+	this(targetType, new NodesBuilder());
+
     }
 
     /**
-     * Browse the class fields and create a map of fields annotated with
+     * Constructor to build the list of field in a annoted pojo class
      *
-     * @Fragment. If a field is a custom class annotated with @Registration, it
-     * is explored recursively.
-     *
-     * @param clazz la classe to wrap
-     * @param prefix prefix for field names
-     * @return a map of field names and their corresponding ranges
+     * @param targetType the pojo class type
+     * @param builder the builder to use
      */
-    private static Map<String, Field> mapAnnotatedFields(final Class<?> clazz, final String prefix) {
-        final Map<String, Field> fieldMap = new LinkedHashMap<>();
-
-        for (Field field : clazz.getDeclaredFields()) {
-            processField(fieldMap, prefix, field);
-            processRecord(fieldMap, prefix, field);
-        }
-        return fieldMap;
+    protected AbstractMojetLine(@NonNull Class<T> targetType, @NonNull NodesBuilder builder) {
+	root = builder.build(targetType);
     }
 
-    private static void processField(final Map<String, Field> fieldMap, final String prefix, final Field field) {
-        if (field.isAnnotationPresent(Fragment.class) || field.isAnnotationPresent(Filler.class) || field.isAnnotationPresent(Fillers.class)) {
-            final String key = prefix + field.getName();
-            if (field.getType().isArray()) {
-                processOccuences(fieldMap, key, field);
-            } else {
-                if (field.isAnnotationPresent(Fragment.class) && field.getAnnotation(Fragment.class).length() < 1) {
-                    throw new MojetRuntimeException("Natual number of occurences expected on field " + field);
-                }
-                fieldMap.put(key, field);
-            }
-        }
-    }
+    /**
+     * Abstract node visitor implemention, providing common behaviors
+     */
+    protected abstract static class AbstractNodeVisitor implements NodeVisitor {
 
-    private static void processRecord(final Map<String, Field> fieldMap, final String prefix, final Field field) {
-        if (field.getType().isAnnotationPresent(Record.class)) {
-            if (field.isAnnotationPresent(Record.class)) {
-                // If the field is a custom class, we recursively explore
-                fieldMap.putAll(mapAnnotatedFields(field.getType(), prefix + field.getName() + "."));
-            } else {
-                throw new MojetRuntimeException("Nested type should be annoted as Record");
-            }
-        }
-    }
+	private final Deque<String> path = new ArrayDeque<>();
 
-    private static void processOccuences(final Map<String, Field> fieldMap, final String key, final Field field) {
-        if (!field.isAnnotationPresent(Occurences.class)) {
-            throw new MojetRuntimeException("Array required a number of occurences. See corresponding annotation");
-        }
-        final int max = field.getAnnotation(Occurences.class).value();
-        if (max < 1) {
-            throw new MojetRuntimeException("Natual number of occurences expected on field " + field);
-        }
-        for (int i = 0; i < max; i++) {
-            fieldMap.put(key + "[" + i + "]", field);
-        }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final void visit(final RecordNode node) {
+	    for (AbstractNode<?> visitable : node.getNodes()) {
+		path.push(visitable.getAccessor());
+		visitable.accept(this);
+		path.pop();
+	    }
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final void visit(final OccurencesNode node) {
+	    final String old = path.pop();
+	    for (int i = 0; i < node.getCount(); i++) {
+		path.push(node.getAccessor() + "[" + i + "]");
+		node.getItem().accept(this);
+		path.pop();
+	    }
+	    path.push(old);
+	}
+
+	/**
+	 * Get the path from root record
+	 *
+	 * @return the absolute path from root record
+	 */
+	protected final String getPath() {
+	    return path.stream().filter(t -> !t.isEmpty()).collect(Collectors.collectingAndThen(
+		    Collectors.toList(),
+		    lst -> {
+			Collections.reverse(lst);
+			return lst.stream().filter(t -> !t.isEmpty()).collect(Collectors.joining("."));
+		    }
+	    ));
+	}
     }
 
 }

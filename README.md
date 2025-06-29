@@ -51,12 +51,10 @@ public class SimplePojo {
 
     @Filler(length = 3, value = '#')
     @Filler(length = 2, value = '|')
-    @Padding(Padding.PadWay.LEFT)
     @Fragment(length = 10)
     private String name; // Left-padded to 10 characters with spaces
 
-    @Padding(Padding.PadWay.RIGHT)
-    @Fragment(length = 10, padder = '_')
+    @Fragment(length = 10, padder = '_', alignement = PadWay.RIGHT)
     private String surname; // Right-padded to 10 characters with underscores
 
     @Converter(MyLocalDateTypeHandler.class)
@@ -83,11 +81,13 @@ public class SimplePojo {
 @EnableBatchProcessing
 public class ExampleBatchConfig {
 
+    private final NodeBuilder builder = new NodeBuilder();
+
     @Bean
     public FlatFileItemReader<SimplePojo> reader() {
         FlatFileItemReader<SimplePojo> reader = new FlatFileItemReader<>();
         reader.setResource(new ClassPathResource("input.txt"));
-        reader.setLineMapper(new MojetLineMapper<>(SimplePojo.class));
+        reader.setLineMapper(new MojetLineMapper<>(builder, SimplePojo.class));
         return reader;
     }
 
@@ -95,7 +95,7 @@ public class ExampleBatchConfig {
     public FlatFileItemWriter<SimplePojo> writer() {
         FlatFileItemWriter<SimplePojo> writer = new FlatFileItemWriter<>();
         writer.setResource(new FileSystemResource("output.txt"));
-        writer.setLineAggregator(new MojetLineAggregator<>(SimplePojo.class));
+        writer.setLineAggregator(new MojetLineAggregator<>(builder, SimplePojo.class));
         return writer;
     }
 

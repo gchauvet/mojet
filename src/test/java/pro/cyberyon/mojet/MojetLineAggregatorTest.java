@@ -18,8 +18,6 @@ package pro.cyberyon.mojet;
 import pro.cyberyon.mojet.types.AbstractTypeHandler;
 import java.time.LocalDate;
 import java.time.Month;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 import lombok.Data;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,101 +29,78 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class MojetLineAggregatorTest {
 
-    public static final class MyLocalDateTypeHandler extends AbstractTypeHandler<LocalDate> {
-
-        @Override
-        protected boolean isAccept(Class<?> type) {
-            return LocalDate.class == type;
-        }
-
-        @Override
-        public LocalDate read(String data, String format) {
-            final DateTimeFormatter sfd = DateTimeFormatter.ofPattern("dd" + format, Locale.FRENCH);
-            return LocalDate.parse("01" + data, sfd);
-        }
-
-        @Override
-        public String write(LocalDate data, String format) {
-            final DateTimeFormatter sfd = DateTimeFormatter.ofPattern("dd" + format, Locale.FRENCH);
-            return data.format(sfd).substring(2);
-        }
-
-    }
-
     @Data
     @Record
     @Filler(length = 3, value = '€')
     public static final class SimplePojo {
 
-        @Fragment(length = 7, padder = '0')
-        private long id;
-        @Filler(length = 3, value = '#')
-        @Filler(length = 2, value = '|')
-        @Padding(Padding.PadWay.LEFT)
-        @Fragment(length = 10)
-        private String name;
-        @Padding(Padding.PadWay.RIGHT)
-        @Fragment(length = 10, padder = '_')
-        private String surname;
-        @Converter(MyLocalDateTypeHandler.class)
-        @Fragment(length = 4, format = "yyMM")
-        private LocalDate date;
-        @Fragment(length = 2, padder = '$')
-        private byte octet = 5;
-        @Fragment(length = 2, padder = '€')
-        private char car = 'C';
-        @Fragment(length = 5)
-        @Occurences(3)
-        private long[] values = new long[]{2, 4, 6};
+	@Fragment(length = 7, padder = '0')
+	private long id;
+	@Filler(length = 3, value = '#')
+	@Filler(length = 2, value = '|')
+	@Fragment(length = 10)
+	private String name;
+	@Fragment(length = 10, padder = '_', alignement = Fragment.PadWay.RIGHT)
+	private String surname;
+	@Converter(MyLocalDateTypeHandler.class)
+	@Fragment(length = 4, format = "yyMM")
+	private LocalDate date;
+	@Fragment(length = 2, padder = '$')
+	private byte octet = 5;
+	@Fragment(length = 2, padder = '€')
+	private char car = 'C';
+	@Fragment(length = 5)
+	@Occurences(3)
+	private long[] values = new long[]{2, 4, 6};
     }
 
     @Test
     void testSimpleAggregation() {
-        var instance = new MojetLineAggregator<>(SimplePojo.class);
-        SimplePojo item = new SimplePojo();
-        item.setId(777);
-        item.setName("CHAUVET");
-        item.setSurname("Guillaume");
-        item.setDate(LocalDate.of(1999, Month.JULY, 18));
-        assertEquals("0000777###||   CHAUVETGuillaume_9907$5€C    2    4    6€€€", instance.aggregate(item));
+	var instance = new MojetLineAggregator<>(SimplePojo.class);
+	SimplePojo item = new SimplePojo();
+	item.setId(777);
+	item.setName("CHAUVET");
+	item.setSurname("Guillaume");
+	item.setDate(LocalDate.of(1999, Month.JULY, 18));
+	assertEquals("0000777###||   CHAUVETGuillaume_9907$5€C    2    4    6€€€", instance.aggregate(item));
     }
 
     @Data
     @Record
     public static final class UndefinedPojo {
 
-        @Fragment(length = 10)
-        private Object undefined = "";
+	@Fragment(length = 10)
+	private Object undefined = "";
     }
 
     @Data
     @Record
     public static final class BadFragmentPojo {
 
-        @Fragment(length = 0)
-        private long undefined;
+	@Fragment(length = 0)
+	private long undefined;
     }
 
     public static class BuggerConverterType extends AbstractTypeHandler<Object> {
 
-        public BuggerConverterType() {
-            throw new IllegalStateException("bug");
-        }
+	public BuggerConverterType() {
+	    throw new IllegalStateException("bug");
+	}
 
-        @Override
-        protected boolean isAccept(Class<?> type) {
-            return true;
-        }
+	@Override
+	protected boolean isAccept(Class<?> type) {
+	    return true;
+	}
 
-        @Override
-        public Object read(String data, String format) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
+	@Override
+	public Object read(String data, String format) {
+	    throw new UnsupportedOperationException("Not supported yet.");
+	}
 
-        @Override
-        public String write(Object data, String format) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
+	@Override
+	public String write(Object data, String format) {
+	    throw new UnsupportedOperationException("Not supported yet.");
+	}
 
     }
 
@@ -133,35 +108,35 @@ class MojetLineAggregatorTest {
     @Record
     public static final class BuggedConverterPojo {
 
-        @Fragment(length = 10)
-        @Converter(BuggerConverterType.class)
-        private Object undefined = "";
+	@Fragment(length = 10)
+	@Converter(BuggerConverterType.class)
+	private Object undefined = "";
     }
 
     @Data
     @Record
     public static final class NoConverterPojo {
 
-        @Fragment(length = 10)
-        private Object undefined = "";
+	@Fragment(length = 10)
+	private Object undefined = "";
     }
 
     public static class InacceptableConverterType extends AbstractTypeHandler<Object> {
 
-        @Override
-        protected boolean isAccept(Class<?> type) {
-            return false;
-        }
+	@Override
+	protected boolean isAccept(Class<?> type) {
+	    return false;
+	}
 
-        @Override
-        public Object read(String data, String format) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
+	@Override
+	public Object read(String data, String format) {
+	    throw new UnsupportedOperationException("Not supported yet.");
+	}
 
-        @Override
-        public String write(Object data, String format) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
+	@Override
+	public String write(Object data, String format) {
+	    throw new UnsupportedOperationException("Not supported yet.");
+	}
 
     }
 
@@ -169,79 +144,69 @@ class MojetLineAggregatorTest {
     @Record
     public static final class InacceptablePojo {
 
-        @Fragment(length = 10)
-        @Converter(InacceptableConverterType.class)
-        private Object undefined = "";
+	@Fragment(length = 10)
+	@Converter(InacceptableConverterType.class)
+	private Object undefined = "";
     }
 
     @Data
     @Record
     public static final class OverflowPojo {
 
-        @Fragment(length = 2)
-        private String good = "OK";
-        @Fragment(length = 3)
-        private String overflow = "TEST";
+	@Fragment(length = 2)
+	private String good = "OK";
+	@Fragment(length = 3)
+	private String overflow = "TEST";
     }
 
     @Data
     @Record
     public static final class NoIterableAllowedPojo {
 
-        @Fragment(length = 5)
-        @Occurences(3)
-        private Iterable<Long> undefined;
+	@Fragment(length = 5)
+	@Occurences(3)
+	private Iterable<Long> undefined;
     }
 
     @Data
     @Record
     public static final class InvalidFragmentPojo {
 
-        @Fragment(length = -1)
-        private String value;
+	@Fragment(length = -1)
+	private String value;
     }
 
     @Data
     @Record
     public static final class NoOccurencesDefinedPojo {
 
-        @Fragment(length = 5)
-        private long[] values;
+	@Fragment(length = 5)
+	private long[] values;
     }
 
     @Data
     @Record
     public static final class BadOccurencesDefinedPojo {
 
-        @Fragment(length = 5)
-        @Occurences(0)
-        private long[] values;
+	@Fragment(length = 5)
+	@Occurences(0)
+	private long[] values;
     }
 
     @Test
-    void testErrorAggregation() {
-        var undefined = new MojetLineAggregator<>(UndefinedPojo.class);
-        var pojo1 = new UndefinedPojo();
-        assertThrows(MojetRuntimeException.class, () -> undefined.aggregate(pojo1));
-        var bugged = new MojetLineAggregator<>(BuggedConverterPojo.class);
-        var pojo2 = new BuggedConverterPojo();
-        assertThrows(MojetRuntimeException.class, () -> bugged.aggregate(pojo2));
-        var uncoverted = new MojetLineAggregator<>(NoConverterPojo.class);
-        var pojo3 = new NoConverterPojo();
-        assertThrows(MojetRuntimeException.class, () -> uncoverted.aggregate(pojo3));
-        var inacceptable = new MojetLineAggregator<>(InacceptablePojo.class);
-        var pojo4 = new InacceptablePojo();
-        assertThrows(MojetRuntimeException.class, () -> inacceptable.aggregate(pojo4));
-        var overflow = new MojetLineAggregator<>(OverflowPojo.class);
-        var pojo5 = new OverflowPojo();
-        assertEquals("private java.lang.String pro.cyberyon.mojet.MojetLineAggregatorTest$OverflowPojo.overflow length (4) greater than fragment length definition (3)", assertThrows(MojetRuntimeException.class, () -> overflow.aggregate(pojo5)).getMessage());
-        var noIterable = new MojetLineAggregator<>(NoIterableAllowedPojo.class);
-        var pojo6 = new NoIterableAllowedPojo();
-        assertThrows(MojetRuntimeException.class, () -> noIterable.aggregate(pojo6));
-        assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(NoOccurencesDefinedPojo.class));
-        assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(BadOccurencesDefinedPojo.class));
-        assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(BadFragmentPojo.class));
-        assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(InvalidFragmentPojo.class));
+    void testErrorsAggregation() {
+	assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(UndefinedPojo.class));
+	assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(BuggedConverterPojo.class));
+	assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(NoConverterPojo.class));
+	assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(InacceptablePojo.class));
+	var overflow = new MojetLineAggregator<>(OverflowPojo.class);
+	var pojo5 = new OverflowPojo();
+	assertEquals("Data overflow", assertThrows(MojetRuntimeException.class, () -> overflow.aggregate(pojo5)).getMessage());
+	assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(NoIterableAllowedPojo.class));
+	assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(NoOccurencesDefinedPojo.class));
+	assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(BadOccurencesDefinedPojo.class));
+	assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(BadFragmentPojo.class));
+	assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(InvalidFragmentPojo.class));
     }
 
 }

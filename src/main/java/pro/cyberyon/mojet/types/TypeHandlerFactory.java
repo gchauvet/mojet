@@ -33,16 +33,16 @@ public final class TypeHandlerFactory {
     private static TypeHandlerFactory instance = null;
 
     private TypeHandlerFactory() {
-        final var types = new HashSet<TypeHandler<?>>();
-        types.add(new StringTypeHandler());
-        types.add(new LongTypeHandler());
-        types.add(new IntegerTypeHandler());
-        types.add(new ShortTypeHandler());
-        types.add(new BigIntegerTypeHandler());
-        types.add(new ByteTypeHandler());
-        types.add(new CharacterTypeHandler());
-        types.add(new LocalDateTypeHandler());
-        handlers = Collections.unmodifiableSet(types);
+	final var types = new HashSet<TypeHandler<?>>();
+	types.add(new StringTypeHandler());
+	types.add(new LongTypeHandler());
+	types.add(new IntegerTypeHandler());
+	types.add(new ShortTypeHandler());
+	types.add(new BigIntegerTypeHandler());
+	types.add(new ByteTypeHandler());
+	types.add(new CharacterTypeHandler());
+	types.add(new LocalDateTypeHandler());
+	handlers = Collections.unmodifiableSet(types);
     }
 
     /**
@@ -55,11 +55,11 @@ public final class TypeHandlerFactory {
      * occurs
      */
     public <T> TypeHandler<T> get(final Class<T> type) {
-        try {
-            return (TypeHandler<T>) handlers.stream().filter(t -> t.accept(type)).findFirst().orElseThrow();
-        } catch (NoSuchElementException ex) {
-            throw new MojetRuntimeException(ex);
-        }
+	try {
+	    return (TypeHandler<T>) handlers.stream().filter(t -> t.accept(type)).findFirst().orElseThrow();
+	} catch (NoSuchElementException ex) {
+	    throw new MojetRuntimeException(ex);
+	}
     }
 
     /**
@@ -68,10 +68,10 @@ public final class TypeHandlerFactory {
      * @return the singleton instance of this factory
      */
     public static TypeHandlerFactory getInstance() {
-        if (instance == null) {
-            instance = new TypeHandlerFactory();
-        }
-        return instance;
+	if (instance == null) {
+	    instance = new TypeHandlerFactory();
+	}
+	return instance;
     }
 
 }

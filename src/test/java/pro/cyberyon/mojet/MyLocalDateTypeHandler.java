@@ -13,30 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pro.cyberyon.mojet.types;
+package pro.cyberyon.mojet;
 
-import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+import pro.cyberyon.mojet.types.AbstractTypeHandler;
 
 /**
- * Big integer data type handler
  *
  * @author Guillaume CHAUVET
  */
-final class BigIntegerTypeHandler extends AbstractTypeHandler<BigInteger> {
+public final class MyLocalDateTypeHandler extends AbstractTypeHandler<LocalDate> {
 
     @Override
     protected boolean isAccept(Class<?> type) {
-	return BigInteger.class == type;
+	return LocalDate.class == type;
     }
 
     @Override
-    public BigInteger read(String data, String format) {
-	return new BigInteger(data);
+    public LocalDate read(String data, String format) {
+	final DateTimeFormatter sfd = DateTimeFormatter.ofPattern("dd" + format, Locale.FRENCH);
+	return LocalDate.parse("01" + data, sfd);
     }
 
     @Override
-    public String write(BigInteger data, String format) {
-	return data.toString();
+    public String write(LocalDate data, String format) {
+	final DateTimeFormatter sfd = DateTimeFormatter.ofPattern("dd" + format, Locale.FRENCH);
+	return data.format(sfd).substring(2);
     }
 
 }

@@ -15,39 +15,22 @@
  */
 package pro.cyberyon.mojet;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 /**
- * Define the padding of a field annoted by {@link Fragment}
  *
  * @author Guillaume CHAUVET
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-public @interface Padding {
+class MojetIT {
 
-    /**
-     * Define ways for padding
-     */
-    public enum PadWay {
-        /**
-         * align at left
-         */
-        LEFT,
-        /**
-         * align at right
-         */
-        RIGHT
+    @Test
+    void testSimpleReadLineToRootPojo() throws Exception {
+	final NodesBuilder builder = new NodesBuilder();
+	final MojetLineMapper<RootPojo> mapper = new MojetLineMapper(builder, RootPojo.class);
+	final RootPojo result = mapper.mapLine("01985000##114273EUR567   100011000210003200301_____", 1);
+	final MojetLineAggregator<RootPojo> aggregator = new MojetLineAggregator(builder, RootPojo.class);
+	assertEquals("01985000##114273EUR567   100011000210003200301_____", aggregator.aggregate(result));
     }
-
-    /**
-     * The padding way to apply
-     *
-     * @return padding way constant enum
-     */
-    PadWay value() default PadWay.RIGHT;
 
 }

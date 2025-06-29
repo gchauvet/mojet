@@ -13,30 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pro.cyberyon.mojet.types;
-
-import java.math.BigInteger;
+package pro.cyberyon.mojet.nodes;
 
 /**
- * Big integer data type handler
+ * the node client visitor part
  *
  * @author Guillaume CHAUVET
  */
-final class BigIntegerTypeHandler extends AbstractTypeHandler<BigInteger> {
+public interface NodeVisitor {
 
-    @Override
-    protected boolean isAccept(Class<?> type) {
-	return BigInteger.class == type;
-    }
+    /**
+     * Visit a record
+     *
+     * @param node an instance
+     */
+    void visit(RecordNode node);
 
-    @Override
-    public BigInteger read(String data, String format) {
-	return new BigInteger(data);
-    }
+    /**
+     * VIsit a filler
+     *
+     * @param node an instance
+     */
+    void visit(FillerNode node);
 
-    @Override
-    public String write(BigInteger data, String format) {
-	return data.toString();
-    }
+    /**
+     * Visit an occurences
+     *
+     * @param node an instance
+     */
+    void visit(OccurencesNode node);
+
+    /**
+     * visit a fragment
+     *
+     * @param node an instance
+     */
+    void visit(FragmentNode node);
 
 }

@@ -29,23 +29,23 @@ class ShortTypeHandlerTest {
 
     @Test
     void testAccept() {
-        assertFalse(instance.accept(null));
-        assertFalse(instance.accept(Double.class));
-        assertFalse(instance.accept(long.class));
-        assertTrue(instance.accept(Short.class));
-        assertTrue(instance.accept(short.class));
+	assertFalse(instance.accept(null));
+	assertFalse(instance.accept(Double.class));
+	assertFalse(instance.accept(long.class));
+	assertTrue(instance.accept(Short.class));
+	assertTrue(instance.accept(short.class));
     }
 
     @Test
     void testRead() {
-        assertEquals((short) 1, instance.read("1", null));
-        assertEquals((short) 1985, instance.read("1985", null));
+	assertEquals((short) 1, instance.read("1", null));
+	assertEquals((short) 1985, instance.read("1985", null));
     }
 
     @Test
     void testWrite() {
-        assertEquals("0", instance.write((short) 0, null));
-        assertEquals("1985", instance.write((short) 1985, null));
+	assertEquals("0", instance.write((short) 0, null));
+	assertEquals("1985", instance.write((short) 1985, null));
     }
 
 }

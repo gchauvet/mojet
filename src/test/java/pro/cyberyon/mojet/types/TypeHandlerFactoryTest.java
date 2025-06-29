@@ -29,20 +29,20 @@ class TypeHandlerFactoryTest {
 
     @Test
     void testFactory() {
-        final TypeHandlerFactory instance = TypeHandlerFactory.getInstance();
-        assertSame(instance, TypeHandlerFactory.getInstance());
+	final TypeHandlerFactory instance = TypeHandlerFactory.getInstance();
+	assertSame(instance, TypeHandlerFactory.getInstance());
     }
 
     @Test
     void testGetter() {
-        final TypeHandlerFactory instance = TypeHandlerFactory.getInstance();
-        assertNotNull(instance.get(long.class));
-        assertNotNull(instance.get(char.class));
-        assertNotNull(instance.get(String.class));
-        assertNotNull(instance.get(byte.class));
-        assertNotNull(instance.get(LocalDate.class));
+	final TypeHandlerFactory instance = TypeHandlerFactory.getInstance();
+	assertNotNull(instance.get(long.class));
+	assertNotNull(instance.get(char.class));
+	assertNotNull(instance.get(String.class));
+	assertNotNull(instance.get(byte.class));
+	assertNotNull(instance.get(LocalDate.class));
 
-        assertThrows(MojetRuntimeException.class, () -> instance.get(Void.class));
+	assertThrows(MojetRuntimeException.class, () -> instance.get(Void.class));
     }
 
 }

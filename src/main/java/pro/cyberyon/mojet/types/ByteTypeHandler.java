@@ -24,17 +24,17 @@ final class ByteTypeHandler extends AbstractTypeHandler<Byte> {
 
     @Override
     protected boolean isAccept(Class<?> type) {
-        return Byte.class == type;
+	return Byte.class == type;
     }
 
     @Override
     public Byte read(String data, String format) {
-        return Byte.parseByte(data);
+	return Byte.parseByte(data);
     }
 
     @Override
     public String write(Byte data, String format) {
-        return Byte.toString(data);
+	return Byte.toString(data);
     }
 
 }

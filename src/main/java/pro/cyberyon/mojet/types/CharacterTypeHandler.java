@@ -24,17 +24,17 @@ final class CharacterTypeHandler extends AbstractTypeHandler<Character> {
 
     @Override
     protected boolean isAccept(Class<?> type) {
-        return Character.class == type;
+	return Character.class == type;
     }
 
     @Override
     public Character read(String data, String format) {
-        return data.toCharArray()[0];
+	return data.toCharArray()[0];
     }
 
     @Override
     public String write(Character data, String format) {
-        return Character.toString(data);
+	return Character.toString(data);
     }
 
 }

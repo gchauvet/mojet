@@ -15,13 +15,12 @@
  */
 package pro.cyberyon.mojet;
 
-import pro.cyberyon.mojet.types.TypeHandlerFactory;
-import pro.cyberyon.mojet.types.TypeHandler;
-import java.lang.reflect.Field;
-import java.util.Map;
 import org.apache.commons.text.TextStringBuilder;
-import org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor;
 import org.springframework.batch.item.file.transform.LineAggregator;
+import org.springframework.beans.BeanWrapperImpl;
+import pro.cyberyon.mojet.nodes.FillerNode;
+import pro.cyberyon.mojet.nodes.FragmentNode;
+import pro.cyberyon.mojet.types.TypeHandler;
 
 /**
  * This class allow to write type as a line of characters.
@@ -31,96 +30,61 @@ import org.springframework.batch.item.file.transform.LineAggregator;
  */
 public class MojetLineAggregator<T> extends AbstractMojetLine<T> implements LineAggregator<T> {
 
-    private final BeanWrapperFieldExtractor<T> extractor;
-
     /**
      * Construct a new pojo {@link LineAggregator} instance
      *
      * @param type the bean type to manage
      */
     public MojetLineAggregator(final Class<T> type) {
-        super(type);
-        extractor = new BeanWrapperFieldExtractor<>();
-        extractor.setNames(mappedFields.keySet().toArray(new String[0]));
+	super(type);
     }
 
-    @SuppressWarnings("java:S3011")
+    /**
+     * Construct a new pojo {@link LineAggregator} instance
+     *
+     * @param builder the node builder instance to use
+     * @param type the bean type to manage
+     */
+    public MojetLineAggregator(final NodesBuilder builder, final Class<T> type) {
+	super(type, builder);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public String aggregate(T item) {
-        final TextStringBuilder output = new TextStringBuilder();
-        final var items = extractor.extract(item);
+    public String aggregate(final T item) {
+	final TextStringBuilder output = new TextStringBuilder();
+	root.accept(new AbstractNodeVisitor() {
 
-        int i = 0;
-        for (Map.Entry<String, Field> entry : mappedFields.entrySet()) {
-            final Field field = entry.getValue();
-            generateFillers(output, field.getAnnotationsByType(Filler.class));
+	    private final BeanWrapperImpl bean = new BeanWrapperImpl(item);
 
-            if (field.isAnnotationPresent(Fragment.class)) {
-                final TypeHandler<Object> handler = getHandler(field);
+	    @Override
+	    public void visit(final FillerNode node) {
+		output.appendPadding(node.getLength(), node.getPadding());
+	    }
 
-                if (handler.accept(items[i].getClass())) {
-                    generateFragment(output, handler, items[i], field);
-                } else {
-                    throw new MojetRuntimeException("Bad converter on field " + field);
-                }
-            }
-            i++;
-        }
-
-        if (type.isAnnotationPresent(Filler.class)) {
-            generateFillers(output, type.getAnnotationsByType(Filler.class));
-        }
-
-        return output.toString();
-    }
-
-    private static void generateFillers(TextStringBuilder output, Filler[] fillers) {
-        for (Filler filler : fillers) {
-            output.appendPadding(filler.length(), filler.value());
-        }
-    }
-
-    private static TypeHandler<Object> getHandler(Field field) {
-        final TypeHandler<Object> result;
-        final Converter converter = field.getAnnotation(Converter.class);
-        if (converter != null) {
-            try {
-                result = converter.value().getConstructor().newInstance();
-            } catch (ReflectiveOperationException ex) {
-                throw new MojetRuntimeException(ex);
-            }
-        } else {
-            result = (TypeHandler<Object>) TypeHandlerFactory.getInstance().get(field.getType());
-        }
-        return result;
-    }
-
-    private static void generateFragment(final TextStringBuilder output, TypeHandler<Object> handler, Object item, Field field) {
-        final Fragment fragment = field.getAnnotation(Fragment.class);
-        final String data = handler.write(item, fragment.format());
-
-        if (data.length() > fragment.length()) {
-            throw new MojetRuntimeException(field.toString() + " length (" + data.length() + ") greater than fragment length definition (" + fragment.length() + ")");
-        } else {
-            final Padding padding = field.getAnnotation(Padding.class);
-            final Padding.PadWay way;
-
-            if (padding != null) {
-                way = padding.value();
-            } else {
-                way = Padding.PadWay.LEFT;
-            }
-            switch (way) {
-                case LEFT:
-                    output.appendFixedWidthPadLeft(data, fragment.length(), fragment.padder());
-                    break;
-                case RIGHT:
-                    output.appendFixedWidthPadRight(data, fragment.length(), fragment.padder());
-                    break;
-                default:
-                    throw new MojetRuntimeException("Undefined case");
-            }
-        }
+	    @Override
+	    public void visit(final FragmentNode node) {
+		final Object value = bean.getPropertyValue(getPath());
+		final String data = ((TypeHandler<Object>) node.getHandler()).write(value, node.getFormat());
+		if (data.length() > node.getLenght()) {
+		    throw new MojetRuntimeException("Data overflow");
+		} else {
+		    switch (node.getAlignement()) {
+			case LEFT:
+			    output.appendFixedWidthPadLeft(data, node.getLenght(), node.getPadder());
+			    break;
+			case RIGHT:
+			    output.appendFixedWidthPadRight(data, node.getLenght(), node.getPadder());
+			    break;
+			default:
+			    throw new MojetRuntimeException("Undefined case");
+		    }
+		}
+	    }
+	});
+	return output.toString();
     }
 
 }

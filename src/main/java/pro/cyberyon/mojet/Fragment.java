@@ -32,6 +32,20 @@ import pro.cyberyon.mojet.types.TypeHandler;
 public @interface Fragment {
 
     /**
+     * Define ways for padding
+     */
+    public enum PadWay {
+	/**
+	 * align at left
+	 */
+	LEFT,
+	/**
+	 * align at right
+	 */
+	RIGHT
+    }
+
+    /**
      * The field length
      *
      * @return a positive number corresponding to field length
@@ -51,4 +65,11 @@ public @interface Fragment {
      * @return optional format argument passed to the {@link TypeHandler}
      */
     String format() default "";
+
+    /**
+     * The padding way to apply
+     *
+     * @return padding way constant enum
+     */
+    PadWay alignement() default PadWay.LEFT;
 }

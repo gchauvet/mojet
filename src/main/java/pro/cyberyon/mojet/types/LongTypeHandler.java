@@ -24,17 +24,17 @@ final class LongTypeHandler extends AbstractTypeHandler<Long> {
 
     @Override
     protected boolean isAccept(Class<?> type) {
-        return Long.class == type;
+	return Long.class == type;
     }
 
     @Override
     public Long read(String data, String format) {
-        return Long.valueOf(data);
+	return Long.valueOf(data);
     }
 
     @Override
     public String write(Long data, String format) {
-        return Long.toString(data);
+	return Long.toString(data);
     }
 
 }

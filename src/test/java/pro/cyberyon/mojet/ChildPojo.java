@@ -13,30 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pro.cyberyon.mojet.types;
+package pro.cyberyon.mojet;
 
-import java.math.BigInteger;
+import lombok.Data;
 
 /**
- * Big integer data type handler
- *
- * @author Guillaume CHAUVET
+ * Child pojo test class.
  */
-final class BigIntegerTypeHandler extends AbstractTypeHandler<BigInteger> {
+@Data
+@Record
+public class ChildPojo {
 
-    @Override
-    protected boolean isAccept(Class<?> type) {
-	return BigInteger.class == type;
-    }
-
-    @Override
-    public BigInteger read(String data, String format) {
-	return new BigInteger(data);
-    }
-
-    @Override
-    public String write(BigInteger data, String format) {
-	return data.toString();
-    }
+    @Fragment(length = 6)
+    private long total;
+    @Fragment(length = 3)
+    private String label;
 
 }

@@ -24,17 +24,17 @@ final class IntegerTypeHandler extends AbstractTypeHandler<Integer> {
 
     @Override
     protected boolean isAccept(Class<?> type) {
-        return Integer.class == type;
+	return Integer.class == type;
     }
 
     @Override
     public Integer read(String data, String format) {
-        return Integer.valueOf(data);
+	return Integer.valueOf(data);
     }
 
     @Override
     public String write(Integer data, String format) {
-        return Integer.toString(data);
+	return Integer.toString(data);
     }
 
 }

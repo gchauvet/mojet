@@ -13,30 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pro.cyberyon.mojet.types;
+package pro.cyberyon.mojet.nodes;
 
-import java.math.BigInteger;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 /**
- * Big integer data type handler
+ * skeleton class for node's implementation
  *
+ * @param <A> the annotation to handle
  * @author Guillaume CHAUVET
  */
-final class BigIntegerTypeHandler extends AbstractTypeHandler<BigInteger> {
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
+public abstract class AbstractNode<A> implements NodeVisitable {
 
-    @Override
-    protected boolean isAccept(Class<?> type) {
-	return BigInteger.class == type;
-    }
+    /**
+     * the annotation to decorate
+     */
+    protected final A annotation;
 
-    @Override
-    public BigInteger read(String data, String format) {
-	return new BigInteger(data);
-    }
-
-    @Override
-    public String write(BigInteger data, String format) {
-	return data.toString();
-    }
+    /**
+     * The accessor field name
+     */
+    @Getter
+    protected final String accessor;
 
 }

@@ -16,15 +16,11 @@
 package pro.cyberyon.mojet;
 
 import org.springframework.batch.item.file.LineMapper;
-import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
-import org.springframework.batch.item.file.mapping.DefaultLineMapper;
-import org.springframework.batch.item.file.transform.FixedLengthTokenizer;
-import org.springframework.batch.item.file.transform.Range;
 
-import java.lang.reflect.Field;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import static java.util.Map.Entry;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
+import pro.cyberyon.mojet.nodes.FillerNode;
+import pro.cyberyon.mojet.nodes.FragmentNode;
 
 /**
  * MojetLineMapper is an implementation of LineMapper that uses a POJO type to
@@ -36,67 +32,50 @@ import static java.util.Map.Entry;
  */
 public class MojetLineMapper<T> extends AbstractMojetLine<T> implements LineMapper<T> {
 
-    private final DefaultLineMapper<T> delegate = new DefaultLineMapper<>();
-
     /**
      * Construct a new pojo {@link LineMapper} instance
      *
      * @param targetType the bean type to manage
      */
     public MojetLineMapper(final Class<T> targetType) {
-        super(targetType);
-        final FixedLengthTokenizer tokenizer = new FixedLengthTokenizer();
-        final Map<String, Range> mapping = mapToRanges();
-        final BeanWrapperFieldSetMapper<T> mapper = new BeanWrapperFieldSetMapper<>();
-        mapper.setTargetType(targetType);
-        mapper.setDistanceLimit(0);
-        tokenizer.setNames(mapping.keySet().toArray(new String[0]));
-        tokenizer.setColumns(mapping.values().toArray(new Range[0]));
-        tokenizer.setStrict(false);
-        delegate.setLineTokenizer(tokenizer);
-        delegate.setFieldSetMapper(mapper);
+	super(targetType);
     }
 
-    private Map<String, Range> mapToRanges() {
-        final Map<String, Range> result = new LinkedHashMap<>();
-        int current = 1;
-        Field previous = null;
-        for (Entry<String, Field> field : mappedFields.entrySet()) {
-            current = processFillers(field, previous, current);
-            current = processFragments(field, result, current);
-            previous = field.getValue();
-        }
-        return result;
+    /**
+     * Construct a new pojo {@link LineMapper} instance
+     *
+     * @param builder the node builder instance to use
+     * @param targetType the bean type to manage
+     */
+    public MojetLineMapper(final NodesBuilder builder, final Class<T> targetType) {
+	super(targetType, builder);
     }
 
-    private int processFillers(final Entry<String, Field> field, final Field previous, int current) {
-        if (previous != field.getValue()) {
-            for (Filler filler : field.getValue().getAnnotationsByType(Filler.class)) {
-                if (filler.length() <= 1) {
-                    throw new MojetRuntimeException("Natural number expected on filler " + field.getKey());
-                }
-                current += filler.length();
-            }
-        }
-        return current;
-    }
-
-    private int processFragments(final Entry<String, Field> field, final Map<String, Range> result, int current) {
-        final Fragment fragment = field.getValue().getAnnotation(Fragment.class);
-        if (null != fragment) {
-            final int length = fragment.length();
-            if (length <= 1) {
-                throw new MojetRuntimeException("Natural number expected on fragment " + field.getKey());
-            }
-            final int end = current + length;
-            result.put(field.getKey(), new Range(current, end - 1));
-            current = end;
-        }
-        return current;
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public T mapLine(String line, int lineNumber) throws Exception {
-        return delegate.mapLine(line, lineNumber);
+    public T mapLine(final String line, int lineNumber) throws Exception {
+	final BeanWrapper wrapper = new BeanWrapperImpl(root.getType());
+	wrapper.setAutoGrowNestedPaths(true);
+	root.accept(new AbstractNodeVisitor() {
+
+	    private int index = 0;
+
+	    @Override
+	    public void visit(final FillerNode node) {
+		index += node.getLength();
+	    }
+
+	    @Override
+	    public void visit(final FragmentNode node) {
+		final String data = line.substring(index, index + node.getLenght());
+		final Object value = node.getHandler().read(data, node.getFormat());
+		wrapper.setPropertyValue(getPath(), value);
+		index += node.getLenght();
+	    }
+	});
+	return (T) wrapper.getWrappedInstance();
     }
+
 }
