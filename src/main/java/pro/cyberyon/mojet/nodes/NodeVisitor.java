@@ -16,17 +16,38 @@
 package pro.cyberyon.mojet.nodes;
 
 /**
+ * the node client visitor part
  *
  * @author Guillaume CHAUVET
  */
 public interface NodeVisitor {
-    
+
+    /**
+     * Visit a record
+     *
+     * @param node an instance
+     */
     void visit(RecordNode node);
-    
+
+    /**
+     * VIsit a filler
+     *
+     * @param node an instance
+     */
     void visit(FillerNode node);
-    
+
+    /**
+     * Visit an occurences
+     *
+     * @param node an instance
+     */
     void visit(OccurencesNode node);
-    
+
+    /**
+     * visit a fragment
+     *
+     * @param node an instance
+     */
     void visit(FragmentNode node);
-    
+
 }

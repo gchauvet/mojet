@@ -19,11 +19,17 @@ import pro.cyberyon.mojet.Filler;
 import pro.cyberyon.mojet.MojetRuntimeException;
 
 /**
+ * A filler node
  *
  * @author Guillaume CHAUVET
  */
 public class FillerNode extends AbstractNode<Filler> {
 
+    /**
+     * Construct a filler node
+     *
+     * @param annotation the filler annotation
+     */
     public FillerNode(Filler annotation) {
 	super(annotation, null);
 	if (getLength() < 1) {
@@ -31,14 +37,27 @@ public class FillerNode extends AbstractNode<Filler> {
 	}
     }
 
+    /**
+     * Get the filler length area
+     *
+     * @return the length
+     */
     public int getLength() {
 	return annotation.length();
     }
 
+    /**
+     * Get the padder charactere
+     *
+     * @return the padding value
+     */
     public char getPadding() {
 	return annotation.value();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void accept(NodeVisitor visitor) {
 	visitor.visit(this);

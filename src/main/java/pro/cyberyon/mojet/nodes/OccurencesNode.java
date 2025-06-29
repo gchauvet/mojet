@@ -20,6 +20,7 @@ import pro.cyberyon.mojet.MojetRuntimeException;
 import pro.cyberyon.mojet.Occurences;
 
 /**
+ * Node representing an iteration on a fragment
  *
  * @author Guillaume CHAUVET
  */
@@ -28,19 +29,34 @@ public class OccurencesNode extends AbstractNode<Occurences> {
     @Getter
     private final AbstractNode item;
 
-    public OccurencesNode(String accessor, Occurences annotation, AbstractNode item) {
-        super(annotation, accessor);
-        this.item = item;
-	if (getCount() < 1)
+    /**
+     * Construct a node occurences
+     *
+     * @param accessor the accessor field name
+     * @param annotation the occurences annotation
+     * @param item Node to iterate
+     */
+    public OccurencesNode(final String accessor, final Occurences annotation, final AbstractNode item) {
+	super(annotation, accessor);
+	this.item = item;
+	if (getCount() < 1) {
 	    throw new MojetRuntimeException("Iteration must be a positive value");
-    }
-    
-    public int getCount() {
-        return annotation.value();
+	}
     }
 
+    /**
+     * Number of iteration
+     * @return a strict positive number
+     */
+    public int getCount() {
+	return annotation.value();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void accept(NodeVisitor visitor) {
-        visitor.visit(this);
+	visitor.visit(this);
     }
 }

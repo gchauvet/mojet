@@ -15,13 +15,14 @@
  */
 package pro.cyberyon.mojet;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Stack;
+import java.util.stream.Collectors;
 import org.apache.commons.text.TextStringBuilder;
 import org.springframework.batch.item.file.transform.LineAggregator;
 import org.springframework.beans.BeanWrapperImpl;
+import pro.cyberyon.mojet.nodes.AbstractNode;
 import pro.cyberyon.mojet.nodes.FillerNode;
 import pro.cyberyon.mojet.nodes.FragmentNode;
-import pro.cyberyon.mojet.nodes.NodeVisitable;
 import pro.cyberyon.mojet.nodes.NodeVisitor;
 import pro.cyberyon.mojet.nodes.OccurencesNode;
 import pro.cyberyon.mojet.nodes.RecordNode;
@@ -41,92 +42,71 @@ public class MojetLineAggregator<T> extends AbstractMojetLine<T> implements Line
      * @param type the bean type to manage
      */
     public MojetLineAggregator(final Class<T> type) {
-        super(type);
+	super(type);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String aggregate(final T item) {
-        final TextStringBuilder output = new TextStringBuilder();
-        root.accept(new NodeVisitor() {
+	final TextStringBuilder output = new TextStringBuilder();
+	root.accept(new NodeVisitor() {
 
-            private static interface PropertyFacade {
+	    private final BeanWrapperImpl bean = new BeanWrapperImpl(item);
+	    private final Stack<String> path = new Stack<>();
 
-                Object getValue(String key);
-            }
+	    private String getPath() {
+		return path.stream().filter(t -> !t.isEmpty()).collect(Collectors.joining("."));
+	    }
 
-            private static class BeanPropertyFacade implements PropertyFacade {
+	    @Override
+	    public void visit(final RecordNode node) {
+		for (AbstractNode visitable : node.getNodes()) {
+		    path.push(visitable.getAccessor());
+		    visitable.accept(this);
+		    path.pop();
+		}
+	    }
 
-                private final BeanWrapperImpl wrapper;
+	    @Override
+	    public void visit(final FillerNode node) {
+		output.appendPadding(node.getLength(), node.getPadding());
+	    }
 
-                BeanPropertyFacade(Object object) {
-                    wrapper = new BeanWrapperImpl(object);
-                }
+	    @Override
+	    public void visit(final OccurencesNode node) {
+		final String old = path.pop();
+		for (int i = 0; i < node.getCount(); i++) {
+		    path.push(node.getAccessor() + "[" + i + "]");
+		    node.getItem().accept(this);
+		    path.pop();
+		}
+		path.push(old);
+	    }
 
-                @Override
-                public Object getValue(String key) {
-                    return wrapper.getPropertyValue(key);
-                }
-
-            }
-
-            private PropertyFacade current = new BeanPropertyFacade(item);
-
-            @Override
-            public void visit(final RecordNode node) {
-                final PropertyFacade previous = current;
-                if (!node.getAccessor().isEmpty()) {
-                    current = new BeanPropertyFacade(item);
-                }
-                for (NodeVisitable visitable : node.getNodes()) {
-                    visitable.accept(this);
-                }
-                current = previous;
-            }
-
-            @Override
-            public void visit(final FillerNode node) {
-                output.appendPadding(node.getLength(), node.getPadding());
-            }
-
-            @Override
-            public void visit(final OccurencesNode node) {
-                final PropertyFacade previous = current;
-                final AtomicInteger counter = new AtomicInteger(0);
-                current = new PropertyFacade() {
-                    @Override
-                    public Object getValue(String key) {
-                        return previous.getValue(key + "[" + counter.get() + "]");
-                    }
-                };
-                for (int i = 0; i < node.getCount(); i++) {
-                    counter.set(i);
-                    node.getItem().accept(this);
-                }
-                current = previous;
-            }
-
-            @Override
-            public void visit(final FragmentNode node) {
+	    @Override
+	    public void visit(final FragmentNode node) {
 		final TypeHandler<Object> handler = ((TypeHandler<Object>) node.getHandler());
-		final Object value = current.getValue(node.getAccessor());
-                final String data = ((TypeHandler<Object>) node.getHandler()).write(value, node.getFormat());
-                if (data.length() > node.getLenght()) {
-                    throw new MojetRuntimeException("Data overflow");
-                } else {
-                    switch (node.getAlignement()) {
-                        case LEFT:
-                            output.appendFixedWidthPadLeft(data, node.getLenght(), node.getPadder());
-                            break;
-                        case RIGHT:
-                            output.appendFixedWidthPadRight(data, node.getLenght(), node.getPadder());
-                            break;
-                        default:
-                            throw new MojetRuntimeException("Undefined case");
-                    }
-                }
-            }
-        });
-        return output.toString();
+		final Object value = bean.getPropertyValue(getPath());
+		final String data = handler.write(value, node.getFormat());
+		if (data.length() > node.getLenght()) {
+		    throw new MojetRuntimeException("Data overflow");
+		} else {
+		    switch (node.getAlignement()) {
+			case LEFT:
+			    output.appendFixedWidthPadLeft(data, node.getLenght(), node.getPadder());
+			    break;
+			case RIGHT:
+			    output.appendFixedWidthPadRight(data, node.getLenght(), node.getPadder());
+			    break;
+			default:
+			    throw new MojetRuntimeException("Undefined case");
+		    }
+		}
+	    }
+	});
+	return output.toString();
     }
 
 }

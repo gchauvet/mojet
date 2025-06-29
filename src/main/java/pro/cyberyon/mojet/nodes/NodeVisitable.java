@@ -16,11 +16,17 @@
 package pro.cyberyon.mojet.nodes;
 
 /**
+ * The node visitor provider part
  *
  * @author Guillaume CHAUVET
  */
 public interface NodeVisitable {
 
+    /**
+     * Consume a visitor
+     *
+     * @param visitor an instance
+     */
     void accept(NodeVisitor visitor);
-    
+
 }

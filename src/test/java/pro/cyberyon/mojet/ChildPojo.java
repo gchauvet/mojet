@@ -13,30 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pro.cyberyon.mojet.nodes;
+package pro.cyberyon.mojet;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.Data;
 
 /**
- * skeleton class for node's implementation
- *
- * @param <A> the annotation to handle
- * @author Guillaume CHAUVET
+ * Child pojo test class.
  */
-@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-abstract public class AbstractNode<A> implements NodeVisitable {
+@Data
+@Record
+public class ChildPojo {
 
-    /**
-     * the annotation to decorate
-     */
-    protected final A annotation;
-
-    /**
-     * The accessor field name
-     */
-    @Getter
-    protected final String accessor;
+    @Fragment(length = 6)
+    private long total;
+    @Fragment(length = 3)
+    private String label;
 
 }

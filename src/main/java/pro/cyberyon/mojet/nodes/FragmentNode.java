@@ -22,6 +22,7 @@ import pro.cyberyon.mojet.MojetRuntimeException;
 import pro.cyberyon.mojet.types.TypeHandler;
 
 /**
+ * Node represening a fragment
  *
  * @author Guillaume CHAUVET
  */
@@ -30,31 +31,62 @@ public class FragmentNode extends AbstractNode<Fragment> {
     @Getter
     private final TypeHandler<?> handler;
 
-    public FragmentNode(String accessor, Fragment annotation, TypeHandler<?> handler) {
-        super(annotation, accessor);
-        this.handler = handler;
-	if (getLenght() < 1)
+    /**
+     * Construct a fragment node instance
+     *
+     * @param accessor the field accessor name
+     * @param annotation the fragment annotation
+     * @param handler the concrete handle to use
+     */
+    public FragmentNode(final String accessor, final Fragment annotation, final TypeHandler<?> handler) {
+	super(annotation, accessor);
+	this.handler = handler;
+	if (getLenght() < 1) {
 	    throw new MojetRuntimeException("Lenght must be a positive value");
+	}
     }
 
+    /**
+     * The length of data area
+     *
+     * @return a strict positive number
+     */
     public int getLenght() {
-        return annotation.length();
+	return annotation.length();
     }
 
+    /**
+     * The padding charactere
+     *
+     * @return the padding value
+     */
     public char getPadder() {
-        return annotation.padder();
+	return annotation.padder();
     }
 
+    /**
+     * the padding way
+     *
+     * @return the alignement xay
+     */
     public PadWay getAlignement() {
-        return annotation.alignement();
+	return annotation.alignement();
     }
 
+    /**
+     * The format for handling data
+     *
+     * @return a string, or null
+     */
     public String getFormat() {
-        return annotation.format();
+	return annotation.format();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void accept(NodeVisitor visitor) {
-        visitor.visit(this);
+	visitor.visit(this);
     }
 }

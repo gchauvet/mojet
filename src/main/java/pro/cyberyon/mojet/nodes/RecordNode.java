@@ -22,31 +22,52 @@ import java.util.Set;
 import lombok.Getter;
 
 /**
+ * Node representing a record set
  *
  * @author Guillaume CHAUVET
  */
 public class RecordNode extends AbstractNode<Record> {
-    
+
     private final Set<AbstractNode> nodes = new LinkedHashSet<>();
     @Getter
     private final Class<?> type;
 
-    public RecordNode(String accessor, Class<?> type) {
-        super(type.getAnnotation(Record.class), accessor);
-        this.type = type;
-    }
-    
-    public boolean add(AbstractNode node) {
-        return nodes.add(node);
-    }
-    
-    public Set<AbstractNode> getNodes() {
-        return Collections.unmodifiableSet(nodes);
+    /**
+     * Construct a node record
+     *
+     * @param accessor field name of accessor
+     * @param type class type or record
+     */
+    public RecordNode(final String accessor, final Class<?> type) {
+	super(type.getAnnotation(Record.class), accessor);
+	this.type = type;
     }
 
+    /**
+     * Add a node to record (order keeped)
+     *
+     * @param node abstract node to add
+     * @return if added
+     */
+    public boolean add(AbstractNode node) {
+	return nodes.add(node);
+    }
+
+    /**
+     * Ordered nodes of record
+     *
+     * @return nodes
+     */
+    public Set<AbstractNode> getNodes() {
+	return Collections.unmodifiableSet(nodes);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void accept(NodeVisitor visitor) {
-        visitor.visit(this);
+	visitor.visit(this);
     }
-    
+
 }

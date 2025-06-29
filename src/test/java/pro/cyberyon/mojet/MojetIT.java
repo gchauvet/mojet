@@ -13,30 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pro.cyberyon.mojet.nodes;
+package pro.cyberyon.mojet;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 /**
- * skeleton class for node's implementation
  *
- * @param <A> the annotation to handle
  * @author Guillaume CHAUVET
  */
-@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-abstract public class AbstractNode<A> implements NodeVisitable {
-
-    /**
-     * the annotation to decorate
-     */
-    protected final A annotation;
-
-    /**
-     * The accessor field name
-     */
-    @Getter
-    protected final String accessor;
-
+class MojetIT {
+    
+    @Test
+    void testSimpleReadLineToRootPojo() throws Exception {
+        final MojetLineMapper<RootPojo> mapper = new MojetLineMapper(RootPojo.class);
+        final RootPojo result = mapper.mapLine("01985000##114273EUR567   100011000210003200301_____", 1);
+        final MojetLineAggregator<RootPojo> aggregator = new MojetLineAggregator(RootPojo.class);
+	assertEquals("01985000##114273EUR567   100011000210003200301_____", aggregator.aggregate(result));
+    }
+    
 }

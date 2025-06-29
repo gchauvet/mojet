@@ -28,43 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class MojetLineMapperTest {
 
-    /**
-     * Main test pojo class
-     */
-    @Data
-    @Record
-    @Filler(length = 5, value = '_')
-    public static class RootPojo {
 
-        @Fragment(length = 5)
-        private long id;
-        @Filler(length = 3, value = '0')
-        @Filler(length = 2, value = '#')
-        @Record
-        private ChildPojo child;
-        @Fragment(length = 3)
-        int counter;
-        @Filler(length = 3)
-        @Fragment(length = 5, padder = '0')
-        @Occurences(3)
-        long[] values;
-        @Converter(MyLocalDateTypeHandler.class)
-        @Fragment(length = 6, format = "yyyyMM")
-        private LocalDate date;
-    }
-
-    /**
-     * Child pojo test class.
-     */
-    @Data
-    @Record
-    public static class ChildPojo {
-
-        @Fragment(length = 6)
-        private long total;
-        @Fragment(length = 3)
-        private String label;
-    }
 
     @Test
     void testSimpleReadLineToRootPojo() throws Exception {

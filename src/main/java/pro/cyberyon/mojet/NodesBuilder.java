@@ -21,12 +21,17 @@ import pro.cyberyon.mojet.types.TypeHandler;
 import pro.cyberyon.mojet.types.TypeHandlerFactory;
 
 /**
- *
+ * A nodes builder
  * @author Guillaume CHAUVET
  */
-public class NodesBuilder {
+class NodesBuilder {
 
-    public RecordNode build(Class<?> type) {
+    /**
+     * Construct an AST from a class definition
+     * @param type the class definition
+     * @return a Recod not as root element
+     */
+    RecordNode build(Class<?> type) {
 	return build("", type);
     }
 

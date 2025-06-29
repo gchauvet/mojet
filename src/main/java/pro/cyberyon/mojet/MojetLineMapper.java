@@ -47,6 +47,9 @@ public class MojetLineMapper<T> extends AbstractMojetLine<T> implements LineMapp
 	super(targetType);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public T mapLine(final String line, int lineNumber) throws Exception {
 	final BeanWrapper wrapper = new BeanWrapperImpl(root.getType());
