@@ -58,7 +58,7 @@ public class RecordNode extends AbstractNode<Record> {
      *
      * @return nodes
      */
-    public Set<AbstractNode<?>> getNodes() {
+    public Set<AbstractNode> getNodes() {
 	return Collections.unmodifiableSet(nodes);
     }
 

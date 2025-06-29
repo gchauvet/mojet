@@ -60,7 +60,7 @@ abstract class AbstractMojetLine<T> {
     /**
      * Abstract node visitor implemention, providing common behaviors
      */
-    protected static abstract class AbstractNodeVisitor implements NodeVisitor {
+    protected abstract static class AbstractNodeVisitor implements NodeVisitor {
 
 	private final Deque<String> path = new ArrayDeque<>();
 
