@@ -25,10 +25,10 @@ jobs:
       - name: Deploy to Maven Central
         uses: actions/setup-java@v4
         with:
-          gpg-key-name: ${{ secretes.GPG_KEY_NAME }}
+          gpg-key-name: ${{ secrets.GPG_KEY_NAME }}
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
           server-id: ossrh
           server-username: ${{ secrets.OSS_ACCESS_KEY_ID }}
           server-password: ${{ OSS_ACCESS_KEY_SECRET }}
-        run: mvn -B deploy -Prelease -Dgpg.keyname=${{ secrets.GPG_PASSPHRASE }}
+        run: mvn -B deploy -Prelease -Dgpg.keyname=${{ secrets.GPG_KEY_NAME }}
