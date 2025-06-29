@@ -1,7 +1,8 @@
-name: Publish package to GitHub Packages
+name: Publish package to Maven Central
 on:
-  release:
-    types: [created]
+  push:
+    tags:
+      - 'v*.*.*'
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -13,12 +14,12 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      - name: Configure Git to use PAT
-        run: |
-          git config --global user.name "GitHub Bot"
-          git config --global user.email "bot.github@users.noreply.github.com"
-          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }}
-      - name: Run Maven Release
-        run: ./mvnw -B release:prepare release:perform
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Deploy to Maven Central
+        with:
+          gpg-key-name: ${{ secrets.GPG_KEY_NAME }}
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
+          server-id: ossrh
+          server-username: ${{ secrets.OSS_ACCESS_KEY_ID }}
+          server-password: ${{ OSS_ACCESS_KEY_SECRET }}
+        run: ./mvnw -B deploy -Ppublish -Dgpg.keyname=${{ secrets.GPG_KEY_NAME }}
