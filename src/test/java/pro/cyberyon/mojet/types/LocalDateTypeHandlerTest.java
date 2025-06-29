@@ -32,22 +32,22 @@ class LocalDateTypeHandlerTest {
 
     @Test
     void testAccept() {
-        assertFalse(instance.accept(null));
-        assertFalse(instance.accept(Double.class));
-        assertFalse(instance.accept(Date.class));
-        assertTrue(instance.accept(LocalDate.class));
+	assertFalse(instance.accept(null));
+	assertFalse(instance.accept(Double.class));
+	assertFalse(instance.accept(Date.class));
+	assertTrue(instance.accept(LocalDate.class));
     }
 
     @Test
     void testRead() {
-        assertEquals(LocalDate.of(2002, Month.OCTOBER, 5), instance.read("2002-10-05", null));
-        assertEquals(LocalDate.of(2003, Month.FEBRUARY, 1), instance.read("01-02-03", "dd-MM-uu"));
+	assertEquals(LocalDate.of(2002, Month.OCTOBER, 5), instance.read("2002-10-05", null));
+	assertEquals(LocalDate.of(2003, Month.FEBRUARY, 1), instance.read("01-02-03", "dd-MM-uu"));
     }
 
     @Test
     void testWrite() {
-        assertEquals("2001-03-17", instance.write(LocalDate.of(2001, Month.MARCH, 17), null));
-        assertEquals("20010317", instance.write(LocalDate.of(2001, Month.MARCH, 17), "yyyyMMdd"));
+	assertEquals("2001-03-17", instance.write(LocalDate.of(2001, Month.MARCH, 17), null));
+	assertEquals("20010317", instance.write(LocalDate.of(2001, Month.MARCH, 17), "yyyyMMdd"));
     }
 
 }

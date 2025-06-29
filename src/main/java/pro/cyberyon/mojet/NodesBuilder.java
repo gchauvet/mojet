@@ -22,12 +22,14 @@ import pro.cyberyon.mojet.types.TypeHandlerFactory;
 
 /**
  * A nodes builder
+ *
  * @author Guillaume CHAUVET
  */
 class NodesBuilder {
 
     /**
      * Construct an AST from a class definition
+     *
      * @param type the class definition
      * @return a Recod not as root element
      */
@@ -48,11 +50,11 @@ class NodesBuilder {
 	}
     }
 
-    private void build(Field field, RecordNode record) {
+    private void build(Field field, RecordNode node) {
 	final String accessor = field.getName();
-	addFillers(field.getDeclaredAnnotationsByType(Filler.class), record);
+	addFillers(field.getDeclaredAnnotationsByType(Filler.class), node);
 	if (field.isAnnotationPresent(Record.class)) {
-	    record.add(build(accessor, field.getType()));
+	    node.add(build(accessor, field.getType()));
 	} else if (field.isAnnotationPresent(Fragment.class)) {
 	    final TypeHandler<?> handler;
 	    if (field.isAnnotationPresent(Converter.class)) {
@@ -66,25 +68,25 @@ class NodesBuilder {
 		handler = TypeHandlerFactory.getInstance().get(field.getType());
 	    }
 	    if (handler.accept(field.getType())) {
-		AbstractNode node = new FragmentNode(accessor, field.getAnnotation(Fragment.class), handler);
+		AbstractNode<?> item = new FragmentNode(accessor, field.getAnnotation(Fragment.class), handler);
 
 		if (field.getType().isArray()) {
 		    if (field.isAnnotationPresent(Occurences.class)) {
-			node = new OccurencesNode(accessor, field.getAnnotation(Occurences.class), node);
+			item = new OccurencesNode(accessor, field.getAnnotation(Occurences.class), item);
 		    } else {
 			throw new MojetRuntimeException("Occurences annotation required");
 		    }
 		}
-		record.add(node);
+		node.add(item);
 	    } else {
 		throw new MojetRuntimeException("Handler can't manage this class type");
 	    }
 	}
     }
 
-    private void addFillers(Filler[] fillers, RecordNode record) {
+    private void addFillers(Filler[] fillers, RecordNode node) {
 	for (Filler filler : fillers) {
-	    record.add(new FillerNode(filler));
+	    node.add(new FillerNode(filler));
 	}
     }
 

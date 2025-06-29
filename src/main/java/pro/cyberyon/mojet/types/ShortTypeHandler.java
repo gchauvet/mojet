@@ -24,17 +24,17 @@ final class ShortTypeHandler extends AbstractTypeHandler<Short> {
 
     @Override
     protected boolean isAccept(Class<?> type) {
-        return Short.class == type;
+	return Short.class == type;
     }
 
     @Override
     public Short read(String data, String format) {
-        return Short.valueOf(data);
+	return Short.valueOf(data);
     }
 
     @Override
     public String write(Short data, String format) {
-        return Short.toString(data);
+	return Short.toString(data);
     }
 
 }

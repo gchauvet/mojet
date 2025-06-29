@@ -25,22 +25,22 @@ import pro.cyberyon.mojet.types.AbstractTypeHandler;
  * @author Guillaume CHAUVET
  */
 public final class MyLocalDateTypeHandler extends AbstractTypeHandler<LocalDate> {
-    
+
     @Override
     protected boolean isAccept(Class<?> type) {
-        return LocalDate.class == type;
+	return LocalDate.class == type;
     }
 
     @Override
     public LocalDate read(String data, String format) {
-        final DateTimeFormatter sfd = DateTimeFormatter.ofPattern("dd" + format, Locale.FRENCH);
-        return LocalDate.parse("01" + data, sfd);
+	final DateTimeFormatter sfd = DateTimeFormatter.ofPattern("dd" + format, Locale.FRENCH);
+	return LocalDate.parse("01" + data, sfd);
     }
 
     @Override
     public String write(LocalDate data, String format) {
-        final DateTimeFormatter sfd = DateTimeFormatter.ofPattern("dd" + format, Locale.FRENCH);
-        return data.format(sfd).substring(2);
+	final DateTimeFormatter sfd = DateTimeFormatter.ofPattern("dd" + format, Locale.FRENCH);
+	return data.format(sfd).substring(2);
     }
-    
+
 }

@@ -29,23 +29,23 @@ class IntegerTypeHandlerTest {
 
     @Test
     void testAccept() {
-        assertFalse(instance.accept(null));
-        assertFalse(instance.accept(Double.class));
-        assertFalse(instance.accept(long.class));
-        assertTrue(instance.accept(Integer.class));
-        assertTrue(instance.accept(int.class));
+	assertFalse(instance.accept(null));
+	assertFalse(instance.accept(Double.class));
+	assertFalse(instance.accept(long.class));
+	assertTrue(instance.accept(Integer.class));
+	assertTrue(instance.accept(int.class));
     }
 
     @Test
     void testRead() {
-        assertEquals(1, instance.read("1", null));
-        assertEquals(1985, instance.read("1985", null));
+	assertEquals(1, instance.read("1", null));
+	assertEquals(1985, instance.read("1985", null));
     }
 
     @Test
     void testWrite() {
-        assertEquals("0", instance.write(0, null));
-        assertEquals("1985", instance.write(1985, null));
+	assertEquals("0", instance.write(0, null));
+	assertEquals("1985", instance.write(1985, null));
     }
 
 }

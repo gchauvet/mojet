@@ -35,14 +35,14 @@ public @interface Fragment {
      * Define ways for padding
      */
     public enum PadWay {
-        /**
-         * align at left
-         */
-        LEFT,
-        /**
-         * align at right
-         */
-        RIGHT
+	/**
+	 * align at left
+	 */
+	LEFT,
+	/**
+	 * align at right
+	 */
+	RIGHT
     }
 
     /**

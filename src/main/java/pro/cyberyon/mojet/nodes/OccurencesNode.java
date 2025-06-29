@@ -46,6 +46,7 @@ public class OccurencesNode extends AbstractNode<Occurences> {
 
     /**
      * Number of iteration
+     *
      * @return a strict positive number
      */
     public int getCount() {

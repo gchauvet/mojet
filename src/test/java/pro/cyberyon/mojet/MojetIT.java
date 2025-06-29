@@ -23,13 +23,13 @@ import org.junit.jupiter.api.Test;
  * @author Guillaume CHAUVET
  */
 class MojetIT {
-    
+
     @Test
     void testSimpleReadLineToRootPojo() throws Exception {
-        final MojetLineMapper<RootPojo> mapper = new MojetLineMapper(RootPojo.class);
-        final RootPojo result = mapper.mapLine("01985000##114273EUR567   100011000210003200301_____", 1);
-        final MojetLineAggregator<RootPojo> aggregator = new MojetLineAggregator(RootPojo.class);
+	final MojetLineMapper<RootPojo> mapper = new MojetLineMapper(RootPojo.class);
+	final RootPojo result = mapper.mapLine("01985000##114273EUR567   100011000210003200301_____", 1);
+	final MojetLineAggregator<RootPojo> aggregator = new MojetLineAggregator(RootPojo.class);
 	assertEquals("01985000##114273EUR567   100011000210003200301_____", aggregator.aggregate(result));
     }
-    
+
 }

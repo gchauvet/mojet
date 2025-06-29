@@ -29,23 +29,23 @@ class StringTypeHandlerTest {
 
     @Test
     void testAccept() {
-        assertFalse(instance.accept(null));
-        assertFalse(instance.accept(Double.class));
-        assertTrue(instance.accept(String.class));
+	assertFalse(instance.accept(null));
+	assertFalse(instance.accept(Double.class));
+	assertTrue(instance.accept(String.class));
     }
 
     @Test
     void testRead() {
-        assertEquals("", instance.read("", null));
-        assertEquals("test", instance.read("test", null));
-        assertEquals("€éàÉ", instance.read("€éàÉ", null));
+	assertEquals("", instance.read("", null));
+	assertEquals("test", instance.read("test", null));
+	assertEquals("€éàÉ", instance.read("€éàÉ", null));
     }
 
     @Test
     void testWrite() {
-        assertEquals("", instance.write("", null));
-        assertEquals("test", instance.write("test", null));
-        assertEquals("€éàÉ", instance.write("€éàÉ", null));
+	assertEquals("", instance.write("", null));
+	assertEquals("test", instance.write("test", null));
+	assertEquals("€éàÉ", instance.write("€éàÉ", null));
     }
 
 }

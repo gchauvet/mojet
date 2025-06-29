@@ -29,22 +29,22 @@ class CharactereTypeHandlerTest {
 
     @Test
     void testAccept() {
-        assertFalse(instance.accept(null));
-        assertFalse(instance.accept(Double.class));
-        assertTrue(instance.accept(char.class));
-        assertTrue(instance.accept(Character.class));
+	assertFalse(instance.accept(null));
+	assertFalse(instance.accept(Double.class));
+	assertTrue(instance.accept(char.class));
+	assertTrue(instance.accept(Character.class));
     }
 
     @Test
     void testRead() {
-        assertEquals('0', instance.read("0", null));
-        assertEquals('t', instance.read("t", null));
+	assertEquals('0', instance.read("0", null));
+	assertEquals('t', instance.read("t", null));
     }
 
     @Test
     void testWrite() {
-        assertEquals("t", instance.write('t', null));
-        assertEquals("€", instance.write('€', null));
+	assertEquals("t", instance.write('t', null));
+	assertEquals("€", instance.write('€', null));
     }
 
 }

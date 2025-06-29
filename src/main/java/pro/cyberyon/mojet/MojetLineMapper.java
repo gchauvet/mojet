@@ -15,7 +15,9 @@
  */
 package pro.cyberyon.mojet;
 
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Collections;
+import java.util.Deque;
 import java.util.stream.Collectors;
 import org.springframework.batch.item.file.LineMapper;
 
@@ -56,12 +58,12 @@ public class MojetLineMapper<T> extends AbstractMojetLine<T> implements LineMapp
 	wrapper.setAutoGrowNestedPaths(true);
 	root.accept(new NodeVisitor() {
 
-	    private final Stack<String> path = new Stack<>();
+	    private final Deque<String> path = new ArrayDeque<>();
 	    private int index = 0;
 
 	    @Override
 	    public void visit(final RecordNode node) {
-		for (AbstractNode visitable : node.getNodes()) {
+		for (AbstractNode<?> visitable : node.getNodes()) {
 		    path.push(visitable.getAccessor());
 		    visitable.accept(this);
 		    path.pop();
@@ -93,7 +95,13 @@ public class MojetLineMapper<T> extends AbstractMojetLine<T> implements LineMapp
 	    }
 
 	    private String getPath() {
-		return path.stream().filter(t -> !t.isEmpty()).collect(Collectors.joining("."));
+		return path.stream().filter(t -> !t.isEmpty()).collect(Collectors.collectingAndThen(
+			Collectors.toList(),
+			lst -> {
+			    Collections.reverse(lst);
+			    return lst.stream().filter(t -> !t.isEmpty()).collect(Collectors.joining("."));
+			}
+		));
 	    }
 	});
 	return (T) wrapper.getWrappedInstance();

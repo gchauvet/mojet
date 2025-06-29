@@ -28,44 +28,42 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class MojetLineMapperTest {
 
-
-
     @Test
     void testSimpleReadLineToRootPojo() throws Exception {
-        final MojetLineMapper<RootPojo> mapper = new MojetLineMapper(RootPojo.class);
-        final RootPojo result = mapper.mapLine("01985000##114273EUR567   100011000210003200301_____", 1);
-        assertEquals(1985, result.getId());
-        assertEquals(114273, result.getChild().getTotal());
-        assertEquals("EUR", result.getChild().getLabel());
-        assertEquals(567, result.getCounter());
-        assertArrayEquals(new long[]{10001, 10002, 10003}, result.getValues());
-        assertEquals(LocalDate.of(2003, Month.JANUARY, 1), result.getDate());
+	final MojetLineMapper<RootPojo> mapper = new MojetLineMapper(RootPojo.class);
+	final RootPojo result = mapper.mapLine("01985000##114273EUR567   100011000210003200301_____", 1);
+	assertEquals(1985, result.getId());
+	assertEquals(114273, result.getChild().getTotal());
+	assertEquals("EUR", result.getChild().getLabel());
+	assertEquals(567, result.getCounter());
+	assertArrayEquals(new long[]{10001, 10002, 10003}, result.getValues());
+	assertEquals(LocalDate.of(2003, Month.JANUARY, 1), result.getDate());
     }
 
     @Data
     @Record
     public static class BadFragmentPojo {
 
-        @Fragment(length = -1)
-        private int value1;
-        @Fragment(length = 0)
-        private int value2;
+	@Fragment(length = -1)
+	private int value1;
+	@Fragment(length = 0)
+	private int value2;
     }
 
     @Data
     @Record
     public static class BadPaddingPojo {
 
-        @Filler(length = -1)
-        private int value1;
-        @Filler(length = 0)
-        private int value2;
+	@Filler(length = -1)
+	private int value1;
+	@Filler(length = 0)
+	private int value2;
     }
-    
+
     public static class FakePojo {
 
-        @Fragment(length = 3)
-        private String test;
+	@Fragment(length = 3)
+	private String test;
     }
 
     @Data
@@ -73,14 +71,14 @@ class MojetLineMapperTest {
     public static class BadRecordPojo {
 
 	@Record
-        private FakePojo value2;
+	private FakePojo value2;
     }
 
     @Test
     void testBadPojoSetting() {
-        assertThrows(MojetRuntimeException.class, () -> new MojetLineMapper(BadFragmentPojo.class));
-        assertThrows(MojetRuntimeException.class, () -> new MojetLineMapper(BadPaddingPojo.class));
-        assertThrows(MojetRuntimeException.class, () -> new MojetLineMapper(BadRecordPojo.class));
+	assertThrows(MojetRuntimeException.class, () -> new MojetLineMapper(BadFragmentPojo.class));
+	assertThrows(MojetRuntimeException.class, () -> new MojetLineMapper(BadPaddingPojo.class));
+	assertThrows(MojetRuntimeException.class, () -> new MojetLineMapper(BadRecordPojo.class));
     }
 
 }

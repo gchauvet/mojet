@@ -24,17 +24,17 @@ final class StringTypeHandler extends AbstractTypeHandler<String> {
 
     @Override
     protected boolean isAccept(Class<?> type) {
-        return String.class == type;
+	return String.class == type;
     }
 
     @Override
     public String read(String data, String format) {
-        return data;
+	return data;
     }
 
     @Override
     public String write(String data, String format) {
-        return data;
+	return data;
     }
 
 }

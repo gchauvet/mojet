@@ -36,8 +36,8 @@ abstract class AbstractMojetLine<T> {
      * @param targetType the pojo class type
      */
     protected AbstractMojetLine(@NonNull Class<T> targetType) {
-        final NodesBuilder builder = new NodesBuilder();
-        root = builder.build(targetType);
+	final NodesBuilder builder = new NodesBuilder();
+	root = builder.build(targetType);
     }
 
 }

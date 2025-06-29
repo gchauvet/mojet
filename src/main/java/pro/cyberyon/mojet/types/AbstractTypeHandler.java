@@ -28,17 +28,17 @@ public abstract class AbstractTypeHandler<T> implements TypeHandler<T> {
 
     @Override
     public final boolean accept(Class<?> type) {
-        boolean result = false;
-        if (type != null) {
-            if (type.isArray()) {
-                type = type.getComponentType();
-            }
-            if (type.isPrimitive()) {
-                type = ClassUtils.primitivesToWrappers(type)[0];
-            }
-            result = isAccept(type);
-        }
-        return result;
+	boolean result = false;
+	if (type != null) {
+	    if (type.isArray()) {
+		type = type.getComponentType();
+	    }
+	    if (type.isPrimitive()) {
+		type = ClassUtils.primitivesToWrappers(type)[0];
+	    }
+	    result = isAccept(type);
+	}
+	return result;
     }
 
     /**

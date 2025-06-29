@@ -29,22 +29,22 @@ class LongTypeHandlerTest {
 
     @Test
     void testAccept() {
-        assertFalse(instance.accept(null));
-        assertFalse(instance.accept(Double.class));
-        assertTrue(instance.accept(Long.class));
-        assertTrue(instance.accept(long.class));
+	assertFalse(instance.accept(null));
+	assertFalse(instance.accept(Double.class));
+	assertTrue(instance.accept(Long.class));
+	assertTrue(instance.accept(long.class));
     }
 
     @Test
     void testRead() {
-        assertEquals(1, instance.read("1", null));
-        assertEquals(1985, instance.read("1985", null));
+	assertEquals(1, instance.read("1", null));
+	assertEquals(1985, instance.read("1985", null));
     }
 
     @Test
     void testWrite() {
-        assertEquals("0", instance.write(0L, null));
-        assertEquals("1985", instance.write(1985L, null));
+	assertEquals("0", instance.write(0L, null));
+	assertEquals("1985", instance.write(1985L, null));
     }
 
 }

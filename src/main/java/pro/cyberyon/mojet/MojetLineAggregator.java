@@ -15,7 +15,9 @@
  */
 package pro.cyberyon.mojet;
 
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Collections;
+import java.util.Deque;
 import java.util.stream.Collectors;
 import org.apache.commons.text.TextStringBuilder;
 import org.springframework.batch.item.file.transform.LineAggregator;
@@ -54,15 +56,21 @@ public class MojetLineAggregator<T> extends AbstractMojetLine<T> implements Line
 	root.accept(new NodeVisitor() {
 
 	    private final BeanWrapperImpl bean = new BeanWrapperImpl(item);
-	    private final Stack<String> path = new Stack<>();
+	    private final Deque<String> path = new ArrayDeque<>();
 
 	    private String getPath() {
-		return path.stream().filter(t -> !t.isEmpty()).collect(Collectors.joining("."));
+		return path.stream().filter(t -> !t.isEmpty()).collect(Collectors.collectingAndThen(
+			Collectors.toList(),
+			lst -> {
+			    Collections.reverse(lst);
+			    return lst.stream().filter(t -> !t.isEmpty()).collect(Collectors.joining("."));
+			}
+		));
 	    }
 
 	    @Override
 	    public void visit(final RecordNode node) {
-		for (AbstractNode visitable : node.getNodes()) {
+		for (AbstractNode<?> visitable : node.getNodes()) {
 		    path.push(visitable.getAccessor());
 		    visitable.accept(this);
 		    path.pop();
@@ -87,9 +95,8 @@ public class MojetLineAggregator<T> extends AbstractMojetLine<T> implements Line
 
 	    @Override
 	    public void visit(final FragmentNode node) {
-		final TypeHandler<Object> handler = ((TypeHandler<Object>) node.getHandler());
 		final Object value = bean.getPropertyValue(getPath());
-		final String data = handler.write(value, node.getFormat());
+		final String data = ((TypeHandler<Object>) node.getHandler()).write(value, node.getFormat());
 		if (data.length() > node.getLenght()) {
 		    throw new MojetRuntimeException("Data overflow");
 		} else {

@@ -31,7 +31,7 @@ public class FillerNode extends AbstractNode<Filler> {
      * @param annotation the filler annotation
      */
     public FillerNode(Filler annotation) {
-	super(annotation, null);
+	super(annotation, "");
 	if (getLength() < 1) {
 	    throw new MojetRuntimeException("Lenght must be a positive value");
 	}
