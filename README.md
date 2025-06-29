@@ -81,11 +81,13 @@ public class SimplePojo {
 @EnableBatchProcessing
 public class ExampleBatchConfig {
 
+    private final NodeBuilder builder = new NodeBuilder();
+
     @Bean
     public FlatFileItemReader<SimplePojo> reader() {
         FlatFileItemReader<SimplePojo> reader = new FlatFileItemReader<>();
         reader.setResource(new ClassPathResource("input.txt"));
-        reader.setLineMapper(new MojetLineMapper<>(SimplePojo.class));
+        reader.setLineMapper(new MojetLineMapper<>(builder, SimplePojo.class));
         return reader;
     }
 
@@ -93,7 +95,7 @@ public class ExampleBatchConfig {
     public FlatFileItemWriter<SimplePojo> writer() {
         FlatFileItemWriter<SimplePojo> writer = new FlatFileItemWriter<>();
         writer.setResource(new FileSystemResource("output.txt"));
-        writer.setLineAggregator(new MojetLineAggregator<>(SimplePojo.class));
+        writer.setLineAggregator(new MojetLineAggregator<>(builder, SimplePojo.class));
         return writer;
     }
 
