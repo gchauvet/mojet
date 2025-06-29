@@ -23,7 +23,7 @@ import pro.cyberyon.mojet.nodes.FillerNode;
 import pro.cyberyon.mojet.nodes.FragmentNode;
 import pro.cyberyon.mojet.nodes.NodeVisitable;
 import pro.cyberyon.mojet.nodes.NodeVisitor;
-import pro.cyberyon.mojet.nodes.OccurenceNode;
+import pro.cyberyon.mojet.nodes.OccurencesNode;
 import pro.cyberyon.mojet.nodes.RecordNode;
 import pro.cyberyon.mojet.types.TypeHandler;
 
@@ -89,7 +89,7 @@ public class MojetLineAggregator<T> extends AbstractMojetLine<T> implements Line
             }
 
             @Override
-            public void visit(final OccurenceNode node) {
+            public void visit(final OccurencesNode node) {
                 final PropertyFacade previous = current;
                 final AtomicInteger counter = new AtomicInteger(0);
                 current = new PropertyFacade() {
@@ -107,7 +107,9 @@ public class MojetLineAggregator<T> extends AbstractMojetLine<T> implements Line
 
             @Override
             public void visit(final FragmentNode node) {
-                final String data = ((TypeHandler<Object>) node.getHandler()).write(current.getValue(node.getAccessor()), node.getFormat());
+		final TypeHandler<Object> handler = ((TypeHandler<Object>) node.getHandler());
+		final Object value = current.getValue(node.getAccessor());
+                final String data = ((TypeHandler<Object>) node.getHandler()).write(value, node.getFormat());
                 if (data.length() > node.getLenght()) {
                     throw new MojetRuntimeException("Data overflow");
                 } else {

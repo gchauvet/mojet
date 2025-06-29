@@ -18,6 +18,7 @@ package pro.cyberyon.mojet.nodes;
 import lombok.Getter;
 import pro.cyberyon.mojet.Fragment;
 import pro.cyberyon.mojet.Fragment.PadWay;
+import pro.cyberyon.mojet.MojetRuntimeException;
 import pro.cyberyon.mojet.types.TypeHandler;
 
 /**
@@ -32,6 +33,8 @@ public class FragmentNode extends AbstractNode<Fragment> {
     public FragmentNode(String accessor, Fragment annotation, TypeHandler<?> handler) {
         super(annotation, accessor);
         this.handler = handler;
+	if (getLenght() < 1)
+	    throw new MojetRuntimeException("Lenght must be a positive value");
     }
 
     public int getLenght() {

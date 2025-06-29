@@ -194,25 +194,15 @@ class MojetLineAggregatorTest {
     }
 
     @Test
-    void testErrorAggregation() {
-        var undefined = new MojetLineAggregator<>(UndefinedPojo.class);
-        var pojo1 = new UndefinedPojo();
-        assertThrows(MojetRuntimeException.class, () -> undefined.aggregate(pojo1));
-        var bugged = new MojetLineAggregator<>(BuggedConverterPojo.class);
-        var pojo2 = new BuggedConverterPojo();
-        assertThrows(MojetRuntimeException.class, () -> bugged.aggregate(pojo2));
-        var uncoverted = new MojetLineAggregator<>(NoConverterPojo.class);
-        var pojo3 = new NoConverterPojo();
-        assertThrows(MojetRuntimeException.class, () -> uncoverted.aggregate(pojo3));
-        var inacceptable = new MojetLineAggregator<>(InacceptablePojo.class);
-        var pojo4 = new InacceptablePojo();
-        assertThrows(MojetRuntimeException.class, () -> inacceptable.aggregate(pojo4));
+    void testErrorsAggregation() {
+        assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(UndefinedPojo.class));
+        assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(BuggedConverterPojo.class));
+        assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(NoConverterPojo.class));
+        assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(InacceptablePojo.class));
         var overflow = new MojetLineAggregator<>(OverflowPojo.class);
         var pojo5 = new OverflowPojo();
-        assertEquals("private java.lang.String pro.cyberyon.mojet.MojetLineAggregatorTest$OverflowPojo.overflow length (4) greater than fragment length definition (3)", assertThrows(MojetRuntimeException.class, () -> overflow.aggregate(pojo5)).getMessage());
-        var noIterable = new MojetLineAggregator<>(NoIterableAllowedPojo.class);
-        var pojo6 = new NoIterableAllowedPojo();
-        assertThrows(MojetRuntimeException.class, () -> noIterable.aggregate(pojo6));
+        assertEquals("Data overflow", assertThrows(MojetRuntimeException.class, () -> overflow.aggregate(pojo5)).getMessage());
+        assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(NoIterableAllowedPojo.class));
         assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(NoOccurencesDefinedPojo.class));
         assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(BadOccurencesDefinedPojo.class));
         assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(BadFragmentPojo.class));

@@ -16,20 +16,23 @@
 package pro.cyberyon.mojet.nodes;
 
 import lombok.Getter;
+import pro.cyberyon.mojet.MojetRuntimeException;
 import pro.cyberyon.mojet.Occurences;
 
 /**
  *
  * @author Guillaume CHAUVET
  */
-public class OccurenceNode extends AbstractNode<Occurences> {
+public class OccurencesNode extends AbstractNode<Occurences> {
 
     @Getter
     private final NodeVisitable item;
 
-    public OccurenceNode(String accessor, Occurences annotation, NodeVisitable item) {
+    public OccurencesNode(String accessor, Occurences annotation, NodeVisitable item) {
         super(annotation, accessor);
         this.item = item;
+	if (getCount() < 1)
+	    throw new MojetRuntimeException("Iteration must be a positive value");
     }
     
     public int getCount() {

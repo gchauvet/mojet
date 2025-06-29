@@ -25,7 +25,7 @@ public interface NodeVisitor {
     
     void visit(FillerNode node);
     
-    void visit(OccurenceNode node);
+    void visit(OccurencesNode node);
     
     void visit(FragmentNode node);
     

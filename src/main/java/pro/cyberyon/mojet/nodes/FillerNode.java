@@ -16,6 +16,7 @@
 package pro.cyberyon.mojet.nodes;
 
 import pro.cyberyon.mojet.Filler;
+import pro.cyberyon.mojet.MojetRuntimeException;
 
 /**
  *
@@ -24,19 +25,22 @@ import pro.cyberyon.mojet.Filler;
 public class FillerNode extends AbstractNode<Filler> {
 
     public FillerNode(Filler annotation) {
-        super(annotation, null);
+	super(annotation, null);
+	if (getLength() < 1) {
+	    throw new MojetRuntimeException("Lenght must be a positive value");
+	}
     }
-    
+
     public int getLength() {
-        return annotation.length();
+	return annotation.length();
     }
-    
+
     public char getPadding() {
-        return annotation.value();
+	return annotation.value();
     }
-    
+
     @Override
     public void accept(NodeVisitor visitor) {
-        visitor.visit(this);
+	visitor.visit(this);
     }
 }

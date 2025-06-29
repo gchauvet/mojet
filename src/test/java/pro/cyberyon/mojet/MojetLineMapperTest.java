@@ -97,12 +97,19 @@ class MojetLineMapperTest {
         @Filler(length = 0)
         private int value2;
     }
+    
+    public static class FakePojo {
+
+        @Fragment(length = 3)
+        private String test;
+    }
 
     @Data
     @Record
     public static class BadRecordPojo {
 
-        private ChildPojo value2;
+	@Record
+        private FakePojo value2;
     }
 
     @Test

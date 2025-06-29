@@ -27,46 +27,60 @@ import pro.cyberyon.mojet.types.TypeHandlerFactory;
 public class NodesBuilder {
 
     public RecordNode build(Class<?> type) {
-        return build("", type);
+	return build("", type);
     }
 
     private RecordNode build(String accessor, Class<?> type) {
-        final RecordNode result = new RecordNode(accessor, type);
-        for (Field field : type.getDeclaredFields()) {
-            build(field, result);
-        }
-        addFillers(type.getDeclaredAnnotationsByType(Filler.class), result);
-        return result;
+	if (!type.isAnnotationPresent(Record.class)) {
+	    throw new MojetRuntimeException("Record not annoted");
+	} else {
+	    final RecordNode result = new RecordNode(accessor, type);
+	    for (Field field : type.getDeclaredFields()) {
+		build(field, result);
+	    }
+	    addFillers(type.getDeclaredAnnotationsByType(Filler.class), result);
+	    return result;
+	}
     }
 
     private void build(Field field, RecordNode record) {
-        final String accessor = field.getName();
-        addFillers(field.getDeclaredAnnotationsByType(Filler.class), record);
-        if (field.isAnnotationPresent(Fragment.class)) {
-            final TypeHandler<?> handler;
-            if (field.isAnnotationPresent(Converter.class)) {
-                final Converter converter = field.getAnnotation(Converter.class);
-                try {
-                    handler = converter.value().getConstructor().newInstance();
-                } catch (ReflectiveOperationException ex) {
-                    throw new MojetRuntimeException("Can't instanciate handler " + converter.value().getSimpleName(), ex);
-                }
-            } else {
-                handler = TypeHandlerFactory.getInstance().get(field.getType());
-            }
-            NodeVisitable node = new FragmentNode(accessor, field.getAnnotation(Fragment.class), handler);
+	final String accessor = field.getName();
+	addFillers(field.getDeclaredAnnotationsByType(Filler.class), record);
+	if (field.isAnnotationPresent(Record.class)) {
+	    record.add(build(accessor, field.getType()));
+	} else if (field.isAnnotationPresent(Fragment.class)) {
+	    final TypeHandler<?> handler;
+	    if (field.isAnnotationPresent(Converter.class)) {
+		final Converter converter = field.getAnnotation(Converter.class);
+		try {
+		    handler = converter.value().getConstructor().newInstance();
+		} catch (ReflectiveOperationException ex) {
+		    throw new MojetRuntimeException("Can't instanciate handler " + converter.value().getSimpleName(), ex);
+		}
+	    } else {
+		handler = TypeHandlerFactory.getInstance().get(field.getType());
+	    }
+	    if (handler.accept(field.getType())) {
+		NodeVisitable node = new FragmentNode(accessor, field.getAnnotation(Fragment.class), handler);
 
-            if (field.isAnnotationPresent(Occurences.class)) {
-                node = new OccurenceNode(accessor, field.getAnnotation(Occurences.class), node);
-            }
-            record.add(node);
-        }
+		if (field.getType().isArray()) {
+		    if (field.isAnnotationPresent(Occurences.class)) {
+			node = new OccurencesNode(accessor, field.getAnnotation(Occurences.class), node);
+		    } else {
+			throw new MojetRuntimeException("Occurences annotation required");
+		    }
+		}
+		record.add(node);
+	    } else {
+		throw new MojetRuntimeException("Handler can't manage this class type");
+	    }
+	}
     }
 
     private void addFillers(Filler[] fillers, RecordNode record) {
-        for (Filler filler : fillers) {
-            record.add(new FillerNode(filler));
-        }
+	for (Filler filler : fillers) {
+	    record.add(new FillerNode(filler));
+	}
     }
 
 }

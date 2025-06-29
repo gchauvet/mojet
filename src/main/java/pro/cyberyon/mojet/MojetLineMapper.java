@@ -22,7 +22,7 @@ import org.springframework.beans.BeanWrapperImpl;
 import pro.cyberyon.mojet.nodes.FillerNode;
 import pro.cyberyon.mojet.nodes.FragmentNode;
 import pro.cyberyon.mojet.nodes.NodeVisitor;
-import pro.cyberyon.mojet.nodes.OccurenceNode;
+import pro.cyberyon.mojet.nodes.OccurencesNode;
 import pro.cyberyon.mojet.nodes.RecordNode;
 
 /**
@@ -59,7 +59,7 @@ public class MojetLineMapper<T> extends AbstractMojetLine<T> implements LineMapp
             }
 
             @Override
-            public void visit(OccurenceNode node) {
+            public void visit(OccurencesNode node) {
                 throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
             }
 
