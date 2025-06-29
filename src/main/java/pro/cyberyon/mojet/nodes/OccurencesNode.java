@@ -27,7 +27,7 @@ import pro.cyberyon.mojet.Occurences;
 public class OccurencesNode extends AbstractNode<Occurences> {
 
     @Getter
-    private final AbstractNode item;
+    private final AbstractNode<?> item;
 
     /**
      * Construct a node occurences
@@ -36,7 +36,7 @@ public class OccurencesNode extends AbstractNode<Occurences> {
      * @param annotation the occurences annotation
      * @param item Node to iterate
      */
-    public OccurencesNode(final String accessor, final Occurences annotation, final AbstractNode item) {
+    public OccurencesNode(final String accessor, final Occurences annotation, final AbstractNode<?> item) {
 	super(annotation, accessor);
 	this.item = item;
 	if (getCount() < 1) {

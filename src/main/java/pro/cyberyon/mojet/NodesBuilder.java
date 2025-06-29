@@ -50,37 +50,41 @@ class NodesBuilder {
 	}
     }
 
-    private void build(Field field, RecordNode node) {
-	final String accessor = field.getName();
+    private void build(final Field field, final RecordNode node) {
 	addFillers(field.getDeclaredAnnotationsByType(Filler.class), node);
+	final String accessor = field.getName();
 	if (field.isAnnotationPresent(Record.class)) {
 	    node.add(build(accessor, field.getType()));
 	} else if (field.isAnnotationPresent(Fragment.class)) {
-	    final TypeHandler<?> handler;
-	    if (field.isAnnotationPresent(Converter.class)) {
-		final Converter converter = field.getAnnotation(Converter.class);
-		try {
-		    handler = converter.value().getConstructor().newInstance();
-		} catch (ReflectiveOperationException ex) {
-		    throw new MojetRuntimeException("Can't instanciate handler " + converter.value().getSimpleName(), ex);
-		}
-	    } else {
-		handler = TypeHandlerFactory.getInstance().get(field.getType());
-	    }
-	    if (handler.accept(field.getType())) {
-		AbstractNode<?> item = new FragmentNode(accessor, field.getAnnotation(Fragment.class), handler);
+	    node.add(processFragment(accessor, field));
+	}
+    }
 
-		if (field.getType().isArray()) {
-		    if (field.isAnnotationPresent(Occurences.class)) {
-			item = new OccurencesNode(accessor, field.getAnnotation(Occurences.class), item);
-		    } else {
-			throw new MojetRuntimeException("Occurences annotation required");
-		    }
-		}
-		node.add(item);
-	    } else {
-		throw new MojetRuntimeException("Handler can't manage this class type");
+    private AbstractNode<?> processFragment(final String accessor, final Field field) {
+	final TypeHandler<?> handler;
+	if (field.isAnnotationPresent(Converter.class)) {
+	    final Converter converter = field.getAnnotation(Converter.class);
+	    try {
+		handler = converter.value().getConstructor().newInstance();
+	    } catch (ReflectiveOperationException ex) {
+		throw new MojetRuntimeException("Can't instanciate handler " + converter.value().getSimpleName(), ex);
 	    }
+	} else {
+	    handler = TypeHandlerFactory.getInstance().get(field.getType());
+	}
+	if (handler.accept(field.getType())) {
+	    AbstractNode<?> item = new FragmentNode(accessor, field.getAnnotation(Fragment.class), handler);
+
+	    if (field.getType().isArray()) {
+		if (field.isAnnotationPresent(Occurences.class)) {
+		    item = new OccurencesNode(accessor, field.getAnnotation(Occurences.class), item);
+		} else {
+		    throw new MojetRuntimeException("Occurences annotation required");
+		}
+	    }
+	    return item;
+	} else {
+	    throw new MojetRuntimeException("Handler can't manage this class type");
 	}
     }
 
