@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -30,61 +30,61 @@ import pro.cyberyon.mojet.types.TypeHandler;
  */
 public class MojetLineAggregator<T> extends AbstractMojetLine<T> implements LineAggregator<T> {
 
-    /**
-     * Construct a new pojo {@link LineAggregator} instance
-     *
-     * @param type the bean type to manage
-     */
-    public MojetLineAggregator(final Class<T> type) {
-	super(type);
-    }
+	/**
+	 * Construct a new pojo {@link LineAggregator} instance
+	 *
+	 * @param type the bean type to manage
+	 */
+	public MojetLineAggregator(final Class<T> type) {
+		super(type);
+	}
 
-    /**
-     * Construct a new pojo {@link LineAggregator} instance
-     *
-     * @param builder the node builder instance to use
-     * @param type the bean type to manage
-     */
-    public MojetLineAggregator(final NodesBuilder builder, final Class<T> type) {
-	super(type, builder);
-    }
+	/**
+	 * Construct a new pojo {@link LineAggregator} instance
+	 *
+	 * @param builder the node builder instance to use
+	 * @param type    the bean type to manage
+	 */
+	public MojetLineAggregator(final NodesBuilder builder, final Class<T> type) {
+		super(type, builder);
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String aggregate(final T item) {
-	final TextStringBuilder output = new TextStringBuilder();
-	root.accept(new AbstractNodeVisitor() {
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String aggregate(final T item) {
+		final TextStringBuilder output = new TextStringBuilder();
+		root.accept(new AbstractNodeVisitor() {
 
-	    private final BeanWrapperImpl bean = new BeanWrapperImpl(item);
+			private final BeanWrapperImpl bean = new BeanWrapperImpl(item);
 
-	    @Override
-	    public void visit(final FillerNode node) {
-		output.appendPadding(node.getLength(), node.getPadding());
-	    }
+			@Override
+			public void visit(final FillerNode node) {
+				output.appendPadding(node.getLength(), node.getPadding());
+			}
 
-	    @Override
-	    public void visit(final FragmentNode node) {
-		final Object value = bean.getPropertyValue(getPath());
-		final String data = ((TypeHandler<Object>) node.getHandler()).write(value, node.getFormat());
-		if (data.length() > node.getLenght()) {
-		    throw new MojetRuntimeException("Data overflow");
-		} else {
-		    switch (node.getAlignement()) {
-			case LEFT:
-			    output.appendFixedWidthPadLeft(data, node.getLenght(), node.getPadder());
-			    break;
-			case RIGHT:
-			    output.appendFixedWidthPadRight(data, node.getLenght(), node.getPadder());
-			    break;
-			default:
-			    throw new MojetRuntimeException("Undefined case");
-		    }
-		}
-	    }
-	});
-	return output.toString();
-    }
+			@Override
+			public void visit(final FragmentNode node) {
+				final Object value = bean.getPropertyValue(getPath());
+				final String data = ((TypeHandler<Object>) node.getHandler()).write(value, node.getFormat());
+				if (data.length() > node.getLenght()) {
+					throw new MojetRuntimeException("Data overflow");
+				} else {
+					switch (node.getAlignement()) {
+						case LEFT:
+							output.appendFixedWidthPadLeft(data, node.getLenght(), node.getPadder());
+							break;
+						case RIGHT:
+							output.appendFixedWidthPadRight(data, node.getLenght(), node.getPadder());
+							break;
+						default:
+							throw new MojetRuntimeException("Undefined case");
+					}
+				}
+			}
+		});
+		return output.toString();
+	}
 
 }

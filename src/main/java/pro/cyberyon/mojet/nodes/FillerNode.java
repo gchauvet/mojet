@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,41 +25,41 @@ import pro.cyberyon.mojet.MojetRuntimeException;
  */
 public class FillerNode extends AbstractNode<Filler> {
 
-    /**
-     * Construct a filler node
-     *
-     * @param annotation the filler annotation
-     */
-    public FillerNode(Filler annotation) {
-	super(annotation, "");
-	if (getLength() < 1) {
-	    throw new MojetRuntimeException("Lenght must be a positive value");
+	/**
+	 * Construct a filler node
+	 *
+	 * @param annotation the filler annotation
+	 */
+	public FillerNode(Filler annotation) {
+		super(annotation, "");
+		if (getLength() < 1) {
+			throw new MojetRuntimeException("Lenght must be a positive value");
+		}
 	}
-    }
 
-    /**
-     * Get the filler length area
-     *
-     * @return the length
-     */
-    public int getLength() {
-	return annotation.length();
-    }
+	/**
+	 * Get the filler length area
+	 *
+	 * @return the length
+	 */
+	public int getLength() {
+		return annotation.length();
+	}
 
-    /**
-     * Get the padder charactere
-     *
-     * @return the padding value
-     */
-    public char getPadding() {
-	return annotation.value();
-    }
+	/**
+	 * Get the padder charactere
+	 *
+	 * @return the padding value
+	 */
+	public char getPadding() {
+		return annotation.value();
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void accept(NodeVisitor visitor) {
-	visitor.visit(this);
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void accept(NodeVisitor visitor) {
+		visitor.visit(this);
+	}
 }

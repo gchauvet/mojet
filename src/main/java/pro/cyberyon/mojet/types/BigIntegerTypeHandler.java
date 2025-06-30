@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,19 +24,19 @@ import java.math.BigInteger;
  */
 final class BigIntegerTypeHandler extends AbstractTypeHandler<BigInteger> {
 
-    @Override
-    protected boolean isAccept(Class<?> type) {
-	return BigInteger.class == type;
-    }
+	@Override
+	protected boolean isAccept(Class<?> type) {
+		return BigInteger.class == type;
+	}
 
-    @Override
-    public BigInteger read(String data, String format) {
-	return new BigInteger(data);
-    }
+	@Override
+	public BigInteger read(String data, String format) {
+		return new BigInteger(data);
+	}
 
-    @Override
-    public String write(BigInteger data, String format) {
-	return data.toString();
-    }
+	@Override
+	public String write(BigInteger data, String format) {
+		return data.toString();
+	}
 
 }
