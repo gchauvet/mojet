@@ -35,7 +35,7 @@ public class MojetPolyLineMapper<T extends RecordVisitable> implements LineMappe
 	/**
 	 * Construct a new mapper whos can handle multiple visitable records
 	 *
-	 * @param pojos
+	 * @param pojos set of visitable classes in the same scope
 	 */
 	public MojetPolyLineMapper(final Set<Class<? extends T>> pojos) {
 		final Map<String, MojetLineMapper<? extends T>> mappers = new HashMap<>();
