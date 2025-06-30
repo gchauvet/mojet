@@ -15,9 +15,6 @@
  */
 package pro.cyberyon.mojet;
 
-import java.util.HashSet;
-import lombok.Getter;
-import lombok.Setter;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 

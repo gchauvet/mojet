@@ -26,9 +26,10 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author Guillaume CHAUVET
  */
-public class MojetPolyLineMapperTest {
+class MojetPolyLineMapperTest {
 
 	private static interface PojoVisitor extends RecordVisitor {
+
 		void visit(MyPojo visitor);
 
 		void visit(YourPojo visitor);
@@ -93,7 +94,6 @@ public class MojetPolyLineMapperTest {
 			public void visit(YourPojo visitor) {
 				fail("Not good type");
 			}
-
 		});
 		result = mapper.mapLine("YOUR567 TEST07890", 2);
 		assertNotNull(result);
@@ -109,7 +109,6 @@ public class MojetPolyLineMapperTest {
 				assertEquals("TEST", visitor.getName());
 				assertEquals(7890, visitor.getFoo());
 			}
-
 		});
 	}
 
