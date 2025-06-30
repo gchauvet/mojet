@@ -98,7 +98,7 @@ public class NodesBuilder {
 		}
 	}
 
-	private void addFillers(Filler[] fillers, RecordNode node) {
+	private static void addFillers(Filler[] fillers, RecordNode node) {
 		for (Filler filler : fillers) {
 			node.add(new FillerNode(filler));
 		}

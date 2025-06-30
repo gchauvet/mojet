@@ -15,6 +15,7 @@
  */
 package pro.cyberyon.mojet;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.batch.item.file.LineMapper;
 
 import org.springframework.beans.BeanWrapper;
@@ -26,7 +27,7 @@ import pro.cyberyon.mojet.nodes.FragmentNode;
  * MojetLineMapper is an implementation of LineMapper that uses a POJO type to
  * map data that are annotated.
  *
- * @param <T> POJO type
+ * @param <T> pojo type
  *
  * @author Guillaume CHAUVET
  */
@@ -69,7 +70,18 @@ public class MojetLineMapper<T> extends AbstractMojetLine<T> implements LineMapp
 
 			@Override
 			public void visit(final FragmentNode node) {
-				final String data = line.substring(index, index + node.getLenght());
+				String data = line.substring(index, index + node.getLenght());
+				switch (node.getAlignement()) {
+					case LEFT:
+						data = StringUtils.stripEnd(data, Character.toString(node.getPadder()));
+						break;
+					case RIGHT:
+						data = StringUtils.stripStart(data, Character.toString(node.getPadder()));
+						break;
+					default:
+						throw new MojetRuntimeException("Undefined case");
+				}
+
 				final Object value = node.getHandler().read(data, node.getFormat());
 				wrapper.setPropertyValue(getPath(), value);
 				index += node.getLenght();

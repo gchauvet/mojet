@@ -15,22 +15,11 @@
  */
 package pro.cyberyon.mojet;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.Test;
-
 /**
+ * Symbolic interface to define the client side of visitor pattern
  *
  * @author Guillaume CHAUVET
  */
-class MojetIT {
-
-	@Test
-	void testSimpleReadLineToRootPojo() throws Exception {
-		final NodesBuilder builder = new NodesBuilder();
-		final MojetLineMapper<RootPojo> mapper = new MojetLineMapper(builder, RootPojo.class);
-		final RootPojo result = mapper.mapLine("01985000##114273EUR567   100011000210003200301_____", 1);
-		final MojetLineAggregator<RootPojo> aggregator = new MojetLineAggregator(builder, RootPojo.class);
-		assertEquals("01985000##114273EUR567   100011000210003200301_____", aggregator.aggregate(result));
-	}
+public interface RecordVisitor {
 
 }

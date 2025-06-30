@@ -123,8 +123,9 @@ public class ExampleBatchConfig {
 * ✅ Annotation-based POJO-to-fixed-length mapping (including arrays)
 * ✅ Multi-filler and padding support
 * ✅ Custom formatting support (e.g. LocalDate)
-* 🧪 Multi-record type support (in progress)
+* ✅ Multi-record type support
 * ❌ Collections not yet supported
+* ❌ Inheritance not yet supported
 
 ## 🚀 Contributing
 Contributions are welcome!
