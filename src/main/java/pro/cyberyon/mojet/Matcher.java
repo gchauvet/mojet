@@ -19,6 +19,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import org.springframework.batch.support.PatternMatcher;
 
 /**
  * Annotation to define a matching pattern on the root class
@@ -29,5 +30,11 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface Matcher {
 
-	String value();
+    /**
+     * Regular expression for record matching
+     *
+     * @see PatternMatcher#match
+     * @return the regular expression
+     */
+    String value();
 }
