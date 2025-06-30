@@ -125,7 +125,7 @@ public class ExampleBatchConfig {
 * ✅ Custom formatting support (e.g. LocalDate)
 * ✅ Multi-record type support
 * ❌ Collections not yet supported
-* ❌ Inheritance nor yet supported
+* ❌ Inheritance not yet supported
 
 ## 🚀 Contributing
 Contributions are welcome!
