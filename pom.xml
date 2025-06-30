@@ -90,6 +90,20 @@
                             <goal>report</goal>
                         </goals>
                     </execution>
+                    <execution>
+                        <id>prepare-agent-integration</id>
+                        <goals>
+                            <goal>prepare-agent-integration</goal>
+                        </goals>
+                        <phase>pre-integration-test</phase>
+                    </execution>
+                    <execution>
+                        <id>report-integration</id>
+                        <goals>
+                            <goal>report-integration</goal>
+                        </goals>
+                        <phase>post-integration-test</phase>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>

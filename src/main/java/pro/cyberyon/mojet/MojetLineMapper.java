@@ -20,8 +20,6 @@ import org.springframework.batch.item.file.LineMapper;
 
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
-import static pro.cyberyon.mojet.Fragment.PadWay.LEFT;
-import static pro.cyberyon.mojet.Fragment.PadWay.RIGHT;
 import pro.cyberyon.mojet.nodes.FillerNode;
 import pro.cyberyon.mojet.nodes.FragmentNode;
 
