@@ -28,9 +28,10 @@ import pro.cyberyon.mojet.nodes.RecordNode;
 /**
  * Skeleton class providing fields extraction.
  *
+ * @param <T> concrete producer side of visitor
  * @author Guillaume CHAUVET
  */
-abstract class AbstractMojetLine<T> {
+abstract class AbstractMojetLine<T extends RecordVisitable> {
 
 	/**
 	 * The pojo class type

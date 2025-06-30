@@ -24,7 +24,7 @@ import lombok.Data;
 @Data
 @Record
 @Filler(length = 5, value = '_')
-public class RootPojo {
+public class RootPojo implements RecordVisitable<PojoVisitor> {
 
 	@Fragment(length = 5, padder = '0')
 	private long id;
@@ -41,5 +41,10 @@ public class RootPojo {
 	@Converter(value = MyLocalDateTypeHandler.class)
 	@Fragment(length = 6, format = "yyyyMM")
 	private LocalDate date;
+
+	@Override
+	public void accept(PojoVisitor visitor) {
+		visitor.visit(this);
+	}
 
 }

@@ -29,10 +29,15 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class MojetLineAggregatorTest {
 
+	public static interface SimplePojoVisitor extends RecordVisitor {
+
+		void visit(SimplePojo instance);
+	}
+
 	@Data
 	@Record
 	@Filler(length = 3, value = '€')
-	public static final class SimplePojo {
+	public static final class SimplePojo implements RecordVisitable<SimplePojoVisitor> {
 
 		@Fragment(length = 7, padder = '0')
 		private long id;
@@ -52,6 +57,11 @@ class MojetLineAggregatorTest {
 		@Fragment(length = 5)
 		@Occurences(3)
 		private long[] values = new long[]{2, 4, 6};
+
+		@Override
+		public void accept(SimplePojoVisitor visitor) {
+			visitor.visit(this);
+		}
 	}
 
 	@Test
@@ -65,20 +75,33 @@ class MojetLineAggregatorTest {
 		assertEquals("0000777###||   CHAUVETGuillaume_9907$5€C    2    4    6€€€", instance.aggregate(item));
 	}
 
-	@Data
-	@Record
-	public static final class UndefinedPojo {
+	public static interface VoidVisitor extends RecordVisitor {
 
-		@Fragment(length = 10)
-		private Object undefined = "";
+		void visit(Void instance);
 	}
 
 	@Data
 	@Record
-	public static final class BadFragmentPojo {
+	public static final class UndefinedPojo implements RecordVisitable<VoidVisitor> {
+
+		@Fragment(length = 10)
+		private Object undefined = "";
+
+		@Override
+		public void accept(VoidVisitor visitor) {
+		}
+	}
+
+	@Data
+	@Record
+	public static final class BadFragmentPojo implements RecordVisitable<VoidVisitor> {
 
 		@Fragment(length = 0)
 		private long undefined;
+
+		@Override
+		public void accept(VoidVisitor visitor) {
+		}
 	}
 
 	public static class BuggerConverterType extends AbstractTypeHandler<Object> {
@@ -106,19 +129,27 @@ class MojetLineAggregatorTest {
 
 	@Data
 	@Record
-	public static final class BuggedConverterPojo {
+	public static final class BuggedConverterPojo implements RecordVisitable<VoidVisitor> {
 
 		@Fragment(length = 10)
 		@Converter(BuggerConverterType.class)
 		private Object undefined = "";
+
+		@Override
+		public void accept(VoidVisitor visitor) {
+		}
 	}
 
 	@Data
 	@Record
-	public static final class NoConverterPojo {
+	public static final class NoConverterPojo implements RecordVisitable<VoidVisitor> {
 
 		@Fragment(length = 10)
 		private Object undefined = "";
+
+		@Override
+		public void accept(VoidVisitor visitor) {
+		}
 	}
 
 	public static class InacceptableConverterType extends AbstractTypeHandler<Object> {
@@ -142,55 +173,80 @@ class MojetLineAggregatorTest {
 
 	@Data
 	@Record
-	public static final class InacceptablePojo {
+	public static final class InacceptablePojo implements RecordVisitable<VoidVisitor> {
 
 		@Fragment(length = 10)
 		@Converter(InacceptableConverterType.class)
 		private Object undefined = "";
+
+		@Override
+		public void accept(VoidVisitor visitor) {
+		}
 	}
 
 	@Data
 	@Record
-	public static final class OverflowPojo {
+	public static final class OverflowPojo implements RecordVisitable<VoidVisitor> {
 
 		@Fragment(length = 2)
 		private String good = "OK";
 		@Fragment(length = 3)
 		private String overflow = "TEST";
+
+		@Override
+		public void accept(VoidVisitor visitor) {
+		}
 	}
 
 	@Data
 	@Record
-	public static final class NoIterableAllowedPojo {
+	public static final class NoIterableAllowedPojo implements RecordVisitable<VoidVisitor> {
 
 		@Fragment(length = 5)
 		@Occurences(3)
 		private Iterable<Long> undefined;
+
+		@Override
+		public void accept(VoidVisitor visitor) {
+		}
 	}
 
 	@Data
 	@Record
-	public static final class InvalidFragmentPojo {
+	public static final class InvalidFragmentPojo implements RecordVisitable<VoidVisitor> {
 
 		@Fragment(length = -1)
 		private String value;
+
+		@Override
+		public void accept(VoidVisitor visitor) {
+		}
 	}
 
 	@Data
 	@Record
-	public static final class NoOccurencesDefinedPojo {
+	public static final class NoOccurencesDefinedPojo implements RecordVisitable<VoidVisitor> {
 
 		@Fragment(length = 5)
 		private long[] values;
+
+		@Override
+		public void accept(VoidVisitor visitor) {
+		}
 	}
 
 	@Data
 	@Record
-	public static final class BadOccurencesDefinedPojo {
+	public static final class BadOccurencesDefinedPojo implements RecordVisitable<VoidVisitor> {
 
 		@Fragment(length = 5)
 		@Occurences(0)
 		private long[] values;
+
+		@Override
+		public void accept(VoidVisitor visitor) {
+		}
+
 	}
 
 	@Test
