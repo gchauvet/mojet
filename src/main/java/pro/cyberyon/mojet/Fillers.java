@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,11 +26,11 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD, ElementType.TYPE})
 public @interface Fillers {
 
-    /**
-     * The filer lists to apply
-     *
-     * @return a list of filler annotations used to populate the end of the
-     * record
-     */
-    Filler[] value();
+	/**
+	 * The filer lists to apply
+	 *
+	 * @return a list of filler annotations used to populate the end of the
+	 *         record
+	 */
+	Filler[] value();
 }

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,27 +25,27 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class ByteTypeHandlerTest {
 
-    private ByteTypeHandler instance = new ByteTypeHandler();
+	private ByteTypeHandler instance = new ByteTypeHandler();
 
-    @Test
-    void testAccept() {
-	assertFalse(instance.accept(null));
-	assertFalse(instance.accept(Double.class));
-	assertFalse(instance.accept(char.class));
-	assertTrue(instance.accept(byte.class));
-	assertTrue(instance.accept(Byte.class));
-    }
+	@Test
+	void testAccept() {
+		assertFalse(instance.accept(null));
+		assertFalse(instance.accept(Double.class));
+		assertFalse(instance.accept(char.class));
+		assertTrue(instance.accept(byte.class));
+		assertTrue(instance.accept(Byte.class));
+	}
 
-    @Test
-    void testRead() {
-	assertEquals((byte) 77, instance.read("77", null));
-	assertEquals((byte) 0, instance.read("0", null));
-    }
+	@Test
+	void testRead() {
+		assertEquals((byte) 77, instance.read("77", null));
+		assertEquals((byte) 0, instance.read("0", null));
+	}
 
-    @Test
-    void testWrite() {
-	assertEquals("55", instance.write(Byte.valueOf("55"), null));
-	assertEquals("-10", instance.write(Byte.parseByte("-10"), null));
-    }
+	@Test
+	void testWrite() {
+		assertEquals("55", instance.write(Byte.valueOf("55"), null));
+		assertEquals("-10", instance.write(Byte.parseByte("-10"), null));
+	}
 
 }
