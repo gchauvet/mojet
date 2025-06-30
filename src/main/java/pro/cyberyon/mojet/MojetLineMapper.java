@@ -27,7 +27,7 @@ import pro.cyberyon.mojet.nodes.FragmentNode;
  * MojetLineMapper is an implementation of LineMapper that uses a POJO type to
  * map data that are annotated.
  *
- * @param <T> POJO type
+ * @param <T> pojo type
  *
  * @author Guillaume CHAUVET
  */

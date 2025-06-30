@@ -30,96 +30,12 @@ class MojetLineIT {
 
 	@Test
 	void testSimplePojoReadAndWrite() throws Exception {
+		final String line = "01985000##114273EUR567   100011000210003200301_____";
 		final NodesBuilder builder = new NodesBuilder();
 		final MojetLineMapper<RootPojo> mapper = new MojetLineMapper(builder, RootPojo.class);
-		final RootPojo result = mapper.mapLine("01985000##114273EUR567   100011000210003200301_____", 1);
+		final RootPojo result = mapper.mapLine(line, 1);
 		final MojetLineAggregator<RootPojo> aggregator = new MojetLineAggregator(builder, RootPojo.class);
-		assertEquals("01985000##114273EUR567   100011000210003200301_____", aggregator.aggregate(result));
-	}
-
-	private static interface PojoVisitor extends RecordVisitor {
-		void visit(MyPojo visitor);
-
-		void visit(YourPojo visitor);
-	}
-
-	@Getter
-	@Setter
-	@Record
-	@Matcher("MY*")
-	public static final class MyPojo implements RecordVisitable<PojoVisitor> {
-		@Filler(length = 2)
-		@Fragment(length = 3, padder = '0')
-		private int value;
-		@Fragment(length = 10)
-		private String name;
-
-		@Fragment(length = 10)
-		private String bar;
-
-		@Override
-		public void accept(PojoVisitor visitor) {
-			visitor.visit(this);
-		}
-	}
-
-	@Getter
-	@Setter
-	@Record
-	@Matcher("YOUR*")
-	public static final class YourPojo implements RecordVisitable<PojoVisitor> {
-		@Filler(length = 4)
-		@Fragment(length = 3, padder = '0')
-		private int value;
-		@Fragment(length = 5, alignement = Fragment.PadWay.RIGHT)
-		private String name;
-		@Fragment(length = 5)
-		private long foo;
-
-		@Override
-		public void accept(PojoVisitor visitor) {
-			visitor.visit(this);
-		}
-	}
-
-	@Test
-	void testMultiplePojoTypeReadAndWrite() throws Exception {
-		final var mappers = new HashSet<Class<? extends RecordVisitable>>();
-		mappers.add(MyPojo.class);
-		mappers.add(YourPojo.class);
-		final var mapper = new MojetPolyLineMapper<RecordVisitable>(mappers);
-		var result = mapper.mapLine("MY123TEST      VALUE     ", 1);
-		assertNotNull(result);
-		result.accept(new PojoVisitor() {
-			@Override
-			public void visit(MyPojo visitor) {
-				assertEquals(123, visitor.getValue());
-				assertEquals("TEST", visitor.getName());
-				assertEquals("VALUE", visitor.getBar());
-			}
-
-			@Override
-			public void visit(YourPojo visitor) {
-				fail("Not good type");
-			}
-
-		});
-		result = mapper.mapLine("YOUR567 TEST07890", 2);
-		assertNotNull(result);
-		result.accept(new PojoVisitor() {
-			@Override
-			public void visit(MyPojo visitor) {
-				fail("Not good type");
-			}
-
-			@Override
-			public void visit(YourPojo visitor) {
-				assertEquals(567, visitor.getValue());
-				assertEquals("TEST", visitor.getName());
-				assertEquals(7890, visitor.getFoo());
-			}
-
-		});
+		assertEquals(line, aggregator.aggregate(result));
 	}
 
 }

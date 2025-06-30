@@ -24,7 +24,7 @@ import org.springframework.batch.support.PatternMatcher;
 /**
  * This mapper allow handling of multiple record type.
  *
- * @param <T> visitable pojo type class
+ * @param <T> visitable pojo type
  * @see PatternMatcher
  * @author Guillaume CHAUVET
  */
@@ -46,6 +46,9 @@ public class MojetPolyLineMapper<T extends RecordVisitable> implements LineMappe
 		matchers = new PatternMatcher<>(mappers);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public T mapLine(String line, int lineNumber) throws Exception {
 		return matchers.match(line).mapLine(line, lineNumber);
