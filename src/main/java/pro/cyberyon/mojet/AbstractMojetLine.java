@@ -45,7 +45,6 @@ abstract class AbstractMojetLine<T> {
 	 */
 	protected AbstractMojetLine(@NonNull Class<T> targetType) {
 		this(targetType, new NodesBuilder());
-
 	}
 
 	/**

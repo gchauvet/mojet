@@ -16,13 +16,13 @@
 package pro.cyberyon.mojet;
 
 import java.util.HashSet;
-import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 /**
+ * Integration test between mappers and aggregators
  *
  * @author Guillaume CHAUVET
  */
@@ -45,19 +45,17 @@ class MojetLineIT {
 
 	@Getter
 	@Setter
-	public static abstract class AbstractPojo implements RecordVisitable<PojoVisitor> {
+	@Record
+	@Matcher("MY*")
+	public static final class MyPojo implements RecordVisitable<PojoVisitor> {
+		@Filler(length = 2)
 		@Fragment(length = 3, padder = '0')
 		private int value;
 		@Fragment(length = 10)
 		private String name;
-	}
 
-	@Getter
-	@Setter
-	@Matcher("MY*")
-	public static final class MyPojo extends AbstractPojo {
 		@Fragment(length = 10)
-		private String other;
+		private String bar;
 
 		@Override
 		public void accept(PojoVisitor visitor) {
@@ -67,10 +65,16 @@ class MojetLineIT {
 
 	@Getter
 	@Setter
+	@Record
 	@Matcher("YOUR*")
-	public static final class YourPojo extends AbstractPojo {
+	public static final class YourPojo implements RecordVisitable<PojoVisitor> {
+		@Filler(length = 4)
+		@Fragment(length = 3, padder = '0')
+		private int value;
+		@Fragment(length = 5, alignement = Fragment.PadWay.RIGHT)
+		private String name;
 		@Fragment(length = 5)
-		private long other;
+		private long foo;
 
 		@Override
 		public void accept(PojoVisitor visitor) {
@@ -84,8 +88,38 @@ class MojetLineIT {
 		mappers.add(MyPojo.class);
 		mappers.add(YourPojo.class);
 		final var mapper = new MojetPolyLineMapper<RecordVisitable>(mappers);
-		assertEquals(MyPojo.class, mapper.mapLine("MY123TEST      ", 1).getClass());
-		assertEquals(YourPojo.class, mapper.mapLine("MY123TEST      ", 2).getClass());
+		var result = mapper.mapLine("MY123TEST      VALUE     ", 1);
+		assertNotNull(result);
+		result.accept(new PojoVisitor() {
+			@Override
+			public void visit(MyPojo visitor) {
+				assertEquals(123, visitor.getValue());
+				assertEquals("TEST", visitor.getName());
+				assertEquals("VALUE", visitor.getBar());
+			}
+
+			@Override
+			public void visit(YourPojo visitor) {
+				fail("Not good type");
+			}
+
+		});
+		result = mapper.mapLine("YOUR567 TEST07890", 2);
+		assertNotNull(result);
+		result.accept(new PojoVisitor() {
+			@Override
+			public void visit(MyPojo visitor) {
+				fail("Not good type");
+			}
+
+			@Override
+			public void visit(YourPojo visitor) {
+				assertEquals(567, visitor.getValue());
+				assertEquals("TEST", visitor.getName());
+				assertEquals(7890, visitor.getFoo());
+			}
+
+		});
 	}
 
 }
