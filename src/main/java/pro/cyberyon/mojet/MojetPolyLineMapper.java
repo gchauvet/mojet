@@ -15,7 +15,6 @@
  */
 package pro.cyberyon.mojet;
 
-import java.lang.reflect.ParameterizedType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -23,26 +22,28 @@ import org.springframework.batch.item.file.LineMapper;
 import org.springframework.batch.support.PatternMatcher;
 
 /**
+ * This mapper allow handling of multiple record type.
  *
+ * @param <T> visitable pojo type class
+ * @see PatternMatcher
  * @author Guillaume CHAUVET
  */
-public class MojetPolyLineMapper<T extends RecordVisitable<?>> implements LineMapper<T> {
+public class MojetPolyLineMapper<T extends RecordVisitable> implements LineMapper<T> {
 
-	private final PatternMatcher<MojetLineMapper<T>> matchers;
+	private final PatternMatcher<MojetLineMapper<? extends T>> matchers;
 
-	public MojetPolyLineMapper(final Set<Class<MojetLineMapper<T>>> pojos) {
-		final Map<String, MojetLineMapper<T>> mappers = new HashMap<>();
+	/**
+	 * Construct a new mapper whos can handle multiple visitable records
+	 *
+	 * @param pojos
+	 */
+	public MojetPolyLineMapper(final Set<Class<? extends T>> pojos) {
+		final Map<String, MojetLineMapper<? extends T>> mappers = new HashMap<>();
 		final NodesBuilder builder = new NodesBuilder();
-
-		try {
-			for (Class<MojetLineMapper<T>> pojo : pojos) {
-				final Class<T> type = (Class<T>) ((ParameterizedType) pojo.getGenericSuperclass()).getActualTypeArguments()[0];
-				mappers.put(pojo.getAnnotation(Matcher.class).value(), pojo.getConstructor(NodesBuilder.class, Class.class).newInstance(builder, type));
-			}
-			matchers = new PatternMatcher<>(mappers);
-		} catch (ReflectiveOperationException ex) {
-			throw new MojetRuntimeException("Can't build a mapper", ex);
+		for (Class<? extends T> pojo : pojos) {
+			mappers.put(pojo.getAnnotation(Matcher.class).value(), new MojetLineMapper<>(builder, pojo));
 		}
+		matchers = new PatternMatcher<>(mappers);
 	}
 
 	@Override
