@@ -30,11 +30,11 @@ import org.springframework.batch.support.PatternMatcher;
 @Target(ElementType.TYPE)
 public @interface Matcher {
 
-    /**
-     * Regular expression for record matching
-     *
-     * @see PatternMatcher#match
-     * @return the regular expression
-     */
-    String value();
+	/**
+	 * Regular expression for record matching
+	 *
+	 * @see PatternMatcher#match
+	 * @return the regular expression
+	 */
+	String value();
 }

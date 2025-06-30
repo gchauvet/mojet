@@ -25,10 +25,10 @@ import pro.cyberyon.mojet.types.TypeHandler;
 /**
  * This class allow to write type as a line of characters.
  *
- * @param <T> type of consumer side visitor
+ * @param <T> pojo type
  * @author Guillaume CHAUVET
  */
-public class MojetLineAggregator<T extends RecordVisitable> extends AbstractMojetLine<T> implements LineAggregator<T> {
+public class MojetLineAggregator<T> extends AbstractMojetLine<T> implements LineAggregator<T> {
 
 	/**
 	 * Construct a new pojo {@link LineAggregator} instance
