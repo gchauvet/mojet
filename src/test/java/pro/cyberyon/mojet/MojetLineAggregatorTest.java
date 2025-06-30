@@ -89,6 +89,7 @@ class MojetLineAggregatorTest {
 
 		@Override
 		public void accept(VoidVisitor visitor) {
+			// Nothing to do
 		}
 	}
 
@@ -101,6 +102,7 @@ class MojetLineAggregatorTest {
 
 		@Override
 		public void accept(VoidVisitor visitor) {
+			// Nothing to do
 		}
 	}
 
@@ -137,6 +139,7 @@ class MojetLineAggregatorTest {
 
 		@Override
 		public void accept(VoidVisitor visitor) {
+			// Nothing to do
 		}
 	}
 
@@ -149,6 +152,7 @@ class MojetLineAggregatorTest {
 
 		@Override
 		public void accept(VoidVisitor visitor) {
+			// Nothing to do
 		}
 	}
 
@@ -181,6 +185,7 @@ class MojetLineAggregatorTest {
 
 		@Override
 		public void accept(VoidVisitor visitor) {
+			// Nothing to do
 		}
 	}
 
@@ -195,6 +200,7 @@ class MojetLineAggregatorTest {
 
 		@Override
 		public void accept(VoidVisitor visitor) {
+			// Nothing to do
 		}
 	}
 
@@ -208,6 +214,7 @@ class MojetLineAggregatorTest {
 
 		@Override
 		public void accept(VoidVisitor visitor) {
+			// Nothing to do
 		}
 	}
 
@@ -220,6 +227,7 @@ class MojetLineAggregatorTest {
 
 		@Override
 		public void accept(VoidVisitor visitor) {
+			// Nothing to do
 		}
 	}
 
@@ -232,6 +240,7 @@ class MojetLineAggregatorTest {
 
 		@Override
 		public void accept(VoidVisitor visitor) {
+			// Nothing to do
 		}
 	}
 
@@ -245,6 +254,7 @@ class MojetLineAggregatorTest {
 
 		@Override
 		public void accept(VoidVisitor visitor) {
+			// Nothing to do
 		}
 
 	}
