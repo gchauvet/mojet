@@ -21,4 +21,4 @@ jobs:
       - name: Run Maven Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./mvnw -B release:prepare release:perform
+        run: ./mvnw -P!local -B release:prepare release:perform

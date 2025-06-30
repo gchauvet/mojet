@@ -42,4 +42,4 @@ jobs:
     - name: Build and analyze
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      run: ./mvnw -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=gchauvet_mojet
+      run: ./mvnw -P!local -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=gchauvet_mojet

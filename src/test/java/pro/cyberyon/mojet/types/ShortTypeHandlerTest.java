@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,27 +25,27 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class ShortTypeHandlerTest {
 
-    private ShortTypeHandler instance = new ShortTypeHandler();
+	private ShortTypeHandler instance = new ShortTypeHandler();
 
-    @Test
-    void testAccept() {
-	assertFalse(instance.accept(null));
-	assertFalse(instance.accept(Double.class));
-	assertFalse(instance.accept(long.class));
-	assertTrue(instance.accept(Short.class));
-	assertTrue(instance.accept(short.class));
-    }
+	@Test
+	void testAccept() {
+		assertFalse(instance.accept(null));
+		assertFalse(instance.accept(Double.class));
+		assertFalse(instance.accept(long.class));
+		assertTrue(instance.accept(Short.class));
+		assertTrue(instance.accept(short.class));
+	}
 
-    @Test
-    void testRead() {
-	assertEquals((short) 1, instance.read("1", null));
-	assertEquals((short) 1985, instance.read("1985", null));
-    }
+	@Test
+	void testRead() {
+		assertEquals((short) 1, instance.read("1", null));
+		assertEquals((short) 1985, instance.read("1985", null));
+	}
 
-    @Test
-    void testWrite() {
-	assertEquals("0", instance.write((short) 0, null));
-	assertEquals("1985", instance.write((short) 1985, null));
-    }
+	@Test
+	void testWrite() {
+		assertEquals("0", instance.write((short) 0, null));
+		assertEquals("1985", instance.write((short) 1985, null));
+	}
 
 }

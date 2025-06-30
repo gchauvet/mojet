@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -32,78 +32,77 @@ import pro.cyberyon.mojet.nodes.RecordNode;
  */
 abstract class AbstractMojetLine<T> {
 
-    /**
-     * The pojo class type
-     */
-    protected final RecordNode root;
-
-    /**
-     * Constructor to build the list of field in a annoted pojo class
-     *
-     * @param targetType the pojo class type
-     */
-    protected AbstractMojetLine(@NonNull Class<T> targetType) {
-	this(targetType, new NodesBuilder());
-
-    }
-
-    /**
-     * Constructor to build the list of field in a annoted pojo class
-     *
-     * @param targetType the pojo class type
-     * @param builder the builder to use
-     */
-    protected AbstractMojetLine(@NonNull Class<T> targetType, @NonNull NodesBuilder builder) {
-	root = builder.build(targetType);
-    }
-
-    /**
-     * Abstract node visitor implemention, providing common behaviors
-     */
-    protected abstract static class AbstractNodeVisitor implements NodeVisitor {
-
-	private final Deque<String> path = new ArrayDeque<>();
-
 	/**
-	 * {@inheritDoc}
+	 * The pojo class type
 	 */
-	@Override
-	public final void visit(final RecordNode node) {
-	    for (AbstractNode<?> visitable : node.getNodes()) {
-		path.push(visitable.getAccessor());
-		visitable.accept(this);
-		path.pop();
-	    }
-	}
+	protected final RecordNode root;
 
 	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public final void visit(final OccurencesNode node) {
-	    final String old = path.pop();
-	    for (int i = 0; i < node.getCount(); i++) {
-		path.push(node.getAccessor() + "[" + i + "]");
-		node.getItem().accept(this);
-		path.pop();
-	    }
-	    path.push(old);
-	}
-
-	/**
-	 * Get the path from root record
+	 * Constructor to build the list of field in a annoted pojo class
 	 *
-	 * @return the absolute path from root record
+	 * @param targetType the pojo class type
 	 */
-	protected final String getPath() {
-	    return path.stream().filter(t -> !t.isEmpty()).collect(Collectors.collectingAndThen(
-		    Collectors.toList(),
-		    lst -> {
-			Collections.reverse(lst);
-			return lst.stream().filter(t -> !t.isEmpty()).collect(Collectors.joining("."));
-		    }
-	    ));
+	protected AbstractMojetLine(@NonNull Class<T> targetType) {
+		this(targetType, new NodesBuilder());
+
 	}
-    }
+
+	/**
+	 * Constructor to build the list of field in a annoted pojo class
+	 *
+	 * @param targetType the pojo class type
+	 * @param builder    the builder to use
+	 */
+	protected AbstractMojetLine(@NonNull Class<T> targetType, @NonNull NodesBuilder builder) {
+		root = builder.build(targetType);
+	}
+
+	/**
+	 * Abstract node visitor implemention, providing common behaviors
+	 */
+	protected abstract static class AbstractNodeVisitor implements NodeVisitor {
+
+		private final Deque<String> path = new ArrayDeque<>();
+
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		public final void visit(final RecordNode node) {
+			for (AbstractNode<?> visitable : node.getNodes()) {
+				path.push(visitable.getAccessor());
+				visitable.accept(this);
+				path.pop();
+			}
+		}
+
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		public final void visit(final OccurencesNode node) {
+			final String old = path.pop();
+			for (int i = 0; i < node.getCount(); i++) {
+				path.push(node.getAccessor() + "[" + i + "]");
+				node.getItem().accept(this);
+				path.pop();
+			}
+			path.push(old);
+		}
+
+		/**
+		 * Get the path from root record
+		 *
+		 * @return the absolute path from root record
+		 */
+		protected final String getPath() {
+			return path.stream().filter(t -> !t.isEmpty()).collect(Collectors.collectingAndThen(
+					Collectors.toList(), lst -> {
+						Collections.reverse(lst);
+						return lst.stream().filter(t -> !t.isEmpty()).collect(Collectors.joining("."));
+					}
+			));
+		}
+	}
 
 }
