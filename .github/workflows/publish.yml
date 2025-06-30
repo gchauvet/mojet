@@ -22,4 +22,4 @@ jobs:
           server-id: ossrh
           server-username: ${{ secrets.OSS_ACCESS_KEY_ID }}
           server-password: ${{ OSS_ACCESS_KEY_SECRET }}
-        run: ./mvnw -B deploy -Ppublish -Dgpg.keyname=${{ secrets.GPG_KEY_NAME }}
+        run: ./mvnw -B deploy -Pcentral -Dgpg.keyname=${{ secrets.GPG_KEY_NAME }}
