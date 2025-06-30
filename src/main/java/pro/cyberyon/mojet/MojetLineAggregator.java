@@ -25,7 +25,7 @@ import pro.cyberyon.mojet.types.TypeHandler;
 /**
  * This class allow to write type as a line of characters.
  *
- * @param <T> POJO type
+ * @param <T> pojo type
  * @author Guillaume CHAUVET
  */
 public class MojetLineAggregator<T> extends AbstractMojetLine<T> implements LineAggregator<T> {

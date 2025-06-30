@@ -28,6 +28,7 @@ import pro.cyberyon.mojet.nodes.RecordNode;
 /**
  * Skeleton class providing fields extraction.
  *
+ * @param <T> type of pojo
  * @author Guillaume CHAUVET
  */
 abstract class AbstractMojetLine<T> {
@@ -44,7 +45,6 @@ abstract class AbstractMojetLine<T> {
 	 */
 	protected AbstractMojetLine(@NonNull Class<T> targetType) {
 		this(targetType, new NodesBuilder());
-
 	}
 
 	/**
