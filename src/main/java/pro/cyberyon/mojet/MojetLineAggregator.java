@@ -18,7 +18,7 @@ package pro.cyberyon.mojet;
 import org.apache.commons.text.TextStringBuilder;
 import org.springframework.batch.item.file.transform.LineAggregator;
 import org.springframework.beans.BeanWrapperImpl;
-import pro.cyberyon.mojet.nodes.FillerNode;
+import pro.cyberyon.mojet.nodes.ZapNode;
 import pro.cyberyon.mojet.nodes.FragmentNode;
 import pro.cyberyon.mojet.types.TypeHandler;
 
@@ -60,7 +60,7 @@ public class MojetLineAggregator<T> extends AbstractMojetLine<T> implements Line
 			private final BeanWrapperImpl bean = new BeanWrapperImpl(item);
 
 			@Override
-			public void visit(final FillerNode node) {
+			public void visit(final ZapNode node) {
 				output.appendPadding(node.getLength(), node.getPadding());
 			}
 

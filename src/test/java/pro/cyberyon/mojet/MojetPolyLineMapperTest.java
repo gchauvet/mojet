@@ -40,7 +40,7 @@ class MojetPolyLineMapperTest {
 	@Record
 	@Matcher("MY*")
 	public static final class MyPojo implements RecordVisitable<PojoVisitor> {
-		@Filler(length = 2)
+		@Zap(length = 2)
 		@Fragment(length = 3, padder = '0')
 		private int value;
 		@Fragment(length = 10)
@@ -60,7 +60,7 @@ class MojetPolyLineMapperTest {
 	@Record
 	@Matcher("YOUR*")
 	public static final class YourPojo implements RecordVisitable<PojoVisitor> {
-		@Filler(length = 4)
+		@Zap(length = 4)
 		@Fragment(length = 3, padder = '0')
 		private int value;
 		@Fragment(length = 5, alignement = Fragment.PadWay.RIGHT)

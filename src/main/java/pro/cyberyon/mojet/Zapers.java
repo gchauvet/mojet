@@ -24,7 +24,7 @@ import java.lang.annotation.*;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.TYPE})
-public @interface Fillers {
+public @interface Zapers {
 
 	/**
 	 * The filer lists to apply
@@ -32,5 +32,5 @@ public @interface Fillers {
 	 * @return a list of filler annotations used to populate the end of the
 	 *         record
 	 */
-	Filler[] value();
+	Zap[] value();
 }

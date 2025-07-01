@@ -43,14 +43,14 @@ public class ChildPojo {
 }
 
 @Record
-@Filler(length = 5, value = '_') // Adds 5 underscores at the end of each record (optional)
+@Zap(length = 5, value = '_') // Adds 5 underscores at the end of each record (optional)
 public class SimplePojo {
 
     @Fragment(length = 7, padder = '0')
     private long id; // Number padded to 7 characters with '0'
 
-    @Filler(length = 3, value = '#')
-    @Filler(length = 2, value = '|')
+    @Zap(length = 3, value = '#')
+    @Zap(length = 2, value = '|')
     @Fragment(length = 10)
     private String name; // Left-padded to 10 characters with spaces
 

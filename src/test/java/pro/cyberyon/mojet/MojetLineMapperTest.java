@@ -54,9 +54,9 @@ class MojetLineMapperTest {
 	@Record
 	public static class BadPaddingPojo {
 
-		@Filler(length = -1)
+		@Zap(length = -1)
 		private int value1;
-		@Filler(length = 0)
+		@Zap(length = 0)
 		private int value2;
 	}
 

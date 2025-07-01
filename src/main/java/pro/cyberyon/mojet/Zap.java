@@ -26,10 +26,10 @@ import java.lang.annotation.Target;
  *
  * @author Guillaume CHAUVET
  */
-@Repeatable(Fillers.class)
+@Repeatable(Zapers.class)
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.TYPE})
-public @interface Filler {
+public @interface Zap {
 
 	/**
 	 * The size of the filling area

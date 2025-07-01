@@ -31,13 +31,13 @@ class MojetLineAggregatorTest {
 
 	@Data
 	@Record
-	@Filler(length = 3, value = '€')
+	@Zap(length = 3, value = '€')
 	public static final class SimplePojo {
 
 		@Fragment(length = 7, padder = '0')
 		private long id;
-		@Filler(length = 3, value = '#')
-		@Filler(length = 2, value = '|')
+		@Zap(length = 3, value = '#')
+		@Zap(length = 2, value = '|')
 		@Fragment(length = 10)
 		private String name;
 		@Fragment(length = 10, padder = '_', alignement = Fragment.PadWay.RIGHT)

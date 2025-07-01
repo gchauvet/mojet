@@ -20,7 +20,7 @@ import org.springframework.batch.item.file.LineMapper;
 
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
-import pro.cyberyon.mojet.nodes.FillerNode;
+import pro.cyberyon.mojet.nodes.ZapNode;
 import pro.cyberyon.mojet.nodes.FragmentNode;
 
 /**
@@ -64,7 +64,7 @@ public class MojetLineMapper<T> extends AbstractMojetLine<T> implements LineMapp
 			private int index = 0;
 
 			@Override
-			public void visit(final FillerNode node) {
+			public void visit(final ZapNode node) {
 				index += node.getLength();
 			}
 
