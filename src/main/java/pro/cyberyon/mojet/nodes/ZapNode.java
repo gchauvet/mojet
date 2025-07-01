@@ -15,22 +15,22 @@
  */
 package pro.cyberyon.mojet.nodes;
 
-import pro.cyberyon.mojet.Filler;
 import pro.cyberyon.mojet.MojetRuntimeException;
+import pro.cyberyon.mojet.Zap;
 
 /**
  * A filler node
  *
  * @author Guillaume CHAUVET
  */
-public class FillerNode extends AbstractNode<Filler> {
+public class ZapNode extends AbstractNode<Zap> {
 
 	/**
 	 * Construct a filler node
 	 *
 	 * @param annotation the filler annotation
 	 */
-	public FillerNode(Filler annotation) {
+	public ZapNode(Zap annotation) {
 		super(annotation, "");
 		if (getLength() < 1) {
 			throw new MojetRuntimeException("Lenght must be a positive value");

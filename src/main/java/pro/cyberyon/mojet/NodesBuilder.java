@@ -53,7 +53,7 @@ public class NodesBuilder {
 				for (Field field : type.getDeclaredFields()) {
 					build(field, result);
 				}
-				addFillers(type.getDeclaredAnnotationsByType(Filler.class), result);
+				addFillers(type.getDeclaredAnnotationsByType(Zap.class), result);
 				cache.put(type, result);
 			}
 		}
@@ -61,7 +61,7 @@ public class NodesBuilder {
 	}
 
 	private void build(final Field field, final RecordNode node) {
-		addFillers(field.getDeclaredAnnotationsByType(Filler.class), node);
+		addFillers(field.getDeclaredAnnotationsByType(Zap.class), node);
 		final String accessor = field.getName();
 		if (field.isAnnotationPresent(Record.class)) {
 			node.add(build(accessor, field.getType()));
@@ -98,9 +98,9 @@ public class NodesBuilder {
 		}
 	}
 
-	private static void addFillers(Filler[] fillers, RecordNode node) {
-		for (Filler filler : fillers) {
-			node.add(new FillerNode(filler));
+	private static void addFillers(Zap[] fillers, RecordNode node) {
+		for (Zap filler : fillers) {
+			node.add(new ZapNode(filler));
 		}
 	}
 

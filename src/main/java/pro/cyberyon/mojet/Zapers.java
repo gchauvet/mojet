@@ -15,33 +15,22 @@
  */
 package pro.cyberyon.mojet;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Repeatable;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
- * Defines a fill area with a specific charact.
+ * Defines multiple zapping zones.
  *
  * @author Guillaume CHAUVET
  */
-@Repeatable(Fillers.class)
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.TYPE})
-public @interface Filler {
+public @interface Zapers {
 
 	/**
-	 * The size of the filling area
+	 * The filer lists to apply
 	 *
-	 * @return size of this filling area (positive number)
+	 * @return a list of filler annotations used to populate the end of the
+	 *         record
 	 */
-	int length();
-
-	/**
-	 * The default filling character
-	 *
-	 * @return the filling character of this area
-	 */
-	char value() default ' ';
+	Zap[] value();
 }

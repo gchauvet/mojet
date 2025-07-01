@@ -34,7 +34,7 @@ public interface NodeVisitor {
 	 *
 	 * @param node an instance
 	 */
-	void visit(FillerNode node);
+	void visit(ZapNode node);
 
 	/**
 	 * Visit an occurences

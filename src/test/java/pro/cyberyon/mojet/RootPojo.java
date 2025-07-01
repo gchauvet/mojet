@@ -23,18 +23,18 @@ import lombok.Data;
  */
 @Data
 @Record
-@Filler(length = 5, value = '_')
+@Zap(length = 5, value = '_')
 public class RootPojo {
 
 	@Fragment(length = 5, padder = '0')
 	private long id;
-	@Filler(length = 3, value = '0')
-	@Filler(length = 2, value = '#')
+	@Zap(length = 3, value = '0')
+	@Zap(length = 2, value = '#')
 	@Record
 	private ChildPojo child;
 	@Fragment(length = 3)
 	private int counter;
-	@Filler(length = 3)
+	@Zap(length = 3)
 	@Fragment(length = 5, padder = '0')
 	@Occurences(value = 3)
 	private long[] values;
