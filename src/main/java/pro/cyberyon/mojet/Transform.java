@@ -28,7 +28,7 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface Converter {
+public @interface Transform {
 
 	/**
 	 * Define a custom type handler on a field

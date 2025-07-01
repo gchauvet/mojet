@@ -38,7 +38,7 @@ public class RootPojo {
 	@Fragment(length = 5, padder = '0')
 	@Occurences(value = 3)
 	private long[] values;
-	@Converter(value = MyLocalDateTypeHandler.class)
+	@Transform(value = MyLocalDateTypeHandler.class)
 	@Fragment(length = 6, format = "yyyyMM")
 	private LocalDate date;
 

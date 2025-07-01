@@ -57,7 +57,7 @@ public class SimplePojo {
     @Fragment(length = 10, padder = '_', alignement = PadWay.RIGHT)
     private String surname; // Right-padded to 10 characters with underscores
 
-    @Converter(MyLocalDateTypeHandler.class)
+    @Transform(MyLocalDateTypeHandler.class)
     @Fragment(length = 4, format = "uuMM")
     private LocalDate date; // Formatted as 2-digit year and 2-digit month (e.g. "2506")
 
