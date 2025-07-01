@@ -72,8 +72,8 @@ public class NodesBuilder {
 
 	private AbstractNode<?> processFragment(final String accessor, final Field field) {
 		final TypeHandler<?> handler;
-		if (field.isAnnotationPresent(Converter.class)) {
-			final Converter converter = field.getAnnotation(Converter.class);
+		if (field.isAnnotationPresent(Transform.class)) {
+			final Transform converter = field.getAnnotation(Transform.class);
 			try {
 				handler = converter.value().getDeclaredConstructor().newInstance();
 			} catch (ReflectiveOperationException ex) {

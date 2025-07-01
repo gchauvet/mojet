@@ -42,7 +42,7 @@ class MojetLineAggregatorTest {
 		private String name;
 		@Fragment(length = 10, padder = '_', alignement = Fragment.PadWay.RIGHT)
 		private String surname;
-		@Converter(MyLocalDateTypeHandler.class)
+		@Transform(MyLocalDateTypeHandler.class)
 		@Fragment(length = 4, format = "yyMM")
 		private LocalDate date;
 		@Fragment(length = 2, padder = '$')
@@ -109,7 +109,7 @@ class MojetLineAggregatorTest {
 	public static final class BuggedConverterPojo {
 
 		@Fragment(length = 10)
-		@Converter(BuggerConverterType.class)
+		@Transform(BuggerConverterType.class)
 		private Object undefined = "";
 	}
 
@@ -145,7 +145,7 @@ class MojetLineAggregatorTest {
 	public static final class InacceptablePojo {
 
 		@Fragment(length = 10)
-		@Converter(InacceptableConverterType.class)
+		@Transform(InacceptableConverterType.class)
 		private Object undefined = "";
 	}
 
