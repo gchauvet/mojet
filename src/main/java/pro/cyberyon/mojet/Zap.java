@@ -22,7 +22,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Defines a fill area with a specific charact.
+ * Defines a skipped area with a specific charact.
  *
  * @author Guillaume CHAUVET
  */

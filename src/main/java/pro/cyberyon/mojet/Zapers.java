@@ -18,7 +18,7 @@ package pro.cyberyon.mojet;
 import java.lang.annotation.*;
 
 /**
- * Defines multiple padding zones.
+ * Defines multiple zapping zones.
  *
  * @author Guillaume CHAUVET
  */
