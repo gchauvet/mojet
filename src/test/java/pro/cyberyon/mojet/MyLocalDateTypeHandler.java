@@ -24,7 +24,7 @@ import pro.cyberyon.mojet.types.AbstractTypeHandler;
  *
  * @author Guillaume CHAUVET
  */
-public final class MyLocalDateTypeHandler extends AbstractTypeHandler<LocalDate> {
+final class MyLocalDateTypeHandler extends AbstractTypeHandler<LocalDate> {
 
 	@Override
 	protected boolean isAccept(Class<?> type) {

@@ -81,7 +81,7 @@ class MojetLineAggregatorTest {
 		private long undefined;
 	}
 
-	public static class BuggerConverterType extends AbstractTypeHandler<Object> {
+	private static class BuggerConverterType extends AbstractTypeHandler<Object> {
 
 		public BuggerConverterType() {
 			throw new IllegalStateException("bug");
@@ -121,7 +121,7 @@ class MojetLineAggregatorTest {
 		private Object undefined = "";
 	}
 
-	public static class InacceptableConverterType extends AbstractTypeHandler<Object> {
+	private static class InacceptableConverterType extends AbstractTypeHandler<Object> {
 
 		@Override
 		protected boolean isAccept(Class<?> type) {
