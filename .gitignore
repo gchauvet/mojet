@@ -19,3 +19,4 @@ buildNumber.properties
 # Netbeans generated files
 /nbproject
 nb-configuration.xml
+nbactions.xml
