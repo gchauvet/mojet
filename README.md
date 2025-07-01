@@ -23,7 +23,7 @@ This library is built to simplify reading and writing structured flat files in S
 <dependency>
   <groupId>pro.cyberyon</groupId>
   <artifactId>mojet</artifactId>
-  <version>1.0.0</version>
+  <version>1.1.0</version>
 </dependency>
 ```
 ## 🧪 Example POJO Usage
