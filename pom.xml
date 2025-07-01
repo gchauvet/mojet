@@ -6,6 +6,15 @@
     <version>1.1.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Mojet Spring Batch extension</name>
+    <description>An extended spring-batch bean wrapper</description>
+    <url>https://github.com/gchauvet/mojet</url>
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
     <scm>
         <connection>scm:git@github.com:gchauvet/mojet.git</connection>
         <developerConnection>scm:git@github.com:gchauvet/mojet.git</developerConnection>
@@ -161,6 +170,20 @@
             <id>central</id>
             <build>
                 <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.2.7</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
                     <plugin>
                         <groupId>org.sonatype.central</groupId>
                         <artifactId>central-publishing-maven-plugin</artifactId>
