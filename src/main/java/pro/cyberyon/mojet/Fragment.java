@@ -36,6 +36,9 @@ public @interface Fragment {
 	 */
 	public enum PadWay {
 
+		/**
+		 * No alignment
+		 */
 		NONE,
 		/**
 		 * align at left
