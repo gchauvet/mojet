@@ -26,7 +26,7 @@ import lombok.Data;
 @Zap(length = 5, value = '_')
 public class RootPojo {
 
-	@Fragment(length = 5, padder = '0')
+	@Fragment(length = 5, padder = '0', alignement = Fragment.PadWay.LEFT)
 	private long id;
 	@Zap(length = 3, value = '0')
 	@Zap(length = 2, value = '#')
@@ -35,9 +35,11 @@ public class RootPojo {
 	@Fragment(length = 3)
 	private int counter;
 	@Zap(length = 3)
-	@Fragment(length = 5, padder = '0')
+	@Fragment(length = 5, padder = '0', alignement = Fragment.PadWay.LEFT)
 	@Occurences(value = 3)
 	private long[] values;
+	@Fragment(length = 1)
+	private Character space;
 	@Transform(value = MyLocalDateTypeHandler.class)
 	@Fragment(length = 6, format = "yyyyMM")
 	private LocalDate date;

@@ -34,24 +34,26 @@ class MojetLineAggregatorTest {
 	@Zap(length = 3, value = '€')
 	public static final class SimplePojo {
 
-		@Fragment(length = 7, padder = '0')
+		@Fragment(length = 7, padder = '0', alignement = Fragment.PadWay.LEFT)
 		private long id;
 		@Zap(length = 3, value = '#')
 		@Zap(length = 2, value = '|')
-		@Fragment(length = 10)
+		@Fragment(length = 10, alignement = Fragment.PadWay.LEFT)
 		private String name;
 		@Fragment(length = 10, padder = '_', alignement = Fragment.PadWay.RIGHT)
 		private String surname;
 		@Transform(MyLocalDateTypeHandler.class)
 		@Fragment(length = 4, format = "yyMM")
 		private LocalDate date;
-		@Fragment(length = 2, padder = '$')
+		@Fragment(length = 1, padder = '$')
 		private byte octet = 5;
-		@Fragment(length = 2, padder = '€')
+		@Fragment(length = 1, padder = '€')
 		private char car = 'C';
-		@Fragment(length = 5)
+		@Fragment(length = 5, alignement = Fragment.PadWay.LEFT)
 		@Occurences(3)
 		private long[] values = new long[]{2, 4, 6};
+		@Fragment(length = 4)
+		private String bounded;
 	}
 
 	@Test
@@ -62,7 +64,8 @@ class MojetLineAggregatorTest {
 		item.setName("CHAUVET");
 		item.setSurname("Guillaume");
 		item.setDate(LocalDate.of(1999, Month.JULY, 18));
-		assertEquals("0000777###||   CHAUVETGuillaume_9907$5€C    2    4    6€€€", instance.aggregate(item));
+		item.setBounded("TEST");
+		assertEquals("0000777###||   CHAUVETGuillaume_99075C    2    4    6TEST€€€", instance.aggregate(item));
 	}
 
 	@Data
@@ -193,6 +196,14 @@ class MojetLineAggregatorTest {
 		private long[] values;
 	}
 
+	@Data
+	@Record
+	public static final class BadBoundedPojo {
+
+		@Fragment(length = 5)
+		private String value;
+	}
+
 	@Test
 	void testErrorsAggregation() {
 		assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(UndefinedPojo.class));
@@ -200,13 +211,17 @@ class MojetLineAggregatorTest {
 		assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(NoConverterPojo.class));
 		assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(InacceptablePojo.class));
 		var overflow = new MojetLineAggregator<>(OverflowPojo.class);
-		var pojo5 = new OverflowPojo();
-		assertEquals("Data overflow", assertThrows(MojetRuntimeException.class, () -> overflow.aggregate(pojo5)).getMessage());
+		var pojo = new OverflowPojo();
+		assertEquals("Data overflow", assertThrows(MojetRuntimeException.class, () -> overflow.aggregate(pojo)).getMessage());
 		assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(NoIterableAllowedPojo.class));
 		assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(NoOccurencesDefinedPojo.class));
 		assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(BadOccurencesDefinedPojo.class));
 		assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(BadFragmentPojo.class));
 		assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(InvalidFragmentPojo.class));
+		var bounded = new MojetLineAggregator<>(BadBoundedPojo.class);
+		var pojo2 = new BadBoundedPojo();
+		pojo2.setValue("T");
+		assertThrows(MojetRuntimeException.class, () -> bounded.aggregate(pojo2));
 	}
 
 }

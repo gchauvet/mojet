@@ -35,6 +35,11 @@ public @interface Fragment {
 	 * Define ways for padding
 	 */
 	public enum PadWay {
+
+		/**
+		 * No alignment
+		 */
+		NONE,
 		/**
 		 * align at left
 		 */
@@ -71,5 +76,5 @@ public @interface Fragment {
 	 *
 	 * @return padding way constant enum
 	 */
-	PadWay alignement() default PadWay.LEFT;
+	PadWay alignement() default PadWay.NONE;
 }

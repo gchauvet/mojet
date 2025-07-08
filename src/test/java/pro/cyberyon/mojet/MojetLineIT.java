@@ -27,7 +27,7 @@ class MojetLineIT {
 
 	@Test
 	void testSimplePojoReadAndWrite() throws Exception {
-		final String line = "01985000##114273EUR567   100011000210003200301_____";
+		final String line = "01985000##114273EUR567   100011000210003 200301_____";
 		final NodesBuilder builder = new NodesBuilder();
 		final MojetLineMapper<RootPojo> mapper = new MojetLineMapper(builder, RootPojo.class);
 		final RootPojo result = mapper.mapLine(line, 1);
