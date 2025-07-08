@@ -74,7 +74,7 @@ public class MojetLineAggregator<T> extends AbstractMojetLine<T> implements Line
 					switch (node.getAlignement()) {
 						case NONE:
 							if (data.length() != node.getLenght()) {
-								throw new MojetRuntimeException("Expected length not matached");
+								throw new MojetRuntimeException("Expected length not matched");
 							}
 							output.append(data);
 							break;
