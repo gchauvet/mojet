@@ -72,6 +72,12 @@ public class MojetLineAggregator<T> extends AbstractMojetLine<T> implements Line
 					throw new MojetRuntimeException("Data overflow");
 				} else {
 					switch (node.getAlignement()) {
+						case NONE:
+							if (data.length() != node.getLenght()) {
+								throw new MojetRuntimeException("Expected length not matached");
+							}
+							output.append(data);
+							break;
 						case LEFT:
 							output.appendFixedWidthPadLeft(data, node.getLenght(), node.getPadder());
 							break;

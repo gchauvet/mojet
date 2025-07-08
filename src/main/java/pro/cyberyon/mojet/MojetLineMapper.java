@@ -72,6 +72,9 @@ public class MojetLineMapper<T> extends AbstractMojetLine<T> implements LineMapp
 			public void visit(final FragmentNode node) {
 				String data = line.substring(index, index + node.getLenght());
 				switch (node.getAlignement()) {
+					case NONE:
+						// Do nothing
+						break;
 					case LEFT:
 						data = StringUtils.stripEnd(data, Character.toString(node.getPadder()));
 						break;

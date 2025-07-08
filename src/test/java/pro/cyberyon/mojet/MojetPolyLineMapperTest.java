@@ -41,9 +41,9 @@ class MojetPolyLineMapperTest {
 	@Matcher("MY*")
 	public static final class MyPojo implements RecordVisitable<PojoVisitor> {
 		@Zap(length = 2)
-		@Fragment(length = 3, padder = '0')
+		@Fragment(length = 3, padder = '0', alignement = Fragment.PadWay.LEFT)
 		private int value;
-		@Fragment(length = 10)
+		@Fragment(length = 10, alignement = Fragment.PadWay.LEFT)
 		private String name;
 
 		@Fragment(length = 10)
@@ -87,7 +87,7 @@ class MojetPolyLineMapperTest {
 			public void visit(MyPojo visitor) {
 				assertEquals(123, visitor.getValue());
 				assertEquals("TEST", visitor.getName());
-				assertEquals("VALUE", visitor.getBar());
+				assertEquals("VALUE     ", visitor.getBar());
 			}
 
 			@Override
