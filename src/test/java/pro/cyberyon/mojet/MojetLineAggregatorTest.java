@@ -196,6 +196,14 @@ class MojetLineAggregatorTest {
 		private long[] values;
 	}
 
+	@Data
+	@Record
+	public static final class BadBoundedPojo {
+
+		@Fragment(length = 5)
+		private String value;
+	}
+
 	@Test
 	void testErrorsAggregation() {
 		assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(UndefinedPojo.class));
@@ -203,13 +211,17 @@ class MojetLineAggregatorTest {
 		assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(NoConverterPojo.class));
 		assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(InacceptablePojo.class));
 		var overflow = new MojetLineAggregator<>(OverflowPojo.class);
-		var pojo5 = new OverflowPojo();
-		assertEquals("Data overflow", assertThrows(MojetRuntimeException.class, () -> overflow.aggregate(pojo5)).getMessage());
+		var pojo = new OverflowPojo();
+		assertEquals("Data overflow", assertThrows(MojetRuntimeException.class, () -> overflow.aggregate(pojo)).getMessage());
 		assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(NoIterableAllowedPojo.class));
 		assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(NoOccurencesDefinedPojo.class));
 		assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(BadOccurencesDefinedPojo.class));
 		assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(BadFragmentPojo.class));
 		assertThrows(MojetRuntimeException.class, () -> new MojetLineAggregator<>(InvalidFragmentPojo.class));
+		var bounded = new MojetLineAggregator<>(BadBoundedPojo.class);
+		var pojo2 = new BadBoundedPojo();
+		pojo2.setValue("T");
+		assertThrows(MojetRuntimeException.class, () -> bounded.aggregate(pojo2));
 	}
 
 }
