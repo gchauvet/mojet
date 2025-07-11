@@ -63,10 +63,23 @@ public class NodesBuilder {
 	private void build(final Field field, final RecordNode node) {
 		addFillers(field.getDeclaredAnnotationsByType(Zap.class), node);
 		final String accessor = field.getName();
+		final boolean isArray = field.getType().isArray();
+		AbstractNode<?> item = null;
+
 		if (field.isAnnotationPresent(Record.class)) {
-			node.add(build(accessor, field.getType()));
+			item = build(accessor, !isArray ? field.getType() : field.getType().componentType());
 		} else if (field.isAnnotationPresent(Fragment.class)) {
-			node.add(processFragment(accessor, field));
+			item = processFragment(accessor, field);
+		}
+		if (item != null) {
+			if (isArray) {
+				if (field.isAnnotationPresent(Occurences.class)) {
+					item = new OccurencesNode(accessor, field.getAnnotation(Occurences.class), item);
+				} else {
+					throw new MojetRuntimeException("Occurences annotation required");
+				}
+			}
+			node.add(item);
 		}
 	}
 
@@ -83,16 +96,7 @@ public class NodesBuilder {
 			handler = TypeHandlerFactory.getInstance().get(field.getType());
 		}
 		if (handler.accept(field.getType())) {
-			AbstractNode<?> item = new FragmentNode(accessor, field.getAnnotation(Fragment.class), handler);
-
-			if (field.getType().isArray()) {
-				if (field.isAnnotationPresent(Occurences.class)) {
-					item = new OccurencesNode(accessor, field.getAnnotation(Occurences.class), item);
-				} else {
-					throw new MojetRuntimeException("Occurences annotation required");
-				}
-			}
-			return item;
+			return new FragmentNode(accessor, field.getAnnotation(Fragment.class), handler);
 		} else {
 			throw new MojetRuntimeException("Handler can't manage this class type");
 		}

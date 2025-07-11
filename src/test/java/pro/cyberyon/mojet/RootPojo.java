@@ -43,5 +43,8 @@ public class RootPojo {
 	@Transform(value = MyLocalDateTypeHandler.class)
 	@Fragment(length = 6, format = "yyyyMM")
 	private LocalDate date;
+	@Record
+	@Occurences(2)
+	private ChildPojo[] childrens;
 
 }
