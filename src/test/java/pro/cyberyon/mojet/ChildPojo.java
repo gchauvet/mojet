@@ -15,13 +15,17 @@
  */
 package pro.cyberyon.mojet;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Child pojo test class.
  */
 @Data
 @Record
+@NoArgsConstructor
+@AllArgsConstructor
 public class ChildPojo {
 
 	@Fragment(length = 6)
