@@ -46,5 +46,5 @@ public class RootPojo {
 	@Record
 	@Occurences(2)
 	private ChildPojo[] childrens;
-
+	private String unused;
 }
