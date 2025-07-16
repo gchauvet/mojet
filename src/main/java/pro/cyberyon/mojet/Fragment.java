@@ -81,7 +81,7 @@ public @interface Fragment {
 	/**
 	 * Allow unparesable/no value
 	 *
-	 * @return <code>true>/code> if optional
+	 * @return <code>true></code> if optional
 	 */
 	boolean optional() default false;
 }

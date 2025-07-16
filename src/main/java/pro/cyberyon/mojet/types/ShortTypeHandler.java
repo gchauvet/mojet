@@ -30,13 +30,13 @@ final class ShortTypeHandler extends AbstractTypeHandler<Short> {
 	}
 
 	@Override
-	public Short read(String data, String format) {
-		return StringUtils.isNotEmpty(data) ? Short.valueOf(data) : null;
+	protected Short doRead(String data, String format) {
+		return Short.valueOf(data);
 	}
 
 	@Override
-	public String write(Short data, String format) {
-		return data != null ? Short.toString(data) : "";
+	protected String doWrite(Short data, String format) {
+		return Short.toString(data);
 	}
 
 }

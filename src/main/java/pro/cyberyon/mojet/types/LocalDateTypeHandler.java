@@ -32,13 +32,13 @@ final class LocalDateTypeHandler extends AbstractTypeHandler<LocalDate> {
 	}
 
 	@Override
-	public LocalDate read(String data, String format) {
-		return StringUtils.isNotBlank(data) ? LocalDate.parse(data, getFormatter(format)) : null;
+	protected LocalDate doRead(String data, String format) {
+		return LocalDate.parse(data, getFormatter(format));
 	}
 
 	@Override
-	public String write(LocalDate data, String format) {
-		return data != null ? getFormatter(format).format(data) : "";
+	protected String doWrite(LocalDate data, String format) {
+		return getFormatter(format).format(data);
 	}
 
 	private static DateTimeFormatter getFormatter(String format) {

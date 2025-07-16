@@ -28,13 +28,13 @@ final class IntegerTypeHandler extends AbstractTypeHandler<Integer> {
 	}
 
 	@Override
-	public Integer read(String data, String format) {
-		return data != null ? Integer.valueOf(data) : null;
+	protected Integer doRead(String data, String format) {
+		return Integer.valueOf(data);
 	}
 
 	@Override
-	public String write(Integer data, String format) {
-		return data != null ? Integer.toString(data) : "";
+	protected String doWrite(Integer data, String format) {
+		return Integer.toString(data);
 	}
 
 }

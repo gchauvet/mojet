@@ -15,8 +15,6 @@
  */
 package pro.cyberyon.mojet.types;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
  * Long data type handler
  *
@@ -30,13 +28,13 @@ final class LongTypeHandler extends AbstractTypeHandler<Long> {
 	}
 
 	@Override
-	public Long read(String data, String format) {
-		return StringUtils.isNotEmpty(data) ? Long.valueOf(data) : null;
+	protected Long doRead(String data, String format) {
+		return Long.valueOf(data);
 	}
 
 	@Override
-	public String write(Long data, String format) {
-		return data != null ? Long.toString(data) : "";
+	protected String doWrite(Long data, String format) {
+		return Long.toString(data);
 	}
 
 }

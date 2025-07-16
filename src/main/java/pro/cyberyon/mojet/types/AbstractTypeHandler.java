@@ -15,7 +15,9 @@
  */
 package pro.cyberyon.mojet.types;
 
+import lombok.NonNull;
 import org.apache.commons.lang3.ClassUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * partial implementation to every concret TypeHandler.
@@ -41,6 +43,21 @@ public abstract class AbstractTypeHandler<T> implements TypeHandler<T> {
 		return result;
 	}
 
+	@Override
+	public final T read(String data, String format) {
+		T result = null;
+		if (StringUtils.isNotBlank(data)) {
+			result = doRead(data, format);
+		}
+		return result;
+	}
+
+	@Override
+	public String write(T data, String format) {
+		return data != null ? doWrite(data, format) : "";
+	}
+
+
 	/**
 	 * Check type of field (or nested type array)
 	 *
@@ -48,5 +65,23 @@ public abstract class AbstractTypeHandler<T> implements TypeHandler<T> {
 	 * @return positive if accepted
 	 */
 	protected abstract boolean isAccept(Class<?> type);
+
+	/**
+	 * Read a non null data
+	 *
+	 * @param data   the data to read
+	 * @param format the optional format
+	 * @return readed content
+	 */
+	protected abstract T doRead(@NonNull String data, String format);
+
+	/**
+	 * Write a non null data
+	 *
+	 * @param data   the data to write
+	 * @param format the optional format
+	 * @return content to write
+	 */
+	protected abstract String doWrite(@NonNull T data, String format);
 
 }

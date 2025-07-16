@@ -31,12 +31,12 @@ class MojetLineMapperTest {
 	@Test
 	void testSimpleReadLineToRootPojo() throws Exception {
 		final MojetLineMapper<RootPojo> mapper = new MojetLineMapper(RootPojo.class);
-		final RootPojo result = mapper.mapLine("01985000##114273EUR567   100011000210003 200301114273NZD999999USD        _____", 1);
+		final RootPojo result = mapper.mapLine("01985000##114273EUR567   100011000210003#200301114273NZD999999USD        _____", 1);
 		assertEquals(1985, result.getId());
 		assertEquals(114273, result.getChild().getTotal());
 		assertEquals("EUR", result.getChild().getLabel());
 		assertEquals(567, result.getCounter());
-		assertEquals(' ', result.getSpace());
+		assertEquals('#', result.getSpace());
 		assertNull(result.getOptional());
 		assertArrayEquals(new long[]{10001, 10002, 10003}, result.getValues());
 		assertEquals(LocalDate.of(2003, Month.JANUARY, 1), result.getDate());

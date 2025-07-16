@@ -36,7 +36,7 @@ class StringTypeHandlerTest {
 
 	@Test
 	void testRead() {
-		assertEquals("", instance.read("", null));
+		assertNull(instance.read("", null));
 		assertEquals("test", instance.read("test", null));
 		assertEquals("€éàÉ", instance.read("€éàÉ", null));
 	}
