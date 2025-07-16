@@ -77,4 +77,11 @@ public @interface Fragment {
 	 * @return padding way constant enum
 	 */
 	PadWay alignement() default PadWay.NONE;
+
+	/**
+	 * Allow unparesable/no value
+	 *
+	 * @return <code>true>/code> if optional
+	 */
+	boolean optional() default false;
 }

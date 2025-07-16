@@ -16,6 +16,7 @@
 package pro.cyberyon.mojet.types;
 
 import java.math.BigInteger;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Big integer data type handler
@@ -31,12 +32,16 @@ final class BigIntegerTypeHandler extends AbstractTypeHandler<BigInteger> {
 
 	@Override
 	public BigInteger read(String data, String format) {
-		return new BigInteger(data);
+		BigInteger result = null;
+		if (StringUtils.isNotBlank(data)) {
+			result = new BigInteger(data);
+		}
+		return result;
 	}
 
 	@Override
 	public String write(BigInteger data, String format) {
-		return data.toString();
+		return data != null ? data.toString() : "";
 	}
 
 }

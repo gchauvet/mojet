@@ -15,6 +15,8 @@
  */
 package pro.cyberyon.mojet.types;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * Short data type handler
  *
@@ -29,12 +31,12 @@ final class ShortTypeHandler extends AbstractTypeHandler<Short> {
 
 	@Override
 	public Short read(String data, String format) {
-		return Short.valueOf(data);
+		return StringUtils.isNotEmpty(data) ? Short.valueOf(data) : null;
 	}
 
 	@Override
 	public String write(Short data, String format) {
-		return Short.toString(data);
+		return data != null ? Short.toString(data) : "";
 	}
 
 }
