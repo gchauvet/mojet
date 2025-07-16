@@ -29,6 +29,7 @@ class StringTypeHandlerTest {
 
 	@Test
 	void testAccept() {
+		assertNull(instance.read(null, null));
 		assertFalse(instance.accept(null));
 		assertFalse(instance.accept(Double.class));
 		assertTrue(instance.accept(String.class));

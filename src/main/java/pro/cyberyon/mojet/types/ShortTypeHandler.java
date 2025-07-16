@@ -15,8 +15,6 @@
  */
 package pro.cyberyon.mojet.types;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
  * Short data type handler
  *
