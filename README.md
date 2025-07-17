@@ -26,6 +26,7 @@ This library is built to simplify reading and writing structured flat files in S
   <version>1.2.0</version>
 </dependency>
 ```
+
 ## 🧪 Example POJO Usage
 ```java
 @Record
@@ -33,7 +34,7 @@ public class ChildPojo {
 
     @Fragment(length = 6)
     private double total;
-    @Fragment(length = 3, alignement = Fragment.PadWay.LEFT)
+    @Fragment(length = 3, alignement = PadWay.LEFT)
     private String label;
     @Fragment(length = 5)
     @Occurences(3)
@@ -44,7 +45,7 @@ public class ChildPojo {
 
 @Record
 @Zap(length = 5, value = '_') // Adds 5 underscores at the end of each record (optional)
-public class SimplePojo {
+public class SimplePojo implements RecordVisitable {
 
     @Fragment(length = 7, padder = '0')
     private long id; // Number padded to 7 characters with '0'
@@ -67,10 +68,18 @@ public class SimplePojo {
     @Fragment(length = 2, padder = '€')
     private char car = 'C';
 
+    @Fragment(length = 8, optional = true, alignement = PadWay.LEFT)
+    private LocalDate optional; // Optional field; if unparsable or empty, set to null
+
     @Record
     private ChildPojo child; // append fragments/fillers description to main mapper description
 
     // Getters / Setters...
+
+    @Override
+    public void accept(RecordVisitor visitor) {
+        visitor.visit(this);
+    }
 }
 ```
 
@@ -118,6 +127,114 @@ public class ExampleBatchConfig {
     }
 }
 ```
+
+## 📊 Multi-Record Type Support Example
+
+Mojet seamlessly integrates with Spring Batch to handle flat files containing multiple record types (e.g., header, detail, footer lines identified by a prefix). Use `PatternMatchingCompositeLineMapper` to delegate mapping based on line patterns.
+
+### Example POJOs for Multiple Types
+To handle the different record types in a type-safe manner, use the Visitor pattern. The POJOs implement `RecordVisitable`, allowing them to be visited by a `RecordVisitor`.
+
+First, define a `PojoVisitor` implementation:
+
+```java
+public interface PojoVisitor extends RecordVisitor {
+    void visit(HeaderPojo header);
+    void visit(DetailPojo detail);
+    void visit(FooterPojo footer);
+}
+
+And pojo classes:
+```java
+@Record
+public class HeaderPojo implements RecordVisitable<PojoVisitor> {
+
+    @Fragment(length = 1)
+    private String type; // 'H'
+
+    @Fragment(length = 10, format = "yyyyMMdd")
+    private LocalDate date;
+
+    // Getters / Setters...
+
+    @Override
+    public void accept(PojoVisitor visitor) {
+        visitor.visit(this);
+    }
+}
+
+@Record
+public class DetailPojo implements RecordVisitable<PojoVisitor> {
+
+    @Fragment(length = 1)
+    private String type; // 'D'
+
+    @Fragment(length = 7, padder = '0')
+    private long id;
+
+    @Fragment(length = 10)
+    private String name;
+
+    @Fragment(length = 6)
+    private double amount;
+
+    // Getters / Setters...
+
+    @Override
+    public void accept(PojoVisitor visitor) {
+        visitor.visit(this);
+    }
+}
+
+@Record
+public class FooterPojo implements RecordVisitable<PojoVisitor> {
+
+    @Fragment(length = 1)
+    private String type; // 'F'
+
+    @Fragment(length = 5)
+    private int recordCount;
+
+    @Fragment(length = 10)
+    private double totalAmount;
+
+    // Getters / Setters...
+
+    @Override
+    public void accept(PojoVisitor visitor) {
+        visitor.visit(this);
+    }
+}
+```
+
+### Using the Visitor Pattern for Type-Specific Processing
+
+
+
+public class MyRecordVisitor implements RecordVisitor {
+
+    @Override
+    public void visit(HeaderPojo header) {
+        // Handle header logic, e.g., log date
+        System.out.println("Header date: " + header.getDate());
+    }
+
+    @Override
+    public void visit(DetailPojo detail) {
+        // Handle detail logic, e.g., accumulate amount
+        System.out.println("Detail name: " + detail.getName() + ", amount: " + detail.getAmount());
+    }
+
+    @Override
+    public void visit(FooterPojo footer) {
+        // Handle footer logic, e.g., validate total
+        System.out.println("Footer record count: " + footer.getRecordCount());
+    }
+}
+```
+
+Then, create an `ItemProcessor` that uses the visitor.
+This approach allows for clean, type-specific processing of each record type using the Visitor pattern.
 
 ## 🛠 Roadmap
 * ✅ Annotation-based POJO-to-fixed-length mapping (including arrays)
