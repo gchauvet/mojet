@@ -68,7 +68,7 @@ public class SimplePojo implements RecordVisitable {
     @Fragment(length = 2, padder = '€')
     private char car = 'C';
 
-    @Fragment(length = 8, optional = true, alignement = PadWay.LEFT)
+    @Fragment(length = 8, optional = true)
     private LocalDate optional; // Optional field; if unparsable or empty, set to null
 
     @Record
