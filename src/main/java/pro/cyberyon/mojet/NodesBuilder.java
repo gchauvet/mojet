@@ -88,7 +88,9 @@ public class NodesBuilder {
 		if (field.isAnnotationPresent(Transform.class)) {
 			final Transform converter = field.getAnnotation(Transform.class);
 			try {
-				handler = converter.value().getDeclaredConstructor().newInstance();
+				var constructor = converter.value().getDeclaredConstructor();
+				constructor.trySetAccessible();
+				handler = constructor.newInstance();
 			} catch (ReflectiveOperationException ex) {
 				throw new MojetRuntimeException("Can't instanciate handler " + converter.value().getSimpleName(), ex);
 			}

@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>pro.cyberyon</groupId>
     <artifactId>mojet</artifactId>
-    <version>1.2.0</version>
+    <version>1.2.1</version>
     <packaging>jar</packaging>
     <name>Mojet Spring Batch extension</name>
     <description>An extended spring-batch bean wrapper</description>
