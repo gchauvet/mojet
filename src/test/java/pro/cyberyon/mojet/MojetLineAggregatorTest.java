@@ -223,6 +223,44 @@ class MojetLineAggregatorTest {
 		var pojo2 = new BadBoundedPojo();
 		pojo2.setValue("T");
 		assertThrows(MojetRuntimeException.class, () -> bounded.aggregate(pojo2));
+
+	}
+
+	@Data
+	@Record
+	public static final class AllowPrivateTypeHandlerPojo {
+
+		private static class InacceptableConverterType implements TypeHandler<String> {
+
+			@Override
+			public boolean accept(Class<?> type) {
+				return true;
+			}
+
+			@Override
+			public String read(String data, String format) {
+				return data;
+			}
+
+			@Override
+			public String write(String data, String format) {
+				return data;
+			}
+
+		}
+
+
+		@Transform(InacceptableConverterType.class)
+		@Fragment(length = 5, alignement = Fragment.PadWay.RIGHT)
+		private String value;
+	}
+
+	@Test
+	void testPrivateConverter() {
+		var converter = new MojetLineAggregator<>(AllowPrivateTypeHandlerPojo.class);
+		var result = new AllowPrivateTypeHandlerPojo();
+		result.setValue("TEST");
+		assertEquals("TEST ", converter.aggregate(result));
 	}
 
 }

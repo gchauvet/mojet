@@ -143,6 +143,7 @@ public interface PojoVisitor extends RecordVisitor {
     void visit(DetailPojo detail);
     void visit(FooterPojo footer);
 }
+```
 
 And pojo classes:
 ```java
@@ -209,8 +210,7 @@ public class FooterPojo implements RecordVisitable<PojoVisitor> {
 
 ### Using the Visitor Pattern for Type-Specific Processing
 
-
-
+```java
 public class MyRecordVisitor implements RecordVisitor {
 
     @Override
