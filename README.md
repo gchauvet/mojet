@@ -23,7 +23,7 @@ This library is built to simplify reading and writing structured flat files in S
 <dependency>
   <groupId>pro.cyberyon</groupId>
   <artifactId>mojet</artifactId>
-  <version>1.1.0</version>
+  <version>1.2.0</version>
 </dependency>
 ```
 ## 🧪 Example POJO Usage
@@ -33,7 +33,7 @@ public class ChildPojo {
 
     @Fragment(length = 6)
     private double total;
-    @Fragment(length = 3)
+    @Fragment(length = 3, alignement = Fragment.PadWay.LEFT)
     private String label;
     @Fragment(length = 5)
     @Occurences(3)
@@ -57,9 +57,9 @@ public class SimplePojo {
     @Fragment(length = 10, padder = '_', alignement = PadWay.RIGHT)
     private String surname; // Right-padded to 10 characters with underscores
 
-    @Transform(MyLocalDateTypeHandler.class)
+    @Transform(YearMonthTypeHandler.class)
     @Fragment(length = 4, format = "uuMM")
-    private LocalDate date; // Formatted as 2-digit year and 2-digit month (e.g. "2506")
+    private YearMonth date; // Formatted as 2-digit year and 2-digit month (e.g. "2506")
 
     @Fragment(length = 2, padder = '$')
     private byte octet = 5;
