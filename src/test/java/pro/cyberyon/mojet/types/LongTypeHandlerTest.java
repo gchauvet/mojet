@@ -37,12 +37,14 @@ class LongTypeHandlerTest {
 
 	@Test
 	void testRead() {
+		assertNull(instance.read(null, null));
 		assertEquals(1, instance.read("1", null));
 		assertEquals(1985, instance.read("1985", null));
 	}
 
 	@Test
 	void testWrite() {
+		assertEquals("", instance.write(null, null));
 		assertEquals("0", instance.write(0L, null));
 		assertEquals("1985", instance.write(1985L, null));
 	}

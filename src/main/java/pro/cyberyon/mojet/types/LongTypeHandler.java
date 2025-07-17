@@ -28,12 +28,12 @@ final class LongTypeHandler extends AbstractTypeHandler<Long> {
 	}
 
 	@Override
-	public Long read(String data, String format) {
+	protected Long doRead(String data, String format) {
 		return Long.valueOf(data);
 	}
 
 	@Override
-	public String write(Long data, String format) {
+	protected String doWrite(Long data, String format) {
 		return Long.toString(data);
 	}
 

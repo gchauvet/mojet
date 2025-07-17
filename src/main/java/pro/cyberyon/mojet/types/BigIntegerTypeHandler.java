@@ -30,12 +30,12 @@ final class BigIntegerTypeHandler extends AbstractTypeHandler<BigInteger> {
 	}
 
 	@Override
-	public BigInteger read(String data, String format) {
+	protected BigInteger doRead(String data, String format) {
 		return new BigInteger(data);
 	}
 
 	@Override
-	public String write(BigInteger data, String format) {
+	protected String doWrite(BigInteger data, String format) {
 		return data.toString();
 	}
 

@@ -28,12 +28,12 @@ final class ByteTypeHandler extends AbstractTypeHandler<Byte> {
 	}
 
 	@Override
-	public Byte read(String data, String format) {
+	protected Byte doRead(String data, String format) {
 		return Byte.parseByte(data);
 	}
 
 	@Override
-	public String write(Byte data, String format) {
+	protected String doWrite(Byte data, String format) {
 		return Byte.toString(data);
 	}
 

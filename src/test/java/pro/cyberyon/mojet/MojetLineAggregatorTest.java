@@ -21,6 +21,7 @@ import java.time.Month;
 import lombok.Data;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import pro.cyberyon.mojet.types.TypeHandler;
 
 /**
  * Unit test
@@ -84,14 +85,14 @@ class MojetLineAggregatorTest {
 		private long undefined;
 	}
 
-	private static class BuggerConverterType extends AbstractTypeHandler<Object> {
+	private static class BuggerConverterType implements TypeHandler<Object> {
 
 		public BuggerConverterType() {
 			throw new IllegalStateException("bug");
 		}
 
 		@Override
-		protected boolean isAccept(Class<?> type) {
+		public boolean accept(Class<?> type) {
 			return true;
 		}
 
@@ -124,10 +125,10 @@ class MojetLineAggregatorTest {
 		private Object undefined = "";
 	}
 
-	private static class InacceptableConverterType extends AbstractTypeHandler<Object> {
+	private static class InacceptableConverterType implements TypeHandler<Object> {
 
 		@Override
-		protected boolean isAccept(Class<?> type) {
+		public boolean accept(Class<?> type) {
 			return false;
 		}
 

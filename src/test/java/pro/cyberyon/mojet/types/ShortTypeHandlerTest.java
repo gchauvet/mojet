@@ -38,12 +38,14 @@ class ShortTypeHandlerTest {
 
 	@Test
 	void testRead() {
+		assertNull(instance.read(null, null));
 		assertEquals((short) 1, instance.read("1", null));
 		assertEquals((short) 1985, instance.read("1985", null));
 	}
 
 	@Test
 	void testWrite() {
+		assertEquals("", instance.write(null, null));
 		assertEquals("0", instance.write((short) 0, null));
 		assertEquals("1985", instance.write((short) 1985, null));
 	}

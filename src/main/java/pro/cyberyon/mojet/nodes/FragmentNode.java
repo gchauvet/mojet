@@ -83,6 +83,15 @@ public class FragmentNode extends AbstractNode<Fragment> {
 	}
 
 	/**
+	 * Flag for optional content
+	 *
+	 * @return <code>true</code> if optional
+	 */
+	public boolean isOptional() {
+		return annotation.optional();
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override

@@ -47,4 +47,6 @@ public class RootPojo {
 	@Occurences(2)
 	private ChildPojo[] childrens;
 	private String unused;
+	@Fragment(length = 8, optional = true)
+	private LocalDate optional;
 }

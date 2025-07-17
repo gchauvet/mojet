@@ -37,12 +37,14 @@ class BigIntegerTypeHandlerTest {
 
 	@Test
 	void testRead() {
+		assertNull(instance.read(null, null));
 		assertEquals(BigInteger.ONE, instance.read("1", null));
 		assertEquals(BigInteger.valueOf(1985), instance.read("1985", null));
 	}
 
 	@Test
 	void testWrite() {
+		assertEquals("", instance.write(null, null));
 		assertEquals("0", instance.write(BigInteger.ZERO, null));
 		assertEquals("1985", instance.write(BigInteger.valueOf(1985), null));
 	}
