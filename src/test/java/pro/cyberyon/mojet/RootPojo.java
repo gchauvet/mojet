@@ -47,6 +47,6 @@ public class RootPojo {
 	@Occurences(2)
 	private ChildPojo[] childrens;
 	private String unused;
-	@Fragment(length = 8, optional = true)
+	@Fragment(length = 8, optional = true, alignement = Fragment.PadWay.LEFT)
 	private LocalDate optional;
 }

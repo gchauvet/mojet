@@ -46,7 +46,7 @@ public abstract class AbstractTypeHandler<T> implements TypeHandler<T> {
 	@Override
 	public final T read(String data, String format) {
 		T result = null;
-		if (StringUtils.isNotBlank(data)) {
+		if (StringUtils.isNotEmpty(data)) {
 			result = doRead(data, format);
 		}
 		return result;
