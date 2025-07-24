@@ -75,10 +75,10 @@ public class MojetLineMapper<T> extends AbstractMojetLine<T> implements LineMapp
 					case NONE:
 						// Do nothing
 						break;
-					case RIGHT:
+					case LEFT:
 						data = StringUtils.stripEnd(data, Character.toString(node.getPadder()));
 						break;
-					case LEFT:
+					case RIGHT:
 						data = StringUtils.stripStart(data, Character.toString(node.getPadder()));
 						break;
 					default:

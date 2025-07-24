@@ -63,7 +63,7 @@ class MojetPolyLineMapperTest {
 		@Zap(length = 4)
 		@Fragment(length = 3, padder = '0')
 		private int value;
-		@Fragment(length = 5, alignement = Fragment.PadWay.RIGHT)
+		@Fragment(length = 5, alignement = Fragment.PadWay.LEFT)
 		private String name;
 		@Fragment(length = 5)
 		private long foo;
@@ -80,7 +80,7 @@ class MojetPolyLineMapperTest {
 		mappers.add(MyPojo.class);
 		mappers.add(YourPojo.class);
 		final var mapper = new MojetPolyLineMapper<>(mappers);
-		var result = mapper.mapLine("MY123TEST      VALUE     ", 1);
+		var result = mapper.mapLine("MY123      TESTVALUE     ", 1);
 		assertNotNull(result);
 		result.accept(new PojoVisitor() {
 			@Override
