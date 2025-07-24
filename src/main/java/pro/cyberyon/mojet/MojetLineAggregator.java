@@ -79,10 +79,10 @@ public class MojetLineAggregator<T> extends AbstractMojetLine<T> implements Line
 							output.append(data);
 							break;
 						case LEFT:
-							output.appendFixedWidthPadLeft(data, node.getLenght(), node.getPadder());
+							output.appendFixedWidthPadRight(data, node.getLenght(), node.getPadder());
 							break;
 						case RIGHT:
-							output.appendFixedWidthPadRight(data, node.getLenght(), node.getPadder());
+							output.appendFixedWidthPadLeft(data, node.getLenght(), node.getPadder());
 							break;
 						default:
 							throw new MojetRuntimeException("Undefined case");

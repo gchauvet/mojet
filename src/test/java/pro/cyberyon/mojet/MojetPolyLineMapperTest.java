@@ -41,9 +41,9 @@ class MojetPolyLineMapperTest {
 	@Matcher("MY*")
 	public static final class MyPojo implements RecordVisitable<PojoVisitor> {
 		@Zap(length = 2)
-		@Fragment(length = 3, padder = '0', alignement = Fragment.PadWay.LEFT)
+		@Fragment(length = 3, padder = '0')
 		private int value;
-		@Fragment(length = 10, alignement = Fragment.PadWay.LEFT)
+		@Fragment(length = 10, alignement = Fragment.PadWay.RIGHT)
 		private String name;
 
 		@Fragment(length = 10)
@@ -79,7 +79,7 @@ class MojetPolyLineMapperTest {
 		final var mappers = new HashSet<Class<? extends RecordVisitable>>();
 		mappers.add(MyPojo.class);
 		mappers.add(YourPojo.class);
-		final var mapper = new MojetPolyLineMapper<RecordVisitable>(mappers);
+		final var mapper = new MojetPolyLineMapper<>(mappers);
 		var result = mapper.mapLine("MY123TEST      VALUE     ", 1);
 		assertNotNull(result);
 		result.accept(new PojoVisitor() {
@@ -95,7 +95,7 @@ class MojetPolyLineMapperTest {
 				fail("Not good type");
 			}
 		});
-		result = mapper.mapLine("YOUR567 TEST07890", 2);
+		result = mapper.mapLine("YOUR567TEST 07890", 2);
 		assertNotNull(result);
 		result.accept(new PojoVisitor() {
 			@Override
