@@ -66,7 +66,7 @@ class MojetLineAggregatorTest {
 		item.setSurname("Guillaume");
 		item.setDate(LocalDate.of(1999, Month.JULY, 18));
 		item.setBounded("TEST");
-		assertEquals("0000777###||   CHAUVETGuillaume_99075C    2    4    6TEST€€€", instance.aggregate(item));
+		assertEquals("7770000###||CHAUVET   _Guillaume99075C2    4    6    TEST€€€", instance.aggregate(item));
 	}
 
 	@Data
@@ -260,7 +260,7 @@ class MojetLineAggregatorTest {
 		var converter = new MojetLineAggregator<>(AllowPrivateTypeHandlerPojo.class);
 		var result = new AllowPrivateTypeHandlerPojo();
 		result.setValue("TEST");
-		assertEquals("TEST ", converter.aggregate(result));
+		assertEquals(" TEST", converter.aggregate(result));
 	}
 
 }

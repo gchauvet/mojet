@@ -148,6 +148,7 @@ public interface PojoVisitor extends RecordVisitor {
 And pojo classes:
 ```java
 @Record
+@Matcher("H*")
 public class HeaderPojo implements RecordVisitable<PojoVisitor> {
 
     @Fragment(length = 1)
@@ -165,6 +166,7 @@ public class HeaderPojo implements RecordVisitable<PojoVisitor> {
 }
 
 @Record
+@Matcher("D*")
 public class DetailPojo implements RecordVisitable<PojoVisitor> {
 
     @Fragment(length = 1)
@@ -188,6 +190,7 @@ public class DetailPojo implements RecordVisitable<PojoVisitor> {
 }
 
 @Record
+@Matcher("F*")
 public class FooterPojo implements RecordVisitable<PojoVisitor> {
 
     @Fragment(length = 1)
