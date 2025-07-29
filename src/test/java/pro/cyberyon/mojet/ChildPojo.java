@@ -28,7 +28,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ChildPojo {
 
-	@Fragment(length = 6)
+	@Fragment(length = 6, padder = '0', alignement = Fragment.PadWay.RIGHT)
 	private long total;
 	@Fragment(length = 3)
 	private String label;
