@@ -15,7 +15,6 @@
  */
 package pro.cyberyon.mojet;
 
-import pro.cyberyon.mojet.types.AbstractTypeHandler;
 import java.time.LocalDate;
 import java.time.Month;
 import lombok.Data;
@@ -55,6 +54,9 @@ class MojetLineAggregatorTest {
 		private long[] values = new long[]{2, 4, 6};
 		@Fragment(length = 4)
 		private String bounded;
+		@Fragment(length = 1, alignement = Fragment.PadWay.RIGHT)
+		@Occurences(3)
+		private final int[] empties = new int[3];
 	}
 
 	@Test
@@ -66,7 +68,7 @@ class MojetLineAggregatorTest {
 		item.setSurname("Guillaume");
 		item.setDate(LocalDate.of(1999, Month.JULY, 18));
 		item.setBounded("TEST");
-		assertEquals("7770000###||CHAUVET   _Guillaume99075C2    4    6    TEST€€€", instance.aggregate(item));
+		assertEquals("7770000###||CHAUVET   _Guillaume99075C2    4    6    TEST000€€€", instance.aggregate(item));
 	}
 
 	@Data
