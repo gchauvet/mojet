@@ -86,7 +86,9 @@ public class MojetLineMapper<T> extends AbstractMojetLine<T> implements LineMapp
 				}
 				try {
 					final Object value = node.getHandler().read(data, node.getFormat());
-					wrapper.setPropertyValue(getPath(), value);
+					if (value != null) {
+						wrapper.setPropertyValue(getPath(), value);
+					}
 				} catch (Exception ex) {
 					if (!node.isOptional()) {
 						throw new MojetRuntimeException("Unable to handle data", ex);

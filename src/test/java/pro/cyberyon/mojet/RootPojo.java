@@ -16,6 +16,7 @@
 package pro.cyberyon.mojet;
 
 import java.time.LocalDate;
+import java.time.Month;
 import lombok.Data;
 
 /**
@@ -48,5 +49,5 @@ public class RootPojo {
 	private ChildPojo[] childrens;
 	private String unused;
 	@Fragment(length = 8, optional = true)
-	private LocalDate optional;
+	private LocalDate optional = LocalDate.of(2025, Month.JULY, 29);
 }
