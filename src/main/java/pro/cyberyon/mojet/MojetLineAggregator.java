@@ -59,6 +59,10 @@ public class MojetLineAggregator<T> extends AbstractMojetLine<T> implements Line
 
 			private final BeanWrapperImpl bean = new BeanWrapperImpl(item);
 
+			{
+				bean.setAutoGrowNestedPaths(true);
+			}
+
 			@Override
 			public void visit(final ZapNode node) {
 				output.appendPadding(node.getLength(), node.getPadding());
