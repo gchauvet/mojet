@@ -37,10 +37,10 @@ class MojetLineMapperTest {
 		assertEquals("EUR", result.getChild().getLabel());
 		assertEquals(567, result.getCounter());
 		assertEquals(' ', result.getSpace());
-		assertNull(result.getOptional());
+		assertEquals(LocalDate.of(2025, Month.JULY, 29), result.getOptional());
 		assertArrayEquals(new long[]{10001, 10002, 10003}, result.getValues());
 		assertEquals(LocalDate.of(2003, Month.JANUARY, 1), result.getDate());
-		assertEquals(new ChildPojo(999999, "USD"), result.getChildrens()[1]);
+		assertEquals(new ChildPojo(0, "USD"), result.getChildrens()[1]);
 	}
 
 	@Data
