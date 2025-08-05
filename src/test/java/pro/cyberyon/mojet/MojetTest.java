@@ -23,16 +23,16 @@ import org.junit.jupiter.api.Test;
  *
  * @author Guillaume CHAUVET
  */
-class MojetLineIT {
+class MojetTest {
 
 	@Test
 	void testSimplePojoReadAndWrite() throws Exception {
-		final String line = "01985000##114273EUR567   100011000210003 200301_____";
+		final String line = "01985000##114273EUR567   100011000210003 200301114273NZD000000USD        _____";
 		final NodesBuilder builder = new NodesBuilder();
 		final MojetLineMapper<RootPojo> mapper = new MojetLineMapper(builder, RootPojo.class);
 		final RootPojo result = mapper.mapLine(line, 1);
 		final MojetLineAggregator<RootPojo> aggregator = new MojetLineAggregator(builder, RootPojo.class);
-		assertEquals(line, aggregator.aggregate(result));
+		assertEquals("19850000##114273EUR567   100011000210003 200301114273NZD000000USD20250729_____", aggregator.aggregate(result));
 	}
 
 }
