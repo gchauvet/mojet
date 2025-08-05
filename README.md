@@ -23,7 +23,7 @@ This library is built to simplify reading and writing structured flat files in S
 <dependency>
   <groupId>pro.cyberyon</groupId>
   <artifactId>mojet</artifactId>
-  <version>1.2.0</version>
+  <version>m.n.p</version>
 </dependency>
 ```
 
