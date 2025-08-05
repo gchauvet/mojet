@@ -40,11 +40,11 @@ public class MojetPolyLineAggregator<T extends RecordVisitable> implements LineA
 	}
 
 	@Override
-	public String aggregate(T item) {
+	public String aggregate(final T item) {
 		if (!aggregators.containsKey(item.getClass())) {
 			throw new MojetRuntimeException("Unknow record class : " + item.getClass());
 		}
-		return ((MojetLineAggregator<T>) aggregators.get(item)).aggregate(item);
+		return ((MojetLineAggregator<T>) aggregators.get(item.getClass())).aggregate(item);
 	}
 
 }

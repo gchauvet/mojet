@@ -15,6 +15,8 @@
  */
 package pro.cyberyon.mojet;
 
+import java.util.Set;
+import lombok.Data;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
@@ -25,6 +27,46 @@ import org.junit.jupiter.api.Test;
  */
 class MojetTest {
 
+	@Data
+	@Record
+	private static class FooPojo implements RecordVisitable<CustomVisitor> {
+
+		@Zap(value = 'F', length = 1)
+		@Zap(value = 'O', length = 2)
+		@Fragment(length = 10, alignement = Fragment.PadWay.RIGHT)
+
+		private String test;
+
+		@Override
+		public void accept(CustomVisitor visitor) {
+			visitor.visit(this);
+		}
+
+	}
+
+	@Data
+	@Record
+	private static class BarPojo implements RecordVisitable<CustomVisitor> {
+
+		@Zap(value = 'B', length = 1)
+		@Zap(value = 'A', length = 1)
+		@Zap(value = 'R', length = 1)
+		@Fragment(length = 20, padder = '0', alignement = Fragment.PadWay.RIGHT)
+		private long value;
+
+		@Override
+		public void accept(CustomVisitor visitor) {
+			visitor.visit(this);
+		}
+	}
+
+	private interface CustomVisitor extends RecordVisitor {
+
+		void visit(FooPojo instance);
+
+		void visit(BarPojo instance);
+	}
+
 	@Test
 	void testSimplePojoReadAndWrite() throws Exception {
 		final String line = "01985000##114273EUR567   100011000210003 200301114273NZD000000USD        _____";
@@ -33,6 +75,17 @@ class MojetTest {
 		final RootPojo result = mapper.mapLine(line, 1);
 		final MojetLineAggregator<RootPojo> aggregator = new MojetLineAggregator(builder, RootPojo.class);
 		assertEquals("19850000##114273EUR567   100011000210003 200301114273NZD000000USD20250729_____", aggregator.aggregate(result));
+	}
+
+	@Test
+	void testPolyLineAggregator() {
+		final MojetPolyLineAggregator<RecordVisitable<CustomVisitor>> aggregator = new MojetPolyLineAggregator<RecordVisitable<CustomVisitor>>(Set.of(FooPojo.class, BarPojo.class));
+		final var foo = new FooPojo();
+		foo.setTest("TEST");
+		assertEquals("FOO      TEST", aggregator.aggregate(foo));
+		final var bar = new BarPojo();
+		bar.setValue(18071985);
+		assertEquals("BAR00000000000018071985", aggregator.aggregate(bar));
 	}
 
 }
