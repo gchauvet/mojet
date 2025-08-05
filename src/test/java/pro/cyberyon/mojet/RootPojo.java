@@ -48,6 +48,6 @@ public class RootPojo {
 	@Occurences(2)
 	private ChildPojo[] childrens;
 	private String unused;
-	@Fragment(length = 8, optional = true)
+	@Fragment(length = 8, format = "yyyyMMdd", optional = true)
 	private LocalDate optional = LocalDate.of(2025, Month.JULY, 29);
 }
