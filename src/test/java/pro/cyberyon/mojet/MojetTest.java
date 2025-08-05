@@ -60,6 +60,11 @@ class MojetTest {
 		}
 	}
 
+	@Record
+	private static class ZarbPojo extends BarPojo {
+
+	}
+
 	private interface CustomVisitor extends RecordVisitor {
 
 		void visit(FooPojo instance);
@@ -86,6 +91,7 @@ class MojetTest {
 		final var bar = new BarPojo();
 		bar.setValue(18071985);
 		assertEquals("BAR00000000000018071985", aggregator.aggregate(bar));
+		assertThrows(MojetRuntimeException.class, () -> aggregator.aggregate(new ZarbPojo()));
 	}
 
 }
