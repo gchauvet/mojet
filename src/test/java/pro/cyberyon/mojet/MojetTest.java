@@ -91,7 +91,8 @@ class MojetTest {
 		final var bar = new BarPojo();
 		bar.setValue(18071985);
 		assertEquals("BAR00000000000018071985", aggregator.aggregate(bar));
-		assertThrows(MojetRuntimeException.class, () -> aggregator.aggregate(new ZarbPojo()));
+		final var zarb = new ZarbPojo();
+		assertThrows(MojetRuntimeException.class, () -> aggregator.aggregate(zarb));
 	}
 
 }
