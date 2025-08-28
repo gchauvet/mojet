@@ -24,12 +24,19 @@ import org.springframework.batch.item.file.transform.LineAggregator;
 /**
  * Construct a new aggregator whos can handle multiple visitable records
  *
+ * @param <T> visitable pojo type
+ *
  * @author Guillaume CHAUVET
  */
 public class MojetPolyLineAggregator<T extends RecordVisitable> implements LineAggregator<T> {
 
 	private final Map<Class<? extends T>, MojetLineAggregator<? extends T>> aggregators;
 
+	/**
+	 * Construct a new recordable pojo aggregator instance
+	 *
+	 * @param pojos set of record pojo classes
+	 */
 	public MojetPolyLineAggregator(final Set<Class<? extends T>> pojos) {
 		final Map<Class<? extends T>, MojetLineAggregator<? extends T>> instances = new HashMap<>();
 		final NodesBuilder builder = new NodesBuilder();

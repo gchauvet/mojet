@@ -40,7 +40,7 @@ class MojetLineAggregatorTest {
 		@Zap(length = 2, value = '|')
 		@Fragment(length = 10, alignement = Fragment.PadWay.LEFT)
 		private String name;
-		@Fragment(length = 10, padder = '_', alignement = Fragment.PadWay.RIGHT)
+		@Fragment(length = 10, padder = '_', alignement = Fragment.PadWay.RIGHT, truncable = true)
 		private String surname;
 		@Transform(MyLocalDateTypeHandler.class)
 		@Fragment(length = 4, format = "yyMM")

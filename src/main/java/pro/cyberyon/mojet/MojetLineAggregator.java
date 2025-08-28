@@ -72,10 +72,12 @@ public class MojetLineAggregator<T> extends AbstractMojetLine<T> implements Line
 			public void visit(final FragmentNode node) {
 				final Object value = bean.getPropertyValue(getPath());
 				String data = ((TypeHandler<Object>) node.getHandler()).write(value, node.getFormat());
-				if (node.isTruncable()) {
-					data = data.substring(0, node.getLenght());
-				} else if (data.length() > node.getLenght()) {
-					throw new MojetRuntimeException("Data overflow");
+				if (data.length() > node.getLenght()) {
+					if (node.isTruncable()) {
+						data = data.substring(0, node.getLenght());
+					} else {
+						throw new MojetRuntimeException("Data overflow");
+					}
 				}
 				switch (node.getAlignement()) {
 					case NONE:
