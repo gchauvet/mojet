@@ -98,4 +98,13 @@ public class FragmentNode extends AbstractNode<Fragment> {
 	public void accept(NodeVisitor visitor) {
 		visitor.visit(this);
 	}
+
+	/**
+	 * Allow value truncation.
+	 *
+	 * @return <code>true</code> if truncable
+	 */
+	public boolean isTruncable() {
+		return annotation.truncable();
+	}
 }

@@ -84,4 +84,11 @@ public @interface Fragment {
 	 * @return <code>true></code> if optional
 	 */
 	boolean optional() default false;
+
+	/**
+	 * Allow value truncation
+	 *
+	 * @return <code>true></code> if allowed
+	 */
+	boolean truncable() default false;
 }
