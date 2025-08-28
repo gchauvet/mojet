@@ -52,7 +52,7 @@ class MojetLineAggregatorTest {
 		@Fragment(length = 5, alignement = Fragment.PadWay.LEFT)
 		@Occurences(3)
 		private long[] values = new long[]{2, 4, 6};
-		@Fragment(length = 4)
+		@Fragment(length = 4, truncable = true)
 		private String bounded;
 		@Fragment(length = 1, alignement = Fragment.PadWay.RIGHT)
 		@Occurences(3)
@@ -67,7 +67,7 @@ class MojetLineAggregatorTest {
 		item.setName("CHAUVET");
 		item.setSurname("Guillaume");
 		item.setDate(LocalDate.of(1999, Month.JULY, 18));
-		item.setBounded("TEST");
+		item.setBounded("TESTAAAAAA");
 		assertEquals("7770000###||CHAUVET   _Guillaume99075C2    4    6    TEST000€€€", instance.aggregate(item));
 	}
 

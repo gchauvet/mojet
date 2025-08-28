@@ -71,28 +71,30 @@ public class MojetLineAggregator<T> extends AbstractMojetLine<T> implements Line
 			@Override
 			public void visit(final FragmentNode node) {
 				final Object value = bean.getPropertyValue(getPath());
-				final String data = ((TypeHandler<Object>) node.getHandler()).write(value, node.getFormat());
-				if (data.length() > node.getLenght()) {
+				String data = ((TypeHandler<Object>) node.getHandler()).write(value, node.getFormat());
+				if (node.isTruncable()) {
+					data = data.substring(0, node.getLenght());
+				} else if (data.length() > node.getLenght()) {
 					throw new MojetRuntimeException("Data overflow");
-				} else {
-					switch (node.getAlignement()) {
-						case NONE:
-							if (data.length() != node.getLenght()) {
-								throw new MojetRuntimeException("Expected length not matched");
-							}
-							output.append(data);
-							break;
-						case LEFT:
-							output.appendFixedWidthPadRight(data, node.getLenght(), node.getPadder());
-							break;
-						case RIGHT:
-							output.appendFixedWidthPadLeft(data, node.getLenght(), node.getPadder());
-							break;
-						default:
-							throw new MojetRuntimeException("Undefined case");
-					}
+				}
+				switch (node.getAlignement()) {
+					case NONE:
+						if (data.length() != node.getLenght()) {
+							throw new MojetRuntimeException("Expected length not matched");
+						}
+						output.append(data);
+						break;
+					case LEFT:
+						output.appendFixedWidthPadRight(data, node.getLenght(), node.getPadder());
+						break;
+					case RIGHT:
+						output.appendFixedWidthPadLeft(data, node.getLenght(), node.getPadder());
+						break;
+					default:
+						throw new MojetRuntimeException("Undefined case");
 				}
 			}
+
 		});
 		return output.toString();
 	}
